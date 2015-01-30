@@ -9,6 +9,11 @@ namespace Erbsenzaehler.Models
 {
 	public class Db : IdentityDbContext<User>
 	{
+		public Db() : base("Db")
+		{
+			//Database.SetInitializer(new DropCreateDatabaseAlways<Db>());
+		}
+
 		public static Db Create()
 		{
 			return new Db();
