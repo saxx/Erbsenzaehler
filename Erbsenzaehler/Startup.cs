@@ -1,7 +1,9 @@
-﻿using Microsoft.Owin;
+﻿using Erbsenzaehler;
+using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartupAttribute(typeof(Erbsenzaehler.Startup))]
+[assembly: OwinStartup(typeof (Startup))]
+
 namespace Erbsenzaehler
 {
     public partial class Startup

@@ -1,14 +1,11 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Erbsenzaehler.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using Erbsenzaehler.Models;
 
 namespace Erbsenzaehler.Controllers
 {
@@ -18,15 +15,18 @@ namespace Erbsenzaehler.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
+
         public AccountController()
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
         }
+
 
         public ApplicationSignInManager SignInManager
         {
@@ -34,9 +34,9 @@ namespace Erbsenzaehler.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -60,6 +60,7 @@ namespace Erbsenzaehler.Controllers
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
+
 
         //
         // POST: /Account/Login
@@ -91,6 +92,7 @@ namespace Erbsenzaehler.Controllers
             }
         }
 
+
         //
         // GET: /Account/VerifyCode
         [AllowAnonymous]
@@ -103,6 +105,7 @@ namespace Erbsenzaehler.Controllers
             }
             return View(new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
+
 
         //
         // POST: /Account/VerifyCode
@@ -120,7 +123,7 @@ namespace Erbsenzaehler.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -134,6 +137,7 @@ namespace Erbsenzaehler.Controllers
             }
         }
 
+
         //
         // GET: /Account/Register
         [AllowAnonymous]
@@ -141,6 +145,7 @@ namespace Erbsenzaehler.Controllers
         {
             return View();
         }
+
 
         //
         // POST: /Account/Register
@@ -155,8 +160,8 @@ namespace Erbsenzaehler.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -172,6 +177,7 @@ namespace Erbsenzaehler.Controllers
             return View(model);
         }
 
+
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
@@ -185,6 +191,7 @@ namespace Erbsenzaehler.Controllers
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
+
         //
         // GET: /Account/ForgotPassword
         [AllowAnonymous]
@@ -192,6 +199,7 @@ namespace Erbsenzaehler.Controllers
         {
             return View();
         }
+
 
         //
         // POST: /Account/ForgotPassword
@@ -221,6 +229,7 @@ namespace Erbsenzaehler.Controllers
             return View(model);
         }
 
+
         //
         // GET: /Account/ForgotPasswordConfirmation
         [AllowAnonymous]
@@ -229,6 +238,7 @@ namespace Erbsenzaehler.Controllers
             return View();
         }
 
+
         //
         // GET: /Account/ResetPassword
         [AllowAnonymous]
@@ -236,6 +246,7 @@ namespace Erbsenzaehler.Controllers
         {
             return code == null ? View("Error") : View();
         }
+
 
         //
         // POST: /Account/ResetPassword
@@ -263,6 +274,7 @@ namespace Erbsenzaehler.Controllers
             return View();
         }
 
+
         //
         // GET: /Account/ResetPasswordConfirmation
         [AllowAnonymous]
@@ -270,6 +282,7 @@ namespace Erbsenzaehler.Controllers
         {
             return View();
         }
+
 
         //
         // POST: /Account/ExternalLogin
@@ -281,6 +294,7 @@ namespace Erbsenzaehler.Controllers
             // Request a redirect to the external login provider
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
+
 
         //
         // GET: /Account/SendCode
@@ -296,6 +310,7 @@ namespace Erbsenzaehler.Controllers
             var factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
             return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
+
 
         //
         // POST: /Account/SendCode
@@ -316,6 +331,7 @@ namespace Erbsenzaehler.Controllers
             }
             return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
         }
+
 
         //
         // GET: /Account/ExternalLoginCallback
@@ -346,6 +362,7 @@ namespace Erbsenzaehler.Controllers
                     return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
             }
         }
+
 
         //
         // POST: /Account/ExternalLoginConfirmation
@@ -385,6 +402,7 @@ namespace Erbsenzaehler.Controllers
             return View(model);
         }
 
+
         //
         // POST: /Account/LogOff
         [HttpPost]
@@ -395,6 +413,7 @@ namespace Erbsenzaehler.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+
         //
         // GET: /Account/ExternalLoginFailure
         [AllowAnonymous]
@@ -402,6 +421,7 @@ namespace Erbsenzaehler.Controllers
         {
             return View();
         }
+
 
         protected override void Dispose(bool disposing)
         {
@@ -424,6 +444,7 @@ namespace Erbsenzaehler.Controllers
         }
 
         #region Helpers
+
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -435,6 +456,7 @@ namespace Erbsenzaehler.Controllers
             }
         }
 
+
         private void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)
@@ -442,6 +464,7 @@ namespace Erbsenzaehler.Controllers
                 ModelState.AddModelError("", error);
             }
         }
+
 
         private ActionResult RedirectToLocal(string returnUrl)
         {
@@ -452,12 +475,14 @@ namespace Erbsenzaehler.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+
         internal class ChallengeResult : HttpUnauthorizedResult
         {
             public ChallengeResult(string provider, string redirectUri)
                 : this(provider, redirectUri, null)
             {
             }
+
 
             public ChallengeResult(string provider, string redirectUri, string userId)
             {
@@ -466,9 +491,11 @@ namespace Erbsenzaehler.Controllers
                 UserId = userId;
             }
 
+
             public string LoginProvider { get; set; }
             public string RedirectUri { get; set; }
             public string UserId { get; set; }
+
 
             public override void ExecuteResult(ControllerContext context)
             {
@@ -480,6 +507,7 @@ namespace Erbsenzaehler.Controllers
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
         }
+
         #endregion
     }
 }

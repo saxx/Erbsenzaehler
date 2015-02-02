@@ -1,12 +1,11 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Erbsenzaehler.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using Erbsenzaehler.Models;
 
 namespace Erbsenzaehler.Controllers
 {
@@ -16,9 +15,11 @@ namespace Erbsenzaehler.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
+
         public ManageController()
         {
         }
+
 
         public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
@@ -26,15 +27,16 @@ namespace Erbsenzaehler.Controllers
             SignInManager = signInManager;
         }
 
+
         public ApplicationSignInManager SignInManager
         {
             get
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -55,13 +57,19 @@ namespace Erbsenzaehler.Controllers
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
-                message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
-                : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
-                : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
-                : message == ManageMessageId.Error ? "An error has occurred."
-                : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
-                : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
-                : "";
+                message == ManageMessageId.ChangePasswordSuccess
+                    ? "Your password has been changed."
+                    : message == ManageMessageId.SetPasswordSuccess
+                        ? "Your password has been set."
+                        : message == ManageMessageId.SetTwoFactorSuccess
+                            ? "Your two-factor authentication provider has been set."
+                            : message == ManageMessageId.Error
+                                ? "An error has occurred."
+                                : message == ManageMessageId.AddPhoneSuccess
+                                    ? "Your phone number was added."
+                                    : message == ManageMessageId.RemovePhoneSuccess
+                                        ? "Your phone number was removed."
+                                        : "";
 
             var userId = User.Identity.GetUserId();
             var model = new IndexViewModel
@@ -74,6 +82,7 @@ namespace Erbsenzaehler.Controllers
             };
             return View(model);
         }
+
 
         //
         // POST: /Manage/RemoveLogin
@@ -99,12 +108,14 @@ namespace Erbsenzaehler.Controllers
             return RedirectToAction("ManageLogins", new { Message = message });
         }
 
+
         //
         // GET: /Manage/AddPhoneNumber
         public ActionResult AddPhoneNumber()
         {
             return View();
         }
+
 
         //
         // POST: /Manage/AddPhoneNumber
@@ -130,6 +141,7 @@ namespace Erbsenzaehler.Controllers
             return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = model.Number });
         }
 
+
         //
         // POST: /Manage/EnableTwoFactorAuthentication
         [HttpPost]
@@ -144,6 +156,7 @@ namespace Erbsenzaehler.Controllers
             }
             return RedirectToAction("Index", "Manage");
         }
+
 
         //
         // POST: /Manage/DisableTwoFactorAuthentication
@@ -160,6 +173,7 @@ namespace Erbsenzaehler.Controllers
             return RedirectToAction("Index", "Manage");
         }
 
+
         //
         // GET: /Manage/VerifyPhoneNumber
         public async Task<ActionResult> VerifyPhoneNumber(string phoneNumber)
@@ -168,6 +182,7 @@ namespace Erbsenzaehler.Controllers
             // Send an SMS through the SMS provider to verify the phone number
             return phoneNumber == null ? View("Error") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber });
         }
+
 
         //
         // POST: /Manage/VerifyPhoneNumber
@@ -194,6 +209,7 @@ namespace Erbsenzaehler.Controllers
             return View(model);
         }
 
+
         //
         // GET: /Manage/RemovePhoneNumber
         public async Task<ActionResult> RemovePhoneNumber()
@@ -211,12 +227,14 @@ namespace Erbsenzaehler.Controllers
             return RedirectToAction("Index", new { Message = ManageMessageId.RemovePhoneSuccess });
         }
 
+
         //
         // GET: /Manage/ChangePassword
         public ActionResult ChangePassword()
         {
             return View();
         }
+
 
         //
         // POST: /Manage/ChangePassword
@@ -242,12 +260,14 @@ namespace Erbsenzaehler.Controllers
             return View(model);
         }
 
+
         //
         // GET: /Manage/SetPassword
         public ActionResult SetPassword()
         {
             return View();
         }
+
 
         //
         // POST: /Manage/SetPassword
@@ -274,14 +294,17 @@ namespace Erbsenzaehler.Controllers
             return View(model);
         }
 
+
         //
         // GET: /Manage/ManageLogins
         public async Task<ActionResult> ManageLogins(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
-                message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
-                : message == ManageMessageId.Error ? "An error has occurred."
-                : "";
+                message == ManageMessageId.RemoveLoginSuccess
+                    ? "The external login was removed."
+                    : message == ManageMessageId.Error
+                        ? "An error has occurred."
+                        : "";
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
             if (user == null)
             {
@@ -297,6 +320,7 @@ namespace Erbsenzaehler.Controllers
             });
         }
 
+
         //
         // POST: /Manage/LinkLogin
         [HttpPost]
@@ -306,6 +330,7 @@ namespace Erbsenzaehler.Controllers
             // Request a redirect to the external login provider to link a login for the current user
             return new AccountController.ChallengeResult(provider, Url.Action("LinkLoginCallback", "Manage"), User.Identity.GetUserId());
         }
+
 
         //
         // GET: /Manage/LinkLoginCallback
@@ -320,6 +345,7 @@ namespace Erbsenzaehler.Controllers
             return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
         }
 
+
         protected override void Dispose(bool disposing)
         {
             if (disposing && _userManager != null)
@@ -331,7 +357,8 @@ namespace Erbsenzaehler.Controllers
             base.Dispose(disposing);
         }
 
-#region Helpers
+        #region Helpers
+
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -343,6 +370,7 @@ namespace Erbsenzaehler.Controllers
             }
         }
 
+
         private void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)
@@ -350,6 +378,7 @@ namespace Erbsenzaehler.Controllers
                 ModelState.AddModelError("", error);
             }
         }
+
 
         private bool HasPassword()
         {
@@ -361,6 +390,7 @@ namespace Erbsenzaehler.Controllers
             return false;
         }
 
+
         private bool HasPhoneNumber()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
@@ -370,6 +400,7 @@ namespace Erbsenzaehler.Controllers
             }
             return false;
         }
+
 
         public enum ManageMessageId
         {
@@ -382,6 +413,6 @@ namespace Erbsenzaehler.Controllers
             Error
         }
 
-#endregion
+        #endregion
     }
 }
