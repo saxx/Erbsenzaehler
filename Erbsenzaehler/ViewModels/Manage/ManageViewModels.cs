@@ -4,7 +4,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
-namespace Erbsenzaehler.Models
+namespace Erbsenzaehler.ViewModels.Manage
 {
     public class IndexViewModel
     {

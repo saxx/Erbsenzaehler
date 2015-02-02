@@ -1,5 +1,5 @@
 ﻿@using Microsoft.Owin.Security
-@model Erbsenzaehler.Models.ManageLoginsViewModel
+@model Erbsenzaehler.ViewModels.Manage.ManageLoginsViewModel
 @{
     ViewBag.Title = "Manage your external logins";
 }
@@ -9,7 +9,7 @@
 <p class="text-success">@ViewBag.StatusMessage</p>
 @{
     var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
-    if (loginProviders.Count() == 0)
+    if (loginProviders.Any())
     {
         <div>
             <p>

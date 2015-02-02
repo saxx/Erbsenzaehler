@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
-namespace Erbsenzaehler.Models
+namespace Erbsenzaehler.ViewModels.Account
 {
     public class ExternalLoginConfirmationViewModel
     {
