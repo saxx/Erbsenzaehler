@@ -1,0 +1,46 @@
+﻿@model Erbsenzaehler.ViewModels.Import.IndexViewModel
+<h1>Import</h1>
+
+@if (Model.LinesCount.HasValue)
+{
+    <div class="alert alert-success">
+        @Model.LinesCount.Value.ToString("N0") @(Model.LinesCount == 1 ? "line has" : "lines have") been imported.
+    </div>
+}
+
+@using (Html.BeginForm("Index", "Import", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="form-horizontal">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            @Html.Label("importer", "Format: ", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("importer", Model.AvailableImporters, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("accountId", "Account: ", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("accountId", Model.AvailableAccounts, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("file", "File: ", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="file" name="file" id="file" class="form-control"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-primary">Upload & Import</button>
+            </div>
+        </div>
+    </div>
+}
+
+
+

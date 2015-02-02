@@ -8,6 +8,7 @@ namespace Erbsenzaehler.Models
     public class User : IdentityUser
     {
         public int ClientId { get; set; }
+        public virtual Client Client { get; set; }
 
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User> manager)

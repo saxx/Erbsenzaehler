@@ -2,7 +2,7 @@
 
 namespace Erbsenzaehler.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : ControllerBase
     {
         public ActionResult Index()
         {

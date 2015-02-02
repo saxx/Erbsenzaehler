@@ -20,7 +20,7 @@ namespace Erbsenzaehler.Importer
 
             //foreach (var line in lines)
             //{
-                /*var lineExists = db.Lines.Any(x => x.ClientId == client.Id && x.OriginalDate == line.OriginalDate && x.Text == line.Text && x.Amount == line.Amount && x.AccountId == account.Id);
+            /*var lineExists = db.Lines.Any(x => x.ClientId == client.Id && x.OriginalDate == line.OriginalDate && x.Text == line.Text && x.Amount == line.Amount && x.AccountId == account.Id);
                     if (!lineExists)
                     {
                         line.Client = client;
