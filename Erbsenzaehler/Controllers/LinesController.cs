@@ -10,9 +10,10 @@ namespace Erbsenzaehler.Controllers
     [Authorize]
     public class LinesController : ControllerBase
     {
-        public ActionResult Index(string date)
+        public async Task<ActionResult> Index(string date)
         {
-            return View();
+            var viewModel = await new IndexViewModel().Fill(Db, await GetCurrentClient());
+            return View(viewModel);
         }
 
 
@@ -26,7 +27,7 @@ namespace Erbsenzaehler.Controllers
                 selectedMonth = int.Parse(date.Split('-')[1]);
             }
 
-            var viewModel = await new IndexViewModel().Fill(await GetCurrentClient(), Db, selectedYear, selectedMonth);
+            var viewModel = await new JsonViewModel().Fill(await GetCurrentClient(), Db, selectedYear, selectedMonth);
             return new JsonResult
             {
                 Data = viewModel,
@@ -36,7 +37,7 @@ namespace Erbsenzaehler.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> Json(IndexViewModel.Line line)
+        public async Task<ActionResult> Json(JsonViewModel.Line line)
         {
             var currentClient = await GetCurrentClient();
 

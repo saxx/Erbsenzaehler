@@ -1,42 +1,43 @@
 ﻿@using Newtonsoft.Json
 @model Erbsenzaehler.ViewModels.Reports.IndexViewModel
+@if (Model.Overview.Months.Any())
+{
+    <h2>Report: Monthly balance</h2>
 
-<h2>Report</h2>
+    <div id="chartContainer" style="max-width: 100%; height: 600px;"></div>
+    <p>
+        &nbsp;
+    </p>
 
-
-<div id="chartContainer" style="max-width: 100%; height: 600px;"></div>
-<p>
-    &nbsp;
-</p>
-
-<table class="table table-striped">
-    <tr>
-        <th>Date</th>
-        <th>Balance</th>
-        <th>Income</th>
-        <th>Spent</th>
-        @foreach (var category in Model.Overview.CategoryHeaders.OrderByDescending(x => x))
-        {
-            <th>@category</th>
-        }
-    </tr>
-
-    @foreach (var month in Model.Overview.Months)
-    {
+    <table class="table table-striped">
         <tr>
-            <td>
-                <a href="@Url.Action("Index", "Lines")#@(month.Year + "-" + month.Month)">@month.Name</a>
-            </td>
-            <td class="amount">@month.Balance.ToString("N2")</td>
-            <td class="amount">@month.Income.ToString("N2")</td>
-            <td class="amount">@month.Spent.ToString("N2")</td>
+            <th>Date</th>
+            <th>Balance</th>
+            <th>Income</th>
+            <th>Spent</th>
             @foreach (var category in Model.Overview.CategoryHeaders.OrderByDescending(x => x))
             {
-                <td class="amount">@(((decimal) month[category]).ToString("N2"))</td>
+                <th>@category</th>
             }
         </tr>
-    }
-</table>
+
+        @foreach (var month in Model.Overview.Months)
+        {
+            <tr>
+                <td>
+                    <a href="@Url.Action("Index", "Lines")#@(month.Year + "-" + month.Month)">@month.Name</a>
+                </td>
+                <td class="amount">@month.Balance.ToString("N2")</td>
+                <td class="amount">@month.Income.ToString("N2")</td>
+                <td class="amount">@month.Spent.ToString("N2")</td>
+                @foreach (var category in Model.Overview.CategoryHeaders.OrderByDescending(x => x))
+                {
+                    <td class="amount">@(((decimal) month[category]).ToString("N2"))</td>
+                }
+            </tr>
+        }
+    </table>
+
 
 @section scripts
 {
@@ -52,8 +53,8 @@
                 @foreach (var category in Model.Overview.CategoryHeaders)
                 {
                     <text>
-                month['@Html.Raw(category)'] = -month['@Html.Raw(category)'];
-                </text>
+                    month['@Html.Raw(category)'] = -month['@Html.Raw(category)'];
+                    </text>
                 }
             });
 
@@ -75,11 +76,11 @@
                     @foreach (var category in Model.Overview.CategoryHeaders.OrderByDescending(x => x))
                     {
                         <text>
-                        {
-                            name: '@Html.Raw(category)',
-                            valueField: '@Html.Raw(category)'
-                        },
-                        </text>
+                            {
+                                name: '@Html.Raw(category)',
+                                valueField: '@Html.Raw(category)'
+                            },
+                            </text>
                     }
                     {
                         type: 'spline',
@@ -92,4 +93,10 @@
             });
         });
     </script>
+}}
+else
+{
+    <div class="alert alert-warning">
+        You don't have anything to display here yet. You probably want to @Html.ActionLink("import your data", "Index", "Import", null, new { @class = "alert-link" }) first.
+    </div>
 }
