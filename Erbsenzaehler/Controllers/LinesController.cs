@@ -1,8 +1,5 @@
 ﻿using System;
-using Erbsenzaehler.Models;
 using Erbsenzaehler.ViewModels.Lines;
-using System.Data.Entity;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -22,7 +19,7 @@ namespace Erbsenzaehler.Controllers
         {
             int? selectedYear = null;
             int? selectedMonth = null;
-            if (!string.IsNullOrEmpty(date))
+            if (!string.IsNullOrEmpty(date) && date.Contains("-"))
             {
                 selectedYear = int.Parse(date.Split('-')[0]);
                 selectedMonth = int.Parse(date.Split('-')[1]);
@@ -39,27 +36,17 @@ namespace Erbsenzaehler.Controllers
         [HttpPost]
         public async Task<ActionResult> Json(IndexViewModel.Line line)
         {
-            /*var currentClient = await GetCurrentClient();
+            var currentClient = await GetCurrentClient();
 
             var lineInDatebase = Db.Lines.FirstOrDefault(x => x.Id == line.Id);
-            if (lineInDatebase == null || lineInDatebase.ClientId != currentClient.Id)
-                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-
-            if (string.IsNullOrEmpty(line.Category))
-                lineInDatebase.CategoryId = null;
-            else
+            if (lineInDatebase == null || lineInDatebase.Account.ClientId != currentClient.Id)
             {
-                var category = Db.Categories.FirstOrDefault(x => x.ClientId == currentClient.Id && x.Name == line.Category);
-                if (category != null)
-                    lineInDatebase.CategoryId = category.Id;
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
             }
-            lineInDatebase.Ignore = line.IsIgnored;
-            if (string.IsNullOrEmpty(line.RefundDate))
-                lineInDatebase.RefundDate = null;
-            else
-                lineInDatebase.RefundDate = DateTime.Parse(line.RefundDate);
+
+            lineInDatebase.Ignore = line.Ignore;
             lineInDatebase.Date = DateTime.Parse(line.Date);
-            Db.SaveChanges();*/
+            Db.SaveChanges();
 
             return await Json("");
         }
