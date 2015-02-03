@@ -658,6 +658,7 @@
     <Content Include="Views\Lines\Index.cshtml" />
     <Content Include="Views\Reports\Index.cshtml" />
     <Content Include="Views\ManageRules\Index.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

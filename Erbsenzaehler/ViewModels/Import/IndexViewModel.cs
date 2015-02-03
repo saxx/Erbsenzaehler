@@ -58,5 +58,6 @@ namespace Erbsenzaehler.ViewModels.Import
         public IEnumerable<SelectListItem> AvailableImporters { get; set; }
 
         public ImporterBase.ImportResult ImportResult { get; set; }
+        public string ErrorMessage { get; set; }
     }
 }

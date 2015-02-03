@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -25,19 +26,25 @@ namespace Erbsenzaehler.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(HttpPostedFileBase file, int accountId, ImporterType importer)
         {
+
             var currentClient = await GetCurrentClient();
             var account = await Db.Accounts.FirstOrDefaultAsync(x => x.Id == accountId && x.ClientId == currentClient.Id);
-            if (account == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
             var viewModel = (await new IndexViewModel().Fill(Db, currentClient)).PreSelect(accountId, importer);
 
-            using (var reader = new StreamReader(file.InputStream, Encoding.Default))
+            try
             {
-                var concreteImporter = new ImporterFactory().GetImporter(reader, importer);
-                viewModel.ImportResult = await concreteImporter.LoadFileAndImport(Db, currentClient, account, new RulesApplier());
+                if (account != null && file != null)
+                {
+                    using (var reader = new StreamReader(file.InputStream, Encoding.Default))
+                    {
+                        var concreteImporter = new ImporterFactory().GetImporter(reader, importer);
+                        viewModel.ImportResult = await concreteImporter.LoadFileAndImport(Db, currentClient, account, new RulesApplier());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                viewModel.ErrorMessage = ex.Message;
             }
 
             return View(viewModel);
