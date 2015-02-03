@@ -41,7 +41,7 @@
         </tr>
     </table>
 
-    <input id="date" type="text" style="display:none; width:90px;" />
+    <input id="date" type="text" style="display: none; width: 90px;"/>
 </div>
 
 
@@ -57,56 +57,60 @@
         var erbsenzaehlerAnimations = angular.module('erbsenzaehlerAnimations', ['ngAnimate']);
 
         var erbsenzaehlerServices = angular.module('erbsenzaehlerServices', ['ngResource']);
-        erbsenzaehlerServices.factory('linesResource', ['$resource',
-            function ($resource) {
+        erbsenzaehlerServices.factory('linesResource', [
+            '$resource',
+            function($resource) {
                 return $resource('@Url.Action("Json")?date=:date',
-                    { date: '' }, {
-                        query: { method: 'GET', params: { date: '' } },
-                        update: { method: 'POST', params: { date: '' } }
-                    });
-            }]);
+                { date: '' }, {
+                    query: { method: 'GET', params: { date: '' } },
+                    update: { method: 'POST', params: { date: '' } }
+                });
+            }
+        ]);
 
         var erbsenzaehlerControllers = angular.module('erbsenzaehlerControllers', []);
-        erbsenzaehlerControllers.controller('linesController', ['$scope', 'linesResource', function ($scope, linesResource) {
-            $scope.LoadLines = function () {
-                var selectedDate = window.location.hash.substring(1);
-                if ($scope.viewModel && $scope.viewModel.SelectedDate)
-                    selectedDate = $scope.viewModel.SelectedDate;
+        erbsenzaehlerControllers.controller('linesController', [
+            '$scope', 'linesResource', function($scope, linesResource) {
+                $scope.LoadLines = function() {
+                    var selectedDate = window.location.hash.substring(1);
+                    if ($scope.viewModel && $scope.viewModel.SelectedDate)
+                        selectedDate = $scope.viewModel.SelectedDate;
 
-                $scope.loading = true;
-                $scope.viewModel = linesResource.query({ date: selectedDate }, function (result) {
-                    window.location.hash = "#" + result.SelectedDate;
-                    $scope.loading = false;
-                });
-            };
+                    $scope.loading = true;
+                    $scope.viewModel = linesResource.query({ date: selectedDate }, function(result) {
+                        window.location.hash = "#" + result.SelectedDate;
+                        $scope.loading = false;
+                    });
+                };
 
-            $scope.switchIgnore = function (line) {
-                line.Ignore = !line.Ignore;
-                linesResource.update(line);
-            };
-
-            $scope.changeDate = function (line, event) {
-                var textbox = $("#date");
-                textbox.val(line.Date);
-
-                var clickedControl = $(event.target);
-                textbox
-                    .css("position", "absolute")
-                    .css("top", clickedControl.offset().top + "px")
-                    .css("left", clickedControl.offset().left + "px")
-                    .show()
-                    .focus();
-
-                textbox.off();
-                textbox.focusout(function () {
-                    line.Date = textbox.val();
-                    textbox.hide();
+                $scope.switchIgnore = function(line) {
+                    line.Ignore = !line.Ignore;
                     linesResource.update(line);
-                });
-            };
+                };
 
-            $scope.LoadLines();
-        }]);
+                $scope.changeDate = function(line, event) {
+                    var textbox = $("#date");
+                    textbox.val(line.Date);
+
+                    var clickedControl = $(event.target);
+                    textbox
+                        .css("position", "absolute")
+                        .css("top", clickedControl.offset().top + "px")
+                        .css("left", clickedControl.offset().left + "px")
+                        .show()
+                        .focus();
+
+                    textbox.off();
+                    textbox.focusout(function() {
+                        line.Date = textbox.val();
+                        textbox.hide();
+                        linesResource.update(line);
+                    });
+                };
+
+                $scope.LoadLines();
+            }
+        ]);
 
         var erbsenzaehlerApp = angular.module('erbsenzaehlerApp', ['erbsenzaehlerControllers', 'erbsenzaehlerServices', 'erbsenzaehlerAnimations']);
     </script>

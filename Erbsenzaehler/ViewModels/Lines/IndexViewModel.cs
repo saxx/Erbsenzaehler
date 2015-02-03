@@ -1,9 +1,9 @@
-﻿using Erbsenzaehler.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using Erbsenzaehler.Models;
 
 namespace Erbsenzaehler.ViewModels.Lines
 {
@@ -35,7 +35,12 @@ namespace Erbsenzaehler.ViewModels.Lines
                 .Distinct()
                 .ToList();
 
-            if (selectedYear == null || selectedMonth == null)
+            if (!uniqueDates.Any())
+            {
+                selectedYear = DateTime.Now.Year;
+                selectedMonth = DateTime.Now.Month;
+            }
+            else if (selectedYear == null || selectedMonth == null)
             {
                 var maxDate = uniqueDates.Select(x => x.Date).Max();
                 selectedYear = maxDate.Year;
@@ -63,15 +68,15 @@ namespace Erbsenzaehler.ViewModels.Lines
                 .OrderByDescending(x => x.Date);
 
             Lines = from x in (await query.ToListAsync())
-                    select new Line
-                    {
-                        Account = x.Account.Name,
-                        Amount = x.Amount.ToString("N2"),
-                        Date = x.Date.ToShortDateString(),
-                        Id = x.Id,
-                        Text = x.Text,
-                        Ignore = x.Ignore
-                    };
+                select new Line
+                {
+                    Account = x.Account.Name,
+                    Amount = x.Amount.ToString("N2"),
+                    Date = x.Date.ToShortDateString(),
+                    Id = x.Id,
+                    Text = x.Text,
+                    Ignore = x.Ignore
+                };
         }
 
 

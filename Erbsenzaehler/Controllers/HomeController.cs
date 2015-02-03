@@ -7,7 +7,9 @@ namespace Erbsenzaehler.Controllers
         public ActionResult Index()
         {
             if (User.Identity.IsAuthenticated)
+            {
                 return RedirectToAction("Index", "Reports");
+            }
 
             return View();
         }

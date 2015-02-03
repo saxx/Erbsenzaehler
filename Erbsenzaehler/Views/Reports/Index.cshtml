@@ -4,7 +4,7 @@
 <h2>Report</h2>
 
 
-<div id="chartContainer" style="max-width:100%;height: 600px;"></div>
+<div id="chartContainer" style="max-width: 100%; height: 600px;"></div>
 <p>
     &nbsp;
 </p>
@@ -24,13 +24,15 @@
     @foreach (var month in Model.Overview.Months)
     {
         <tr>
-            <td><a href="@Url.Action("Index", "Lines")#@(month.Year + "-" + month.Month)">@month.Name</a></td>
+            <td>
+                <a href="@Url.Action("Index", "Lines")#@(month.Year + "-" + month.Month)">@month.Name</a>
+            </td>
             <td class="amount">@month.Balance.ToString("N2")</td>
             <td class="amount">@month.Income.ToString("N2")</td>
             <td class="amount">@month.Spent.ToString("N2")</td>
             @foreach (var category in Model.Overview.CategoryHeaders.OrderByDescending(x => x))
             {
-                <td class="amount">@(((decimal)month[category]).ToString("N2"))</td>
+                <td class="amount">@(((decimal) month[category]).ToString("N2"))</td>
             }
         </tr>
     }
@@ -39,10 +41,10 @@
 @section scripts
 {
     <script>
-        var json =  @Html.Raw(JsonConvert.SerializeObject(Model.Overview));
+        var json = @Html.Raw(JsonConvert.SerializeObject(Model.Overview));
 
 
-        $(function () {
+        $(function() {
             json.Months = json.Months.reverse();
 
             $.each(json.Months, function(i, month) {
@@ -66,7 +68,7 @@
                     }
                 },
                 commonSeriesSettings: {
-                    type:'stackedBar',
+                    type: 'stackedBar',
                     argumentField: 'Name'
                 },
                 series: [
@@ -85,7 +87,8 @@
                         color: 'black',
                         point: { visible: false },
                         valueField: 'Income'
-                    }]
+                    }
+                ]
             });
         });
     </script>

@@ -1,0 +1,47 @@
+﻿@model Erbsenzaehler.ViewModels.Rules.IndexViewModel
+<h1>Rules</h1>
+
+@if (Model.ImportResult != null)
+{
+    <div class="alert alert-success">
+        @Model.ImportResult.AddedRulesCount.ToString("N0") @(Model.ImportResult.AddedRulesCount == 1 ? "rule has" : "rules have") been imported,
+        @Model.ImportResult.UpdatedRulesCount.ToString("N0") @(Model.ImportResult.UpdatedRulesCount == 1 ? "rule has" : "rules have") been updated,
+        @Model.ImportResult.DeletedRulesCount.ToString("N0") @(Model.ImportResult.DeletedRulesCount == 1 ? "rule has" : "rules have") been deleted.
+    </div>
+}
+
+@using (Html.BeginForm("Upload", "ManageRules", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="form-horizontal">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            @Html.Label("file", "File: ", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="file" name="file" id="file" class="form-control"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-primary">Upload & Import</button>
+            </div>
+        </div>
+    </div>
+}
+
+@using (Html.BeginForm("Download", "ManageRules"))
+{
+    <div class="form-horizontal">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-primary">Download</button>
+            </div>
+        </div>
+    </div>
+}
+
+
+

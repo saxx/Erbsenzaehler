@@ -1,6 +1,6 @@
-﻿using Erbsenzaehler.ViewModels.Reports;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
+using Erbsenzaehler.ViewModels.Reports;
 
 namespace Erbsenzaehler.Controllers
 {
@@ -12,5 +12,5 @@ namespace Erbsenzaehler.Controllers
 
             return View(viewModel);
         }
-	}
+    }
 }

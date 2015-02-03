@@ -66,7 +66,9 @@ namespace Erbsenzaehler.Importer
                 public object ConvertFromString(TypeConverterOptions options, string text)
                 {
                     if (text.Contains("/"))
+                    {
                         return DateTime.Parse(text, new CultureInfo("en-US"));
+                    }
                     return DateTime.Parse(text, new CultureInfo("de-DE"));
                 }
 

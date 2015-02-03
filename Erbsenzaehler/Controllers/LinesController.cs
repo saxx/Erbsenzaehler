@@ -1,9 +1,9 @@
 ﻿using System;
-using Erbsenzaehler.ViewModels.Lines;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Erbsenzaehler.ViewModels.Lines;
 
 namespace Erbsenzaehler.Controllers
 {
@@ -14,6 +14,7 @@ namespace Erbsenzaehler.Controllers
         {
             return View();
         }
+
 
         public async Task<ActionResult> Json(string date)
         {
@@ -33,6 +34,7 @@ namespace Erbsenzaehler.Controllers
             };
         }
 
+
         [HttpPost]
         public async Task<ActionResult> Json(IndexViewModel.Line line)
         {
@@ -46,10 +48,10 @@ namespace Erbsenzaehler.Controllers
 
             lineInDatebase.Ignore = line.Ignore;
             lineInDatebase.Date = DateTime.Parse(line.Date);
+            lineInDatebase.UpdatedManually = true;
             Db.SaveChanges();
 
             return await Json("");
         }
-
     }
 }

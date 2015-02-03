@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using Erbsenzaehler.Migrations;
 using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Erbsenzaehler.Models
@@ -7,7 +8,7 @@ namespace Erbsenzaehler.Models
     {
         public Db() : base("Db")
         {
-            //Database.SetInitializer(new DropCreateDatabaseAlways<Db>());
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<Db, Configuration>());
         }
 
 
@@ -20,5 +21,6 @@ namespace Erbsenzaehler.Models
         public DbSet<Client> Clients { get; set; }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Line> Lines { get; set; }
+        public DbSet<Rule> Rules { get; set; }
     }
 }

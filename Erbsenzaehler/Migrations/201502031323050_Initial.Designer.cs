@@ -13,7 +13,7 @@ namespace Erbsenzaehler.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201502031139508_Initial"; }
+            get { return "201502031323050_Initial"; }
         }
         
         string IMigrationMetadata.Source

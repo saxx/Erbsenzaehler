@@ -40,11 +40,15 @@ namespace Erbsenzaehler.ViewModels.Import
         {
             var selectedAccount = AvailableAccounts.FirstOrDefault(x => x.Value == accountId.ToString(CultureInfo.InvariantCulture));
             if (selectedAccount != null)
+            {
                 selectedAccount.Selected = true;
+            }
 
             var selectedImporter = AvailableImporters.FirstOrDefault(x => x.Value == importer.ToString());
             if (selectedImporter != null)
+            {
                 selectedImporter.Selected = true;
+            }
 
             return this;
         }

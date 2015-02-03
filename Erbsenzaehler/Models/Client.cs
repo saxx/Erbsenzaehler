@@ -9,5 +9,6 @@ namespace Erbsenzaehler.Models
 
         public virtual ICollection<User> Users { get; set; }
         public virtual ICollection<Account> Accounts { get; set; }
+        public virtual ICollection<Rule> Rules { get; set; }
     }
 }

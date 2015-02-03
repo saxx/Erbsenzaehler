@@ -11,6 +11,7 @@ namespace Erbsenzaehler.Models
         public DateTime OriginalDate { get; set; }
         public string OriginalText { get; set; }
 
+        public string Category { get; set; }
         public decimal Amount { get; set; }
         public DateTime Date { get; set; }
         public string Text { get; set; }

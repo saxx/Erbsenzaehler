@@ -40,7 +40,9 @@ namespace Erbsenzaehler.Controllers
         public async Task<User> GetCurrentUser()
         {
             if (User.Identity.IsAuthenticated)
+            {
                 return await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            }
             return null;
         }
     }

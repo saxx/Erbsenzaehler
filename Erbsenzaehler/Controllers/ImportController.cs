@@ -27,7 +27,9 @@ namespace Erbsenzaehler.Controllers
             var currentClient = await GetCurrentClient();
             var account = await Db.Accounts.FirstOrDefaultAsync(x => x.Id == accountId && x.ClientId == currentClient.Id);
             if (account == null)
+            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
 
             var viewModel = (await new IndexViewModel().Fill(Db, currentClient)).PreSelect(accountId, importer);
 

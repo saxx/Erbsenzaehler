@@ -170,12 +170,13 @@
     <Compile Include="Controllers\LinesController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
+    <Compile Include="Controllers\ManageRulesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201502031139508_Initial.cs" />
-    <Compile Include="Migrations\201502031139508_Initial.Designer.cs">
-      <DependentUpon>201502031139508_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201502031323050_Initial.cs" />
+    <Compile Include="Migrations\201502031323050_Initial.Designer.cs">
+      <DependentUpon>201502031323050_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
@@ -187,6 +188,9 @@
     <Compile Include="Importer\ImporterType.cs" />
     <Compile Include="Importer\ImporterFactory.cs" />
     <Compile Include="Importer\TsvImporter.cs" />
+    <Compile Include="Models\Rule.cs" />
+    <Compile Include="Rules\RulesImporter.cs" />
+    <Compile Include="Rules\RulesImporterResult.cs" />
     <Compile Include="ViewModels\Account\AccountViewModels.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="ViewModels\Import\IndexViewModel.cs" />
@@ -194,6 +198,7 @@
     <Compile Include="ViewModels\Manage\ManageViewModels.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\Reports\IndexViewModel.cs" />
+    <Compile Include="ViewModels\Rules\IndexViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -649,6 +654,7 @@
     <Content Include="Views\Import\Index.cshtml" />
     <Content Include="Views\Lines\Index.cshtml" />
     <Content Include="Views\Reports\Index.cshtml" />
+    <Content Include="Views\ManageRules\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -657,8 +663,8 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201502031139508_Initial.resx">
-      <DependentUpon>201502031139508_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201502031323050_Initial.resx">
+      <DependentUpon>201502031323050_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

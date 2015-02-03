@@ -46,7 +46,9 @@ namespace Erbsenzaehler.Importer
             }
 
             if (anyChangesToDatabase)
+            {
                 await db.SaveChangesAsync();
+            }
 
             return result;
         }
