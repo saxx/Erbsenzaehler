@@ -21,7 +21,7 @@
             <th></th>
         </tr>
 
-        <tr ng-repeat="line in viewModel.Lines" class="line" ng-class="{ignoredLine: line.IsIgnored}">
+        <tr ng-repeat="line in viewModel.Lines" class="line" ng-class="{'line-ignore': line.Ignore}">
             <td>
                 <span class="label label-info">{{line.Account}}</span>
             </td>
@@ -37,7 +37,7 @@
                 {{line.Amount}}
             </td>
             <td>
-                <span class="label label-info">{{line.Category}}</span>
+                <span class="label label-success">{{line.Category}}</span>
             </td>
             <td>
                 <span class="glyphicon" style="cursor: pointer;" ng-click="switchIgnore(line)" ng-class="{'glyphicon-eye-open': line.Ignore, 'glyphicon-eye-close': !line.Ignore}" title="Ignore"></span>

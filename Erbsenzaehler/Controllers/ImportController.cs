@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Erbsenzaehler.Importer;
+using Erbsenzaehler.Rules;
 using Erbsenzaehler.ViewModels.Import;
 
 namespace Erbsenzaehler.Controllers
@@ -36,7 +37,7 @@ namespace Erbsenzaehler.Controllers
             using (var reader = new StreamReader(file.InputStream, Encoding.Default))
             {
                 var concreteImporter = new ImporterFactory().GetImporter(reader, importer);
-                viewModel.ImportResult = await concreteImporter.LoadFileAndImport(Db, account);
+                viewModel.ImportResult = await concreteImporter.LoadFileAndImport(Db, currentClient, account, new RulesApplier());
             }
 
             return View(viewModel);

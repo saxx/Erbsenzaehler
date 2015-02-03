@@ -1,8 +1,10 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Configuration;
 using CsvHelper;
 using Erbsenzaehler.Models;
+using Erbsenzaehler.Rules;
 
 namespace Erbsenzaehler.Importer
 {
@@ -13,7 +15,7 @@ namespace Erbsenzaehler.Importer
         }
 
 
-        public async Task<ImportResult> LoadFileAndImport(Db db, Account account)
+        public async Task<ImportResult> LoadFileAndImport(Db db, Client client, Account account, RulesApplier rulesApplier)
         {
             var result = new ImportResult();
             var lines = GetRecords<Line>();
@@ -34,6 +36,8 @@ namespace Erbsenzaehler.Importer
                     line.Text = line.OriginalText;
                     line.Date = line.OriginalDate;
                     line.Amount = line.OriginalAmount;
+
+                    await rulesApplier.Apply(db, client, line);
 
                     db.Lines.Add(line);
                     result.NewLinesCount++;
