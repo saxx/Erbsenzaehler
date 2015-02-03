@@ -10,6 +10,15 @@ namespace Erbsenzaehler
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                 "~/Scripts/jquery-{version}.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/angular").Include(
+                "~/Scripts/angular.js",
+                "~/Scripts/angular-*",
+                "~/Scripts/moment.js"));    
+
+            bundles.Add(new ScriptBundle("~/bundles/chartjs").Include(
+                "~/Scripts/jquery.globalize/globalize.js",
+                "~/Scripts/dx.chartjs.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                 "~/Scripts/jquery.validate*"));
 

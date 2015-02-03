@@ -1,0 +1,195 @@
+﻿<div ng-app="erbsenzaehlerApp" ng-controller="linesController">
+
+    <h1>Overview</h1>
+
+    <div ng-show="loading">
+        Loading, please give it a few seconds ...
+    </div>
+
+    <p ng-show="!loading">
+        <select id="dateDropdown" class="form-control" ng-model="viewModel.SelectedDate" ng-change="LoadLines()" ng-options="m.Value as m.Name for m in viewModel.AvailableDates"></select>
+    </p>
+
+    <table class="table table-striped" ng-show="!loading">
+        <tr>
+            <th>Account</th>
+            <th>Date</th>
+            <th>Text</th>
+            <th>Amount</th>
+            <th>Category</th>
+            <th></th>
+            <th></th>
+        </tr>
+
+        <tr ng-repeat="line in viewModel.Lines" class="line" ng-class="{ignoredLine: line.IsIgnored}">
+            <td>
+                <span class="label label-info">{{line.Account}}</span>
+            </td>
+            <td>
+                <span style="cursor: pointer;" ng-click="changeDate(line, $event)">
+                    {{line.Date}}
+                </span>
+            </td>
+            <td>
+                {{line.Text}}
+            </td>
+            <td class="amount">
+                {{line.Amount}}
+            </td>
+            <td>
+                <span class="label label-success" style="cursor:pointer" ng-click="changeCategory(line, $event)">{{line.Category}}</span>
+                <span class="glyphicon glyphicon-tag" style="cursor: pointer;" ng-click="changeCategory(line, $event)" ng-show="!line.Category"></span>
+            </td>
+            <td>
+                <span class="glyphicon" style="cursor:pointer" ng-click="switchIgnore(line)" ng-class="{'glyphicon-eye-open': line.IsIgnored, 'glyphicon-eye-close': !line.IsIgnored}" title="Ignore"></span>
+            </td>
+            <td>
+                <span class="glyphicon glyphicon-random" style="cursor:pointer" ng-if="line.Amount[0]!='-' && line.RefundDate==''" ng-click="changeRefundDate(line, $event)" title="Refund Date"></span>
+                <span class="label label-warning" style="cursor:pointer" ng-if="line.RefundDate!=''" ng-click="changeRefundDate(line, $event)">{{line.RefundDate}}</span>
+            </td>
+        </tr>
+
+        <tr ng-if="viewModel.RefundsFromOtherMonths.length > 0">
+            <th colspan="7">
+                Refunds from other months
+            </th>
+        </tr>
+        <tr ng-repeat="line in viewModel.RefundsFromOtherMonths" class="line" ng-class="{ignoredLine: line.IsIgnored}">
+            <td></td>
+            <td>
+                {{line.LineDate}}
+            </td>
+            <td>
+                {{line.LineText}}
+            </td>
+            <td class="amount">
+                {{line.LineAmount}}
+            </td>
+            <td>
+                <span class="label label-success">{{line.LineCategory}}</span>
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+
+    <select id="categoryDropDown" style="display:none;">
+        <option ng-repeat="category in viewModel.AvailableCategories" value="{{category}}">
+            {{category}}
+        </option>
+    </select>
+    <input id="date" type="text" style="display:none; width:90px;" />
+</div>
+
+
+@section scripts {
+    <script>
+        function getParameterByName(name) {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                results = regex.exec(location.search);
+            return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
+
+        var erbsenzaehlerAnimations = angular.module('erbsenzaehlerAnimations', ['ngAnimate']);
+
+        var erbsenzaehlerServices = angular.module('erbsenzaehlerServices', ['ngResource']);
+        erbsenzaehlerServices.factory('linesResource', ['$resource',
+            function ($resource) {
+                return $resource('@Url.Action("Json")?date=:date',
+                    { date: '' }, {
+                        query: { method: 'GET', params: { date: '' } },
+                        update: { method: 'POST', params: { date: '' } }
+                    });
+            }]);
+
+        var erbsenzaehlerControllers = angular.module('erbsenzaehlerControllers', []);
+        erbsenzaehlerControllers.controller('linesController', ['$scope', 'linesResource', function ($scope, linesResource) {
+            $scope.LoadLines = function () {
+                var selectedDate = window.location.hash.substring(1);
+                if ($scope.viewModel && $scope.viewModel.SelectedDate)
+                    selectedDate = $scope.viewModel.SelectedDate;
+
+                $scope.loading = true;
+                $scope.viewModel = linesResource.query({ date: selectedDate }, function (result) {
+                    window.location.hash = "#" + result.SelectedDate;
+                    $scope.loading = false;
+                });
+            };
+
+            $scope.switchIgnore = function (line) {
+                line.IsIgnored = !line.IsIgnored;
+                linesResource.update(line);
+            };
+
+            $scope.changeCategory = function (line, event) {
+                var dropdown = $("#categoryDropDown");
+                dropdown.val(line.Category);
+
+                var clickedControl = $(event.target);
+                dropdown
+                    .css("position", "absolute")
+                    .css("top", clickedControl.offset().top + "px")
+                    .css("left", clickedControl.offset().left + "px")
+                    .show()
+                    .focus();
+
+                dropdown.off();
+                dropdown.change(function () {
+                    line.Category = dropdown.val();
+                    dropdown.hide();
+                    linesResource.update(line);
+                });
+                dropdown.focusout(function () {
+                    dropdown.hide();
+                });
+            };
+
+            $scope.changeDate = function (line, event) {
+                var textbox = $("#date");
+                textbox.val(line.Date);
+
+                var clickedControl = $(event.target);
+                textbox
+                    .css("position", "absolute")
+                    .css("top", clickedControl.offset().top + "px")
+                    .css("left", clickedControl.offset().left + "px")
+                    .show()
+                    .focus();
+
+                textbox.off();
+                textbox.focusout(function () {
+                    line.Date = textbox.val();
+                    textbox.hide();
+                    linesResource.update(line);
+                });
+            };
+
+            $scope.changeRefundDate = function (line, event) {
+                var textbox = $("#date");
+                textbox.val(line.RefundDate);
+                if (line.RefundDate == "")
+                    textbox.val(line.Date);
+
+                var clickedControl = $(event.target);
+                textbox
+                    .css("position", "absolute")
+                    .css("top", clickedControl.offset().top + "px")
+                    .css("left", clickedControl.offset().left + "px")
+                    .show()
+                    .focus();
+
+                textbox.off();
+                textbox.focusout(function () {
+                    line.RefundDate = textbox.val();
+                    textbox.hide();
+                    linesResource.update(line);
+                });
+            };
+
+            $scope.LoadLines();
+        }]);
+
+        var erbsenzaehlerApp = angular.module('erbsenzaehlerApp', ['erbsenzaehlerControllers', 'erbsenzaehlerServices', 'erbsenzaehlerAnimations']);
+    </script>
+}
