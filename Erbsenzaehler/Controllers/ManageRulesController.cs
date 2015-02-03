@@ -20,6 +20,7 @@ namespace Erbsenzaehler.Controllers
             return View(viewModel);
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Apply()
@@ -80,7 +81,6 @@ namespace Erbsenzaehler.Controllers
             var json = JsonConvert.SerializeObject(rules, Formatting.Indented, new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore
-
             });
 
             return File(Encoding.Default.GetBytes(json), "text/json", "rules.json");

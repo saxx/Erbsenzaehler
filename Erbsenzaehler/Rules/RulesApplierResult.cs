@@ -1,5 +1,4 @@
-﻿
-namespace Erbsenzaehler.Rules
+﻿namespace Erbsenzaehler.Rules
 {
     public class RulesApplierResult
     {

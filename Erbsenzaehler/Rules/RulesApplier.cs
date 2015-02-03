@@ -92,10 +92,14 @@ namespace Erbsenzaehler.Rules
 
 
         private IEnumerable<Rule> _rulesCache;
+
+
         private async Task<IEnumerable<Rule>> LoadRules(Db db, Client client)
         {
             if (_rulesCache == null)
+            {
                 _rulesCache = await db.Rules.Where(x => x.ClientId == client.Id).ToListAsync();
+            }
             return _rulesCache;
         }
     }
