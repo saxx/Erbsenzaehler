@@ -37,7 +37,7 @@ namespace Erbsenzaehler.Rules
             var rules = await LoadRules(db, client);
             foreach (var rule in rules)
             {
-                if (Regex.IsMatch(line.OriginalText, rule.Regex, RegexOptions.IgnoreCase))
+                if (Regex.IsMatch(line.OriginalText, rule.Regex, RegexOptions.IgnoreCase | RegexOptions.Multiline))
                 {
                     if (rule.ChangeCategoryTo != null)
                     {

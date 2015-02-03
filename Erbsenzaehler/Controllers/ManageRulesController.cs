@@ -51,7 +51,7 @@ namespace Erbsenzaehler.Controllers
             {
                 var importer = new RulesImporter();
 
-                using (var reader = new StreamReader(file.InputStream, Encoding.Default))
+                using (var reader = new StreamReader(file.InputStream, Encoding.UTF8))
                 {
                     var json = reader.ReadToEnd();
                     viewModel.ImportResult = await importer.Import(Db, await GetCurrentClient(), json);
