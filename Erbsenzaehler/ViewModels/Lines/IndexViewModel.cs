@@ -68,15 +68,16 @@ namespace Erbsenzaehler.ViewModels.Lines
                 .OrderByDescending(x => x.Date);
 
             Lines = from x in (await query.ToListAsync())
-                select new Line
-                {
-                    Account = x.Account.Name,
-                    Amount = x.Amount.ToString("N2"),
-                    Date = x.Date.ToShortDateString(),
-                    Id = x.Id,
-                    Text = x.Text,
-                    Ignore = x.Ignore
-                };
+                    select new Line
+                    {
+                        Account = x.Account.Name,
+                        Amount = x.Amount.ToString("N2"),
+                        Category = x.Category,
+                        Date = x.Date.ToShortDateString(),
+                        Id = x.Id,
+                        Text = x.Text,
+                        Ignore = x.Ignore
+                    };
         }
 
 
@@ -91,6 +92,7 @@ namespace Erbsenzaehler.ViewModels.Lines
             public string Date { get; set; }
             public string Text { get; set; }
             public string Amount { get; set; }
+            public string Category { get; set; }
             public int Id { get; set; }
             public bool Ignore { get; set; }
         }

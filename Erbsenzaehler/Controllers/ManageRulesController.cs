@@ -20,6 +20,26 @@ namespace Erbsenzaehler.Controllers
             return View(viewModel);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Apply()
+        {
+            var viewModel = new IndexViewModel();
+
+            var currentClient = await GetCurrentClient();
+            var applier = new RulesApplier();
+
+            var lines = Db.Lines.Where(x => !x.UpdatedManually);
+
+            viewModel.ApplierResult = await applier.Apply(Db, currentClient, lines, true);
+            if (viewModel.ApplierResult.LinesUpdated > 0)
+            {
+                await Db.SaveChangesAsync();
+            }
+
+            return View("Index", viewModel);
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -48,17 +68,20 @@ namespace Erbsenzaehler.Controllers
         {
             var currentClient = await GetCurrentClient();
             var rules = await Db.Rules.Where(x => x.ClientId == currentClient.Id)
-                .OrderBy(x => x.Id)
+                .OrderBy(x => x.Regex)
                 .Select(x => new
                 {
-                    x.ChangeCategoryTo,
-                    x.ChangeDateTo,
-                    x.ChangeIgnoreTo,
                     x.Regex,
-                    x.Id
+                    x.ChangeCategoryTo,
+                    ChangeDateTo = x.ChangeDateTo.HasValue ? x.ChangeDateTo.Value.ToString() : null,
+                    x.ChangeIgnoreTo
                 }).ToListAsync();
 
-            var json = JsonConvert.SerializeObject(rules, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            var json = JsonConvert.SerializeObject(rules, Formatting.Indented, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore
+
+            });
 
             return File(Encoding.Default.GetBytes(json), "text/json", "rules.json");
         }

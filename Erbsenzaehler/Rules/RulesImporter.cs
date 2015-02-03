@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.UI;
 using Erbsenzaehler.Models;
 using Newtonsoft.Json;
 
@@ -14,35 +13,37 @@ namespace Erbsenzaehler.Rules
             var result = new RulesImporterResult();
 
             var rulesFromJson = JsonConvert.DeserializeObject<IEnumerable<Rule>>(jsonString).ToList();
+
+            // first, delete all existing rules for the client
+            var rulesToDelete = db.Rules.Where(x => x.ClientId == client.Id);
+            if (rulesToDelete.Any())
+            {
+                db.Rules.RemoveRange(rulesToDelete);
+                await db.SaveChangesAsync();
+            }
+
+            // then, add the rules from the JSON
             foreach (var ruleFromJson in rulesFromJson)
             {
-                var ruleInDatabase = db.Rules.FirstOrDefault(x => x.ClientId == client.Id && x.Id == ruleFromJson.Id);
-                if (ruleInDatabase == null)
+                var ruleInDatabase = new Rule
                 {
-                    ruleInDatabase = new Rule
-                    {
-                        ClientId = client.Id
-                    };
-                    db.Rules.Add(ruleInDatabase);
-                    result.AddedRulesCount++;
-                }
-                else
-                {
-                    result.UpdatedRulesCount++;
-                }
+                    ClientId = client.Id
+                };
+                db.Rules.Add(ruleInDatabase);
 
                 ruleInDatabase.ChangeCategoryTo = ruleFromJson.ChangeCategoryTo;
                 ruleInDatabase.ChangeDateTo = ruleFromJson.ChangeDateTo;
                 ruleInDatabase.ChangeIgnoreTo = ruleFromJson.ChangeIgnoreTo;
                 ruleInDatabase.Regex = ruleFromJson.Regex;
+
+                result.RulesAddedOrUpdated++;
             }
 
-            var ruleIdNotToDelete = rulesFromJson.Select(x => x.Id).ToList();
-            var rulesToDelete = db.Rules.Where(x => x.ClientId == client.Id && !ruleIdNotToDelete.Contains(x.Id)).ToList();
-            db.Rules.RemoveRange(rulesToDelete);
-            result.DeletedRulesCount = rulesToDelete.Count;
+            if (rulesFromJson.Any())
+            {
+                await db.SaveChangesAsync();
+            }
 
-            await db.SaveChangesAsync();
             return result;
         }
     }

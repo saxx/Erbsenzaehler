@@ -189,8 +189,10 @@
     <Compile Include="Importer\ImporterFactory.cs" />
     <Compile Include="Importer\TsvImporter.cs" />
     <Compile Include="Models\Rule.cs" />
+    <Compile Include="Rules\RulesApplierResult.cs" />
     <Compile Include="Rules\RulesImporter.cs" />
     <Compile Include="Rules\RulesImporterResult.cs" />
+    <Compile Include="Rules\RulesApplier.cs" />
     <Compile Include="ViewModels\Account\AccountViewModels.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="ViewModels\Import\IndexViewModel.cs" />

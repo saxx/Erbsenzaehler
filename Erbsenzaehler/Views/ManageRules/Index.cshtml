@@ -4,9 +4,14 @@
 @if (Model.ImportResult != null)
 {
     <div class="alert alert-success">
-        @Model.ImportResult.AddedRulesCount.ToString("N0") @(Model.ImportResult.AddedRulesCount == 1 ? "rule has" : "rules have") been imported,
-        @Model.ImportResult.UpdatedRulesCount.ToString("N0") @(Model.ImportResult.UpdatedRulesCount == 1 ? "rule has" : "rules have") been updated,
-        @Model.ImportResult.DeletedRulesCount.ToString("N0") @(Model.ImportResult.DeletedRulesCount == 1 ? "rule has" : "rules have") been deleted.
+        @Model.ImportResult.RulesAddedOrUpdated.ToString("N0") @(Model.ImportResult.RulesAddedOrUpdated == 1 ? "rule has" : "rules have") been imported.
+    </div>
+}
+
+@if (Model.ApplierResult != null)
+{
+    <div class="alert alert-success">
+        @Model.ApplierResult.LinesUpdated.ToString("N0") @(Model.ApplierResult.LinesUpdated == 1 ? "line has" : "lines have") been updated.
     </div>
 }
 
@@ -18,7 +23,7 @@
         <div class="form-group">
             @Html.Label("file", "File: ", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <input type="file" name="file" id="file" class="form-control"/>
+                <input type="file" name="file" id="file" class="form-control" />
             </div>
         </div>
 
@@ -38,6 +43,19 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <button type="submit" class="btn btn-primary">Download</button>
+            </div>
+        </div>
+    </div>
+}
+
+@using (Html.BeginForm("Apply", "ManageRules"))
+{
+    <div class="form-horizontal">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-primary">Apply rules on all lines (except those updated manually).</button>
             </div>
         </div>
     </div>

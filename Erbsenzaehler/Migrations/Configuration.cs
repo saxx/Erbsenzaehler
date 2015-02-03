@@ -27,21 +27,6 @@ namespace Erbsenzaehler.Migrations
                 new Account { Id = 1, Name = "Account #1", ClientId = 1 }
                 );
 
-            context.Rules.AddOrUpdate(
-                x => x.Id,
-                new Rule { Id = 1, ClientId = 1, ChangeCategoryTo = "Supermarkt", Regex = "Billa" }
-                );
-
-            context.Rules.AddOrUpdate(
-                x => x.Id,
-                new Rule { Id = 2, ClientId = 1, ChangeCategoryTo = "Supermarkt", Regex = "Merkur" }
-                );
-
-            context.Rules.AddOrUpdate(
-                x => x.Id,
-                new Rule { Id = 3, ClientId = 1, ChangeCategoryTo = "Drogerie", Regex = "Bipa" }
-                );
-
             if (!context.Users.Any())
             {
                 var userManager = new ApplicationUserManager(new UserStore<User>(context));
