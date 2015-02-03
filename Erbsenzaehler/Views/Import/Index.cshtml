@@ -1,10 +1,11 @@
 ﻿@model Erbsenzaehler.ViewModels.Import.IndexViewModel
 <h1>Import</h1>
 
-@if (Model.LinesCount.HasValue)
+@if (Model.ImportResult != null)
 {
     <div class="alert alert-success">
-        @Model.LinesCount.Value.ToString("N0") @(Model.LinesCount == 1 ? "line has" : "lines have") been imported.
+        @Model.ImportResult.NewLinesCount.ToString("N0") @(Model.ImportResult.NewLinesCount == 1 ? "line has" : "lines have") been imported,
+        @Model.ImportResult.DuplicateLinesCount.ToString("N0") @(Model.ImportResult.DuplicateLinesCount == 1 ? "line was a duplicate" : "lines were duplicates").
     </div>
 }
 
@@ -30,7 +31,7 @@
         <div class="form-group">
             @Html.Label("file", "File: ", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <input type="file" name="file" id="file" class="form-control"/>
+                <input type="file" name="file" id="file" class="form-control" />
             </div>
         </div>
 

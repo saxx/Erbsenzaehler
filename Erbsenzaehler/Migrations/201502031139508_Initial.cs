@@ -25,10 +25,10 @@ namespace Erbsenzaehler.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         AccountId = c.Int(nullable: false),
-                        OriginalAmount = c.Double(nullable: false),
+                        OriginalAmount = c.Decimal(nullable: false, precision: 18, scale: 2),
                         OriginalDate = c.DateTime(nullable: false),
                         OriginalText = c.String(),
-                        Amount = c.Double(nullable: false),
+                        Amount = c.Decimal(nullable: false, precision: 18, scale: 2),
                         Date = c.DateTime(nullable: false),
                         Text = c.String(),
                         Ignore = c.Boolean(nullable: false),

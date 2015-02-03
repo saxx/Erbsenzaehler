@@ -53,6 +53,6 @@ namespace Erbsenzaehler.ViewModels.Import
         public IEnumerable<SelectListItem> AvailableAccounts { get; set; }
         public IEnumerable<SelectListItem> AvailableImporters { get; set; }
 
-        public int? LinesCount { get; set; }
+        public ImporterBase.ImportResult ImportResult { get; set; }
     }
 }

@@ -1,5 +1,8 @@
 ﻿using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using CsvHelper;
+using Erbsenzaehler.Models;
 
 namespace Erbsenzaehler.Importer
 {
@@ -10,32 +13,49 @@ namespace Erbsenzaehler.Importer
         }
 
 
-        public int LoadFileAndImport(Stream stream)
+        public async Task<ImportResult> LoadFileAndImport(Db db, Account account)
         {
-            //var count = 0;
-            //var lines = GetRecords<Line>();
+            var result = new ImportResult();
+            var lines = GetRecords<Line>();
 
-            //var categoryService = new FindCategoryService();
-            //var allCategories = await db.Categories.Where(x => x.ClientId == client.Id && x.Regex != null && x.Regex.Length > 0).ToListAsync();
+            var anyChangesToDatabase = false;
+            foreach (var line in lines)
+            {
+                var lineExists = db.Lines.Any(x => x.AccountId == account.Id &&
+                                                   x.OriginalDate == line.OriginalDate &&
+                                                   x.OriginalText == line.OriginalText &&
+                                                   // ReSharper disable once CompareOfFloatsByEqualityOperator
+                                                   x.OriginalAmount == line.OriginalAmount);
 
-            //foreach (var line in lines)
-            //{
-            /*var lineExists = db.Lines.Any(x => x.ClientId == client.Id && x.OriginalDate == line.OriginalDate && x.Text == line.Text && x.Amount == line.Amount && x.AccountId == account.Id);
-                    if (!lineExists)
-                    {
-                        line.Client = client;
-                        line.Account = account;
-                        line.CreationDateUtc = DateTime.UtcNow;
-                        categoryService.FindCategoryForLine(line, client, db, allCategories);
+                if (!lineExists)
+                {
+                    line.AccountId = account.Id;
 
-                        db.Lines.Add(line);
-                        await db.SaveChangesAsync();
-                        count++;
-                    }*/
-            //    count++;
-            //}
+                    line.Text = line.OriginalText;
+                    line.Date = line.OriginalDate;
+                    line.Amount = line.OriginalAmount;
 
-            return 0;
+                    db.Lines.Add(line);
+                    result.NewLinesCount++;
+                    anyChangesToDatabase = true;
+                }
+                else
+                {
+                    result.DuplicateLinesCount++;
+                }
+            }
+
+            if (anyChangesToDatabase)
+                await db.SaveChangesAsync();
+
+            return result;
+        }
+
+
+        public class ImportResult
+        {
+            public int NewLinesCount { get; set; }
+            public int DuplicateLinesCount { get; set; }
         }
     }
 }

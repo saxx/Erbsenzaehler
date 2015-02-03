@@ -23,10 +23,9 @@ namespace Erbsenzaehler.Importer
         {
             public LineMap()
             {
-                Map(x => x.Text).Index(0).TypeConverter<TextConverter>();
-                Map(x => x.Date).Index(1).TypeConverter<DateConverter>();
+                Map(x => x.OriginalText).Index(0).TypeConverter<TextConverter>();
                 Map(x => x.OriginalDate).Index(1).TypeConverter<DateConverter>();
-                Map(x => x.Amount).Index(2).TypeConverter<AmountConverter>();
+                Map(x => x.OriginalAmount).Index(2).TypeConverter<AmountConverter>();
             }
 
 

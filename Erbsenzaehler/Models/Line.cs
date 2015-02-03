@@ -7,11 +7,11 @@ namespace Erbsenzaehler.Models
         public int Id { get; set; }
         public int AccountId { get; set; }
 
-        public double OriginalAmount { get; set; }
+        public decimal OriginalAmount { get; set; }
         public DateTime OriginalDate { get; set; }
         public string OriginalText { get; set; }
 
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
         public DateTime Date { get; set; }
         public string Text { get; set; }
         public bool Ignore { get; set; }

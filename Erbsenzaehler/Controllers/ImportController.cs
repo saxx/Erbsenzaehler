@@ -1,6 +1,7 @@
 ﻿using System.Data.Entity;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -28,14 +29,13 @@ namespace Erbsenzaehler.Controllers
             if (account == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            var tempPath = Path.GetTempFileName();
-            file.SaveAs(tempPath);
-
-            //var importService = new CsvImportService();
             var viewModel = (await new IndexViewModel().Fill(Db, currentClient)).PreSelect(accountId, importer);
-            //viewModel.LinesCount = await importService.RunImportAndSaveLinesToDatabase(await GetCurrentClient(), tempPath, account, Db, importer);
 
-            System.IO.File.Delete(tempPath);
+            using (var reader = new StreamReader(file.InputStream, Encoding.Default))
+            {
+                var concreteImporter = new ImporterFactory().GetImporter(reader, importer);
+                viewModel.ImportResult = await concreteImporter.LoadFileAndImport(Db, account);
+            }
 
             return View(viewModel);
         }
