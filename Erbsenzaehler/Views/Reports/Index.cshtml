@@ -1,0 +1,92 @@
+﻿@using Newtonsoft.Json
+@model Erbsenzaehler.ViewModels.Reports.IndexViewModel
+
+<h2>Report</h2>
+
+
+<div id="chartContainer" style="max-width:100%;height: 600px;"></div>
+<p>
+    &nbsp;
+</p>
+
+<table class="table table-striped">
+    <tr>
+        <th>Date</th>
+        <th>Balance</th>
+        <th>Income</th>
+        <th>Spent</th>
+        @foreach (var category in Model.Overview.CategoryHeaders.OrderByDescending(x => x))
+        {
+            <th>@category</th>
+        }
+    </tr>
+
+    @foreach (var month in Model.Overview.Months)
+    {
+        <tr>
+            <td><a href="@Url.Action("Index", "Lines")#@(month.Year + "-" + month.Month)">@month.Name</a></td>
+            <td class="amount">@month.Balance.ToString("N2")</td>
+            <td class="amount">@month.Income.ToString("N2")</td>
+            <td class="amount">@month.Spent.ToString("N2")</td>
+            @foreach (var category in Model.Overview.CategoryHeaders.OrderByDescending(x => x))
+            {
+                <td class="amount">@(((decimal)month[category]).ToString("N2"))</td>
+            }
+        </tr>
+    }
+</table>
+
+@section scripts
+{
+    <script>
+        var json =  @Html.Raw(JsonConvert.SerializeObject(Model.Overview));
+
+
+        $(function () {
+            json.Months = json.Months.reverse();
+
+            $.each(json.Months, function(i, month) {
+                month.Spent = -month.Spent;
+                @foreach (var category in Model.Overview.CategoryHeaders)
+                {
+                    <text>
+                month['@Html.Raw(category)'] = -month['@Html.Raw(category)'];
+                </text>
+                }
+            });
+
+
+            $("#chartContainer").dxChart({
+                dataSource: json.Months,
+                tooltip: {
+                    enabled: true,
+                    argumentFormat: 'currency',
+                    customizeText: function() {
+                        return this.argumentText + " - " + this.seriesName + ": " + this.valueText + " €";
+                    }
+                },
+                commonSeriesSettings: {
+                    type:'stackedBar',
+                    argumentField: 'Name'
+                },
+                series: [
+                    @foreach (var category in Model.Overview.CategoryHeaders.OrderByDescending(x => x))
+                    {
+                        <text>
+                        {
+                            name: '@Html.Raw(category)',
+                            valueField: '@Html.Raw(category)'
+                        },
+                        </text>
+                    }
+                    {
+                        type: 'spline',
+                        name: 'Income',
+                        color: 'black',
+                        point: { visible: false },
+                        valueField: 'Income'
+                    }]
+            });
+        });
+    </script>
+}
