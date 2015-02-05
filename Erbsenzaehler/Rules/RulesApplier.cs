@@ -37,54 +37,57 @@ namespace Erbsenzaehler.Rules
             var rules = await LoadRules(db, client);
             foreach (var rule in rules)
             {
-                if (Regex.IsMatch(line.OriginalText, rule.Regex, RegexOptions.IgnoreCase | RegexOptions.Multiline))
+                foreach (var regex in rule.Regex.Split('\n').Select(x => x.Trim()).Where(x => !string.IsNullOrEmpty(x)))
                 {
-                    if (rule.ChangeCategoryTo != null)
+                    if (Regex.IsMatch(line.OriginalText, regex, RegexOptions.IgnoreCase | RegexOptions.Multiline))
                     {
-                        line.Category = string.IsNullOrEmpty(rule.ChangeCategoryTo) ? null : rule.ChangeCategoryTo;
-                    }
-
-                    if (rule.ChangeIgnoreTo.HasValue)
-                    {
-                        line.Ignore = rule.ChangeIgnoreTo.Value;
-                    }
-
-                    if (rule.ChangeDateTo.HasValue)
-                    {
-                        switch (rule.ChangeDateTo.Value)
+                        if (rule.ChangeCategoryTo != null)
                         {
-                            case Rule.ChangeDateToOption.FirstOfCurrentMonth:
-                                line.Date = new DateTime(line.OriginalDate.Year, line.OriginalDate.Month, 1);
-                                break;
-                            case Rule.ChangeDateToOption.LastOfCurrentMonth:
-                                line.Date = new DateTime(line.OriginalDate.Year, line.OriginalDate.Month, 1).AddMonths(1).AddDays(-1);
-                                break;
-                            case Rule.ChangeDateToOption.NearestFirstOfMonth:
-                                // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
-                                if (line.OriginalDate.Day > 15)
-                                {
-                                    line.Date = new DateTime(line.OriginalDate.Year, line.OriginalDate.Month, 1).AddMonths(1);
-                                }
-                                else
-                                {
-                                    line.Date = new DateTime(line.OriginalDate.Year, line.OriginalDate.Month, 1);
-                                }
-                                break;
-                            case Rule.ChangeDateToOption.NearestLastOfMonth:
-                                // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
-                                if (line.OriginalDate.Day > 15)
-                                {
-                                    line.Date = new DateTime(line.OriginalDate.Year, line.OriginalDate.Month, 1).AddMonths(1).AddDays(-1);
-                                }
-                                else
-                                {
-                                    line.Date = new DateTime(line.OriginalDate.Year, line.OriginalDate.Month, 1).AddDays(-1);
-                                }
-                                break;
+                            line.Category = string.IsNullOrEmpty(rule.ChangeCategoryTo) ? null : rule.ChangeCategoryTo;
                         }
-                    }
 
-                    result = true;
+                        if (rule.ChangeIgnoreTo.HasValue)
+                        {
+                            line.Ignore = rule.ChangeIgnoreTo.Value;
+                        }
+
+                        if (rule.ChangeDateTo.HasValue)
+                        {
+                            switch (rule.ChangeDateTo.Value)
+                            {
+                                case Rule.ChangeDateToOption.FirstOfCurrentMonth:
+                                    line.Date = new DateTime(line.OriginalDate.Year, line.OriginalDate.Month, 1);
+                                    break;
+                                case Rule.ChangeDateToOption.LastOfCurrentMonth:
+                                    line.Date = new DateTime(line.OriginalDate.Year, line.OriginalDate.Month, 1).AddMonths(1).AddDays(-1);
+                                    break;
+                                case Rule.ChangeDateToOption.NearestFirstOfMonth:
+                                    // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
+                                    if (line.OriginalDate.Day > 15)
+                                    {
+                                        line.Date = new DateTime(line.OriginalDate.Year, line.OriginalDate.Month, 1).AddMonths(1);
+                                    }
+                                    else
+                                    {
+                                        line.Date = new DateTime(line.OriginalDate.Year, line.OriginalDate.Month, 1);
+                                    }
+                                    break;
+                                case Rule.ChangeDateToOption.NearestLastOfMonth:
+                                    // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
+                                    if (line.OriginalDate.Day > 15)
+                                    {
+                                        line.Date = new DateTime(line.OriginalDate.Year, line.OriginalDate.Month, 1).AddMonths(1).AddDays(-1);
+                                    }
+                                    else
+                                    {
+                                        line.Date = new DateTime(line.OriginalDate.Year, line.OriginalDate.Month, 1).AddDays(-1);
+                                    }
+                                    break;
+                            }
+                        }
+
+                        result = true;
+                    }
                 }
             }
             return result;

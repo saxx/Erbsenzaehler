@@ -1,5 +1,6 @@
-﻿@model Erbsenzaehler.ViewModels.Rules.IndexViewModel
-<h2>Rules</h2>
+﻿@using Erbsenzaehler.Models
+@model Erbsenzaehler.ViewModels.Rules.IndexViewModel
+<h2>Manage rules</h2>
 
 @if (Model.ApplierResult != null)
 {
@@ -14,6 +15,45 @@ else
     </div>
 }
 
+
+<div ng-app="erbsenzaehlerApp" ng-controller="rulesController">
+    <p ng-show="loading">
+        Loading your rules, please give it a second or two ...
+    </p>
+
+    <table class="table table-striped rules-editor" ng-show="!loading">
+        <tr>
+            <th>Regular expression?</th>
+            <th>Change category?</th>
+            <th>Change ignore?</th>
+            <th>Change date?</th>
+            <th>
+                <button class="btn btn-sm btn-success pull-right" ng-click="addRule()">Add new rule</button>
+            </th>
+        </tr>
+
+        <tr ng-repeat="rule in rules">
+            <td>
+                <textarea ng-model="rule.regex" ng-blur="saveRule(rule, $event)" class="form-control" placeholder="Regular expression?" required></textarea>
+            </td>
+            <td>
+                <input type="text" ng-model="rule.category" ng-blur="saveRule(rule)" class="form-control" placeholder="Apply a category?" />
+            </td>
+            <td>
+                <select ng-model="rule.ignore" class="form-control" ng-change="saveRule(rule)" ng-options="o.value as o.name for o in ignoreOptions"></select>
+            </td>
+            <td>
+                <select ng-model="rule.date" class="form-control" ng-change="saveRule(rule)" ng-options="o.value as o.name for o in dateOptions"></select>
+            </td>
+            <td>
+                <button class="btn btn-sm btn-danger pull-right" ng-click="deleteRule(rule)">Delete</button>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<hr />
+<h4>More</h4>
 <div class="row">
     <div class="col-sm-3">
         @using (Html.BeginForm("Download", "ManageRules"))
@@ -40,5 +80,67 @@ else
     </div>
 </div>
 
+@section scripts {
+    @* ReSharper disable once InconsistentNaming *@
+    <script>
+        erbsenzaehlerServices.factory('Rule', function ($resource) {
+            return $resource('@Url.Action("Json")/:id', { id: '@@id' }, {
+                update: {
+                    method: 'PUT'
+                }
+            });
+        });
 
+        erbsenzaehlerControllers.controller('rulesController', function ($scope, Rule) {
+            $scope.ignoreOptions = [
+                 { name: 'Ignore', value: true },
+                 { name: 'Do not ignore', value: false }
+            ];
 
+            $scope.dateOptions = [
+                 { name: 'First of current month', value: @((int)Rule.ChangeDateToOption.FirstOfCurrentMonth) },
+                 { name: 'Last of current month', value: @((int)Rule.ChangeDateToOption.LastOfCurrentMonth) },
+                 { name: 'Nearest first of month', value: @((int)Rule.ChangeDateToOption.NearestFirstOfMonth) },
+                 { name: 'Nearest last of month', value: @((int)Rule.ChangeDateToOption.NearestLastOfMonth) }
+            ];
+
+            $scope.loadRules = function () {
+                $scope.loading = true;
+                $scope.rules = Rule.query(function () {
+                    $scope.loading = false;
+                });
+            };
+
+            $scope.addRule = function () {
+                $scope.loading = true;
+                var newRule = new Rule();
+                newRule.regex = 'regular expression';
+                newRule.category = 'A category';
+                Rule.save(newRule, function () {
+                    $scope.loadRules();
+                });
+            };
+
+            $scope.saveRule = function (updatedRule, event) {
+                if (event) {
+                    var control = $(event.target);
+                    if (control.attr("required") && control.val().length <= 0) {
+                        setTimeout(function () { control.focus(); }, 50);
+                        return;
+                    }
+                }
+
+                updatedRule.$update();
+            };
+
+            $scope.deleteRule = function (deletedRule) {
+                deletedRule.$delete(function () {
+                    var index = $scope.rules.indexOf(deletedRule);
+                    $scope.rules.splice(index, 1);
+                });
+            }
+
+            $scope.loadRules();
+        });
+    </script>
+}

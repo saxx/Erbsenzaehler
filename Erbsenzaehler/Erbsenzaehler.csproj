@@ -234,6 +234,7 @@
     <Content Include="Content\Site.css" />
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\angular-mocks.js" />
+    <Content Include="Scripts\App\app.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\chartjs-modules\dx.module-core.debug.js" />

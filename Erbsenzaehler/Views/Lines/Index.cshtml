@@ -61,9 +61,6 @@
             return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
         }
 
-        var erbsenzaehlerAnimations = angular.module('erbsenzaehlerAnimations', ['ngAnimate']);
-
-        var erbsenzaehlerServices = angular.module('erbsenzaehlerServices', ['ngResource']);
         erbsenzaehlerServices.factory('linesResource', [
             '$resource',
             function($resource) {
@@ -75,7 +72,6 @@
             }
         ]);
 
-        var erbsenzaehlerControllers = angular.module('erbsenzaehlerControllers', []);
         erbsenzaehlerControllers.controller('linesController', [
             '$scope', 'linesResource', function($scope, linesResource) {
                 $scope.LoadLines = function() {
@@ -118,8 +114,6 @@
                 $scope.LoadLines();
             }
         ]);
-
-        var erbsenzaehlerApp = angular.module('erbsenzaehlerApp', ['erbsenzaehlerControllers', 'erbsenzaehlerServices', 'erbsenzaehlerAnimations']);
     </script>
 }}
 else
