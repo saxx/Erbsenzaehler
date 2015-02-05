@@ -203,7 +203,7 @@
     <Compile Include="ViewModels\ManageAccounts\IndexViewModel.cs" />
     <Compile Include="ViewModels\ManageAccounts\DeleteViewModel.cs" />
     <Compile Include="ViewModels\ManageClient\IndexViewModel.cs" />
-    <Compile Include="ViewModels\ManageUser\ManageViewModels.cs" />
+    <Compile Include="ViewModels\ManageUser\ChangePasswordViewModel.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\Reports\IndexViewModel.cs" />
     <Compile Include="ViewModels\Rules\IndexViewModel.cs" />
@@ -639,13 +639,8 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\User\ConfirmEmail.cshtml" />
-    <Content Include="Views\User\ForgotPassword.cshtml" />
-    <Content Include="Views\User\ForgotPasswordConfirmation.cshtml" />
     <Content Include="Views\User\Login.cshtml" />
     <Content Include="Views\User\Register.cshtml" />
-    <Content Include="Views\User\ResetPassword.cshtml" />
-    <Content Include="Views\User\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Import\Index.cshtml" />
@@ -653,12 +648,7 @@
     <Content Include="Views\Reports\Index.cshtml" />
     <Content Include="Views\ManageRules\Index.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\ManageUser\AddPhoneNumber.cshtml" />
     <Content Include="Views\ManageUser\ChangePassword.cshtml" />
-    <Content Include="Views\ManageUser\Index.cshtml" />
-    <Content Include="Views\ManageUser\ManageLogins.cshtml" />
-    <Content Include="Views\ManageUser\SetPassword.cshtml" />
-    <Content Include="Views\ManageUser\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\ManageAccounts\Create.cshtml" />
     <Content Include="Views\ManageAccounts\Delete.cshtml" />
     <Content Include="Views\ManageAccounts\Edit.cshtml" />

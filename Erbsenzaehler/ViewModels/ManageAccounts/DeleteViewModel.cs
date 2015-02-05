@@ -6,7 +6,7 @@ namespace Erbsenzaehler.ViewModels.ManageAccounts
 {
     public class DeleteViewModel
     {
-        public async Task<DeleteViewModel> Fill(Db db, Client currentClient, Models.Account account)
+        public async Task<DeleteViewModel> Fill(Db db, Client currentClient, Account account)
         {
             Account = account;
             NumberOfLines = await db.Lines.CountAsync(x => x.AccountId == account.Id);
@@ -16,7 +16,7 @@ namespace Erbsenzaehler.ViewModels.ManageAccounts
         }
 
 
-        public Models.Account Account { get; set; }
+        public Account Account { get; set; }
         public int NumberOfLines { get; set; }
         public bool IsLastAccount { get; set; }
     }
