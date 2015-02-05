@@ -169,6 +169,7 @@
     <Compile Include="Controllers\ImportController.cs" />
     <Compile Include="Controllers\LinesController.cs" />
     <Compile Include="Controllers\ManageAccountsController.cs" />
+    <Compile Include="Controllers\ManageClientController.cs" />
     <Compile Include="Controllers\ManageUserController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\ManageRulesController.cs" />
@@ -205,6 +206,7 @@
     <Compile Include="ViewModels\Lines\JsonViewModel.cs" />
     <Compile Include="ViewModels\ManageAccounts\IndexViewModel.cs" />
     <Compile Include="ViewModels\ManageAccounts\DeleteViewModel.cs" />
+    <Compile Include="ViewModels\ManageClient\IndexViewModel.cs" />
     <Compile Include="ViewModels\ManageUser\ManageViewModels.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\Reports\IndexViewModel.cs" />
@@ -670,6 +672,8 @@
     <Content Include="Views\ManageAccounts\Delete.cshtml" />
     <Content Include="Views\ManageAccounts\Edit.cshtml" />
     <Content Include="Views\ManageAccounts\Index.cshtml" />
+    <Content Include="Views\ManageClient\Index.cshtml" />
+    <Content Include="Views\ManageClient\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

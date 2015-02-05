@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Security;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Erbsenzaehler.Models;
 using Microsoft.AspNet.Identity;
@@ -33,17 +34,22 @@ namespace Erbsenzaehler.Controllers
         public async Task<Client> GetCurrentClient()
         {
             var currentUser = await GetCurrentUser();
-            return currentUser?.Client;
+            var currentClient =  currentUser?.Client;
+            if (currentClient == null)
+            {
+                throw new SecurityException("There is no user logged in at the moment.");
+            }
+            return currentClient;
         }
 
 
         public async Task<User> GetCurrentUser()
         {
-            if (User.Identity.IsAuthenticated)
+            if (Request.IsAuthenticated)
             {
                 return await UserManager.FindByIdAsync(User.Identity.GetUserId());
             }
-            return null;
+            throw new SecurityException("There is no user logged in at the moment.");
         }
     }
 }

@@ -1,0 +1,17 @@
+﻿@model Erbsenzaehler.ViewModels.ManageAccounts.DeleteViewModel
+
+<h2>Delete everything</h2>
+
+<div class="alert alert-danger">
+    Please be aware that this removes <b>everything</b>, all your data, your users, your settings and your reports. Once your data has been deleted, it is permanent and cannot be undone. Only proceed if you want to stop using Erbsenzähler.
+</div>
+
+<div>
+    @using (Html.BeginForm())
+            {
+        @Html.AntiForgeryToken()
+        <div class="form-actions no-color">
+            <input type="submit" value="Yes, I'm absolutely sure, delete everything" class="btn btn-danger" /> @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>

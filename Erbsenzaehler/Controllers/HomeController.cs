@@ -1,13 +1,29 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
+using Microsoft.Owin.Security;
 
 namespace Erbsenzaehler.Controllers
 {
     public class HomeController : ControllerBase
     {
-        public ActionResult Index()
+        private IAuthenticationManager AuthenticationManager => HttpContext.GetOwinContext().Authentication;
+
+        public async Task<ActionResult> Index()
         {
-            if (User.Identity.IsAuthenticated)
+            if (Request.IsAuthenticated)
             {
+                try
+                {
+                    // make sure we can load a client. if not, we have some kind of data corruption of invalid cookie
+                    await GetCurrentClient();
+                }
+                catch
+                {
+                    AuthenticationManager.SignOut();
+                    return Redirect("~/");
+                }
+
                 return RedirectToAction("Index", "Reports");
             }
 

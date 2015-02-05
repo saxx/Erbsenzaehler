@@ -8,6 +8,7 @@ using Erbsenzaehler.ViewModels.ManageAccounts;
 
 namespace Erbsenzaehler.Controllers
 {
+    [Authorize]
     public class ManageAccountsController : ControllerBase
     {
         public async Task<ActionResult> Index()
