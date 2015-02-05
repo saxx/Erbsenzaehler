@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
 using System.IO;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -26,7 +25,6 @@ namespace Erbsenzaehler.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(HttpPostedFileBase file, int accountId, ImporterType importer)
         {
-
             var currentClient = await GetCurrentClient();
             var account = await Db.Accounts.FirstOrDefaultAsync(x => x.Id == accountId && x.ClientId == currentClient.Id);
             var viewModel = (await new IndexViewModel().Fill(Db, currentClient)).PreSelect(accountId, importer);

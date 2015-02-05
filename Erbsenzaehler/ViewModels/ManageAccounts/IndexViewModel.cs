@@ -8,7 +8,6 @@ namespace Erbsenzaehler.ViewModels.ManageAccounts
 {
     public class IndexViewModel
     {
-
         public async Task<IndexViewModel> Fill(Db db, Client currentClient)
         {
             Accounts = await db.Accounts
@@ -36,6 +35,5 @@ namespace Erbsenzaehler.ViewModels.ManageAccounts
 
             public int LinesCount { get; set; }
         }
-
     }
 }

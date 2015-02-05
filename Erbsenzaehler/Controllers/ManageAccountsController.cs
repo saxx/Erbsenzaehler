@@ -1,7 +1,6 @@
 ﻿using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Erbsenzaehler.Models;
 using Erbsenzaehler.ViewModels.ManageAccounts;
@@ -23,6 +22,7 @@ namespace Erbsenzaehler.Controllers
             return View();
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "Name")] Account account)
@@ -41,6 +41,7 @@ namespace Erbsenzaehler.Controllers
             return View(account);
         }
 
+
         public async Task<ActionResult> Edit(int? id)
         {
             var currentClient = await GetCurrentClient();
@@ -56,6 +57,7 @@ namespace Erbsenzaehler.Controllers
             }
             return View(account);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -111,6 +113,5 @@ namespace Erbsenzaehler.Controllers
 
             return RedirectToAction("Index");
         }
-
     }
 }

@@ -13,6 +13,7 @@ namespace Erbsenzaehler.ViewModels.ManageClient
             return this;
         }
 
+
         [Required(ErrorMessage = "Your clients name must not be empty.")]
         [DisplayName("Client name")]
         public string ClientName { get; set; }

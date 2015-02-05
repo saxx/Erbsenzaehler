@@ -7,6 +7,7 @@ namespace Erbsenzaehler.Models
     {
         public int Id { get; set; }
         public int ClientId { get; set; }
+
         [Required]
         public string Name { get; set; }
 

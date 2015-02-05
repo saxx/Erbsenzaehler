@@ -6,7 +6,6 @@ namespace Erbsenzaehler.ViewModels.ManageAccounts
 {
     public class DeleteViewModel
     {
-
         public async Task<DeleteViewModel> Fill(Db db, Client currentClient, Models.Account account)
         {
             Account = account;
@@ -16,9 +15,9 @@ namespace Erbsenzaehler.ViewModels.ManageAccounts
             return this;
         }
 
+
         public Models.Account Account { get; set; }
         public int NumberOfLines { get; set; }
         public bool IsLastAccount { get; set; }
-
     }
 }

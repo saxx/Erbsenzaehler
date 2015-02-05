@@ -34,7 +34,7 @@ namespace Erbsenzaehler.Controllers
         public async Task<Client> GetCurrentClient()
         {
             var currentUser = await GetCurrentUser();
-            var currentClient =  currentUser?.Client;
+            var currentClient = currentUser?.Client;
             if (currentClient == null)
             {
                 throw new SecurityException("There is no user logged in at the moment.");

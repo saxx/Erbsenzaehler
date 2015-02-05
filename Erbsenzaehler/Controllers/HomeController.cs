@@ -9,6 +9,7 @@ namespace Erbsenzaehler.Controllers
     {
         private IAuthenticationManager AuthenticationManager => HttpContext.GetOwinContext().Authentication;
 
+
         public async Task<ActionResult> Index()
         {
             if (Request.IsAuthenticated)
