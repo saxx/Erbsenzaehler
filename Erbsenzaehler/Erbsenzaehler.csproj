@@ -168,6 +168,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImportController.cs" />
     <Compile Include="Controllers\LinesController.cs" />
+    <Compile Include="Controllers\ManageAccountsController.cs" />
     <Compile Include="Controllers\ManageUserController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\ManageRulesController.cs" />
@@ -177,6 +178,10 @@
     <Compile Include="Migrations\201502031323050_Initial.cs" />
     <Compile Include="Migrations\201502031323050_Initial.Designer.cs">
       <DependentUpon>201502031323050_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502051307359_Two.cs" />
+    <Compile Include="Migrations\201502051307359_Two.Designer.cs">
+      <DependentUpon>201502051307359_Two.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
@@ -198,6 +203,8 @@
     <Compile Include="ViewModels\Import\IndexViewModel.cs" />
     <Compile Include="ViewModels\Lines\IndexViewModel.cs" />
     <Compile Include="ViewModels\Lines\JsonViewModel.cs" />
+    <Compile Include="ViewModels\ManageAccounts\IndexViewModel.cs" />
+    <Compile Include="ViewModels\ManageAccounts\DeleteViewModel.cs" />
     <Compile Include="ViewModels\ManageUser\ManageViewModels.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\Reports\IndexViewModel.cs" />
@@ -659,6 +666,10 @@
     <Content Include="Views\ManageUser\ManageLogins.cshtml" />
     <Content Include="Views\ManageUser\SetPassword.cshtml" />
     <Content Include="Views\ManageUser\VerifyPhoneNumber.cshtml" />
+    <Content Include="Views\ManageAccounts\Create.cshtml" />
+    <Content Include="Views\ManageAccounts\Delete.cshtml" />
+    <Content Include="Views\ManageAccounts\Edit.cshtml" />
+    <Content Include="Views\ManageAccounts\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -669,6 +680,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201502031323050_Initial.resx">
       <DependentUpon>201502031323050_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502051307359_Two.resx">
+      <DependentUpon>201502051307359_Two.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

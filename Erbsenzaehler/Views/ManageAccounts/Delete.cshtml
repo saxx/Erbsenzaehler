@@ -1,0 +1,37 @@
+﻿@model Erbsenzaehler.ViewModels.ManageAccounts.DeleteViewModel
+
+<h2>Delete account '@Model.Account.Name'</h2>
+
+@if (Model.IsLastAccount)
+{
+    <div class="alert alert-danger">
+        You cannot delete this account, because it is your last one. Create another account first if you absolutely want to delete this one.
+    </div>
+
+    @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-default" })
+}
+else
+{
+    <text>
+        <p>
+            Are you sure you want to delete the account '@Model.Account.Name'?
+        </p>
+
+        @if (Model.NumberOfLines > 0)
+        {
+            <div class="alert alert-warning">
+                Deleting this account will also delete <b>@Model.NumberOfLines.ToString("N0") @(Model.NumberOfLines == 1 ? "account statement line" : "account statement lines")</b>.
+            </div>
+        }
+
+        <div>
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-actions no-color">
+                    <input type="submit" value="Delete" class="btn btn-danger" /> @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-default" })
+                </div>
+            }
+        </div>
+    </text>
+}

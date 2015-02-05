@@ -1,0 +1,24 @@
+﻿@model Erbsenzaehler.ViewModels.ManageAccounts.IndexViewModel
+
+<h2>Manage Accounts</h2>
+
+<p>
+    @Html.ActionLink("Create new account", "Create", null, new { @class = "btn btn-default" })
+</p>
+<table class="table table-striped">
+    @foreach (var item in Model.Accounts)
+    {
+        <tr>
+            <td>
+                @item.Name
+            </td>
+            <td>
+                @item.LinesCount.ToString("N0") @(item.LinesCount == 1 ? "line" : "lines")
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
+            </td>
+        </tr>
+    }
+</table>
