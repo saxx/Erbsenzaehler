@@ -168,7 +168,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImportController.cs" />
     <Compile Include="Controllers\LinesController.cs" />
-    <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ManageUserController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\ManageRulesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -198,7 +198,7 @@
     <Compile Include="ViewModels\Import\IndexViewModel.cs" />
     <Compile Include="ViewModels\Lines\IndexViewModel.cs" />
     <Compile Include="ViewModels\Lines\JsonViewModel.cs" />
-    <Compile Include="ViewModels\Manage\ManageViewModels.cs" />
+    <Compile Include="ViewModels\ManageUser\ManageViewModels.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\Reports\IndexViewModel.cs" />
     <Compile Include="ViewModels\Rules\IndexViewModel.cs" />
@@ -646,12 +646,6 @@
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\SendCode.cshtml" />
     <Content Include="Views\Account\VerifyCode.cshtml" />
-    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
-    <Content Include="Views\Manage\ChangePassword.cshtml" />
-    <Content Include="Views\Manage\Index.cshtml" />
-    <Content Include="Views\Manage\ManageLogins.cshtml" />
-    <Content Include="Views\Manage\SetPassword.cshtml" />
-    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Import\Index.cshtml" />
@@ -659,6 +653,12 @@
     <Content Include="Views\Reports\Index.cshtml" />
     <Content Include="Views\ManageRules\Index.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\ManageUser\AddPhoneNumber.cshtml" />
+    <Content Include="Views\ManageUser\ChangePassword.cshtml" />
+    <Content Include="Views\ManageUser\Index.cshtml" />
+    <Content Include="Views\ManageUser\ManageLogins.cshtml" />
+    <Content Include="Views\ManageUser\SetPassword.cshtml" />
+    <Content Include="Views\ManageUser\VerifyPhoneNumber.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

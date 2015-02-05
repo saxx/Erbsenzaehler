@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Erbsenzaehler.ViewModels.Manage;
+using Erbsenzaehler.ViewModels.ManageUser;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -10,18 +10,18 @@ using Microsoft.Owin.Security;
 namespace Erbsenzaehler.Controllers
 {
     [Authorize]
-    public class ManageController : Controller
+    public class ManageUserController : Controller
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
 
-        public ManageController()
+        public ManageUserController()
         {
         }
 
 
-        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+        public ManageUserController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -154,7 +154,7 @@ namespace Erbsenzaehler.Controllers
             {
                 await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
             }
-            return RedirectToAction("Index", "Manage");
+            return RedirectToAction("Index", "ManageUser");
         }
 
 
@@ -170,7 +170,7 @@ namespace Erbsenzaehler.Controllers
             {
                 await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
             }
-            return RedirectToAction("Index", "Manage");
+            return RedirectToAction("Index", "ManageUser");
         }
 
 
@@ -329,7 +329,7 @@ namespace Erbsenzaehler.Controllers
         public ActionResult LinkLogin(string provider)
         {
             // Request a redirect to the external login provider to link a login for the current user
-            return new AccountController.ChallengeResult(provider, Url.Action("LinkLoginCallback", "Manage"), User.Identity.GetUserId());
+            return new AccountController.ChallengeResult(provider, Url.Action("LinkLoginCallback", "ManageUser"), User.Identity.GetUserId());
         }
 
 

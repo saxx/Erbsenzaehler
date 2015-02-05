@@ -1,5 +1,5 @@
 ﻿@using Microsoft.Owin.Security
-@model Erbsenzaehler.ViewModels.Manage.ManageLoginsViewModel
+@model Erbsenzaehler.ViewModels.ManageUser.ManageLoginsViewModel
 @{
     ViewBag.Title = "Manage your external logins";
 }
@@ -32,7 +32,7 @@
                         <td>
                             @if (ViewBag.ShowRemoveButton)
                             {
-                                using (Html.BeginForm("RemoveLogin", "Manage"))
+                                using (Html.BeginForm("RemoveLogin", "ManageUser"))
                                 {
                                     @Html.AntiForgeryToken()
                                     <div>
@@ -54,7 +54,7 @@
         }
         if (Model.OtherLogins.Count > 0)
         {
-            using (Html.BeginForm("LinkLogin", "Manage"))
+            using (Html.BeginForm("LinkLogin", "ManageUser"))
             {
                 @Html.AntiForgeryToken()
                 <div id="socialLoginList">

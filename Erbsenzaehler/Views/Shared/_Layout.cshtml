@@ -21,7 +21,7 @@
                     @Html.ActionLink("Erbsenzähler", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
                 </div>
                 <div class="navbar-collapse collapse">
-                    @if (User.Identity.IsAuthenticated)
+                    @if (Request.IsAuthenticated)
                     {
                         <ul class="nav navbar-nav">
                             <li class="dropdown">
@@ -38,6 +38,8 @@
                                 <a aria-expanded="false" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Manage <span class="caret"></span></a>
                                 <ul class="dropdown-menu">
                                     <li>@Html.ActionLink("Rules", "Index", "ManageRules")</li>
+                                    <li>@Html.ActionLink("Accounts", "Index", "ManageAccounts")</li>
+                                    <li>@Html.ActionLink("User Profile", "Index", "ManageUser")</li>
                                 </ul>
                             </li>
 

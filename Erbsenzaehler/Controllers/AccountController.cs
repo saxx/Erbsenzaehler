@@ -371,7 +371,7 @@ namespace Erbsenzaehler.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Index", "Manage");
+                return RedirectToAction("Index", "ManageUser");
             }
 
             if (ModelState.IsValid)
