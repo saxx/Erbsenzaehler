@@ -176,13 +176,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201502031323050_Initial.cs" />
-    <Compile Include="Migrations\201502031323050_Initial.Designer.cs">
-      <DependentUpon>201502031323050_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201502051307359_Two.cs" />
-    <Compile Include="Migrations\201502051307359_Two.Designer.cs">
-      <DependentUpon>201502051307359_Two.cs</DependentUpon>
+    <Compile Include="Migrations\201502051440258_Initial.cs" />
+    <Compile Include="Migrations\201502051440258_Initial.Designer.cs">
+      <DependentUpon>201502051440258_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
@@ -682,11 +678,8 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201502031323050_Initial.resx">
-      <DependentUpon>201502031323050_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201502051307359_Two.resx">
-      <DependentUpon>201502051307359_Two.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201502051440258_Initial.resx">
+      <DependentUpon>201502051440258_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
