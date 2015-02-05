@@ -195,6 +195,7 @@
     <Compile Include="Rules\RulesImporter.cs" />
     <Compile Include="Rules\RulesImporterResult.cs" />
     <Compile Include="Rules\RulesApplier.cs" />
+    <Compile Include="ViewModels\Rules\UploadRulesViewModel.cs" />
     <Compile Include="ViewModels\User\AccountViewModels.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="ViewModels\Import\IndexViewModel.cs" />
@@ -655,6 +656,7 @@
     <Content Include="Views\ManageAccounts\Index.cshtml" />
     <Content Include="Views\ManageClient\Index.cshtml" />
     <Content Include="Views\ManageClient\Delete.cshtml" />
+    <Content Include="Views\ManageRules\Upload.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

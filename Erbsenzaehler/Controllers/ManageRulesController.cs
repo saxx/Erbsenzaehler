@@ -16,11 +16,11 @@ namespace Erbsenzaehler.Controllers
     {
         public ActionResult Index()
         {
-            var viewModel = new IndexViewModel();
-            return View(viewModel);
+            return View(new IndexViewModel());
         }
 
 
+        #region Apply
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Apply()
@@ -40,13 +40,20 @@ namespace Erbsenzaehler.Controllers
 
             return View("Index", viewModel);
         }
+        #endregion
 
+
+        #region Upload
+        public ActionResult Upload()
+        {
+            return View(new UploadRulesViewModel());
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Upload(HttpPostedFileBase file)
         {
-            var viewModel = new IndexViewModel();
+            var viewModel = new UploadRulesViewModel();
 
             if (file != null)
             {
@@ -55,14 +62,16 @@ namespace Erbsenzaehler.Controllers
                 using (var reader = new StreamReader(file.InputStream, Encoding.UTF8))
                 {
                     var json = reader.ReadToEnd();
-                    viewModel.ImportResult = await importer.Import(Db, await GetCurrentClient(), json);
+                    viewModel.Result = await importer.Import(Db, await GetCurrentClient(), json);
                 }
             }
 
-            return View("Index", viewModel);
+            return View(viewModel);
         }
+        #endregion
 
 
+        #region Download
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Download()
@@ -85,5 +94,6 @@ namespace Erbsenzaehler.Controllers
 
             return File(Encoding.Default.GetBytes(json), "text/json", "rules.json");
         }
+        #endregion
     }
 }

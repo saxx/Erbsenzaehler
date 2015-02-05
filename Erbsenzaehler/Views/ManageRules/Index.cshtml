@@ -1,12 +1,5 @@
 ﻿@model Erbsenzaehler.ViewModels.Rules.IndexViewModel
-<h1>Rules</h1>
-
-@if (Model.ImportResult != null)
-{
-    <div class="alert alert-success">
-        @Model.ImportResult.RulesAddedOrUpdated.ToString("N0") @(Model.ImportResult.RulesAddedOrUpdated == 1 ? "rule has" : "rules have") been imported.
-    </div>
-}
+<h2>Rules</h2>
 
 @if (Model.ApplierResult != null)
 {
@@ -14,52 +7,38 @@
         @Model.ApplierResult.LinesUpdated.ToString("N0") @(Model.ApplierResult.LinesUpdated == 1 ? "line has" : "lines have") been updated.
     </div>
 }
-
-@using (Html.BeginForm("Upload", "ManageRules", FormMethod.Post, new { enctype = "multipart/form-data" }))
+else
 {
-    <div class="form-horizontal">
-        @Html.AntiForgeryToken()
-
-        <div class="form-group">
-            @Html.Label("file", "File: ", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <input type="file" name="file" id="file" class="form-control"/>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <button type="submit" class="btn btn-primary">Upload & Import</button>
-            </div>
-        </div>
+    <div class="alert alert-info">
+        You can use rules to automatically categorize and "sanitize" your account statement lines. The text of each line is used to find matching rules.
     </div>
 }
 
-@using (Html.BeginForm("Download", "ManageRules"))
-{
-    <div class="form-horizontal">
-        @Html.AntiForgeryToken()
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <button type="submit" class="btn btn-primary">Download</button>
-            </div>
-        </div>
+<div class="row">
+    <div class="col-sm-3">
+        @using (Html.BeginForm("Download", "ManageRules"))
+        {
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-default btn-block">Export rules</button>
+        }
     </div>
-}
 
-@using (Html.BeginForm("Apply", "ManageRules"))
-{
-    <div class="form-horizontal">
-        @Html.AntiForgeryToken()
+    <div class="col-sm-1"></div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <button type="submit" class="btn btn-primary">Apply rules on all lines (except those updated manually).</button>
-            </div>
-        </div>
+    <div class="col-sm-4">
+        @using (Html.BeginForm("Apply", "ManageRules"))
+        {
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-default btn-block">Reset and apply rules</button>
+        }
     </div>
-}
+
+    <div class="col-sm-1"></div>
+
+    <div class="col-sm-3">
+        @Html.ActionLink("Import rules", "Upload", null, new { @class = "btn btn-default btn-block" })
+    </div>
+</div>
 
 
 

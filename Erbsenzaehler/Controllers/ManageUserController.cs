@@ -39,7 +39,7 @@ namespace Erbsenzaehler.Controllers
 
         public ActionResult ChangePassword()
         {
-            return View();
+            return View(new ChangePasswordViewModel());
         }
 
 
