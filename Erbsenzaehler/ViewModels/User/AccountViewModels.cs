@@ -1,46 +1,8 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Erbsenzaehler.ViewModels.Account
+
+namespace Erbsenzaehler.ViewModels.User
 {
-    public class ExternalLoginConfirmationViewModel
-    {
-        [Required]
-        [Display(Name = "Email")]
-        public string Email { get; set; }
-    }
-
-    public class ExternalLoginListViewModel
-    {
-        public string ReturnUrl { get; set; }
-    }
-
-    public class SendCodeViewModel
-    {
-        public string SelectedProvider { get; set; }
-        public ICollection<SelectListItem> Providers { get; set; }
-        public string ReturnUrl { get; set; }
-        public bool RememberMe { get; set; }
-    }
-
-    public class VerifyCodeViewModel
-    {
-        [Required]
-        public string Provider { get; set; }
-
-        [Required]
-        [Display(Name = "Code")]
-        public string Code { get; set; }
-
-        public string ReturnUrl { get; set; }
-
-        [Display(Name = "Remember this browser?")]
-        public bool RememberBrowser { get; set; }
-
-        public bool RememberMe { get; set; }
-    }
-
     public class ForgotViewModel
     {
         [Required]
@@ -50,14 +12,14 @@ namespace Erbsenzaehler.ViewModels.Account
 
     public class LoginViewModel
     {
-        [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
+        [Required(ErrorMessage = "Enter your e-mail address.")]
+        [Display(Name = "Your e-mail")]
+        [EmailAddress(ErrorMessage = "Enter your e-mail address.")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Enter your password.")]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Your password")]
         public string Password { get; set; }
 
         [Display(Name = "Remember me?")]
@@ -66,15 +28,15 @@ namespace Erbsenzaehler.ViewModels.Account
 
     public class RegisterViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Enter your e-mail address.")]
         [EmailAddress]
-        [Display(Name = "Email")]
+        [Display(Name = "Your e-mail")]
         public string Email { get; set; }
 
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [Required(ErrorMessage = "Choose a password.")]
+        [StringLength(100, ErrorMessage = "The password must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Choose password")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
