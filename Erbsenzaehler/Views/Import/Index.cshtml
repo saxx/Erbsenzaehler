@@ -31,6 +31,7 @@ else
         @Html.AntiForgeryToken()
 
         <div class="form-group">
+            @* ReSharper disable once Html.IdNotResolved *@
             <label for="accountId" class="control-label col-sm-2">
                 Account
                 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="You can use multiple accounts to group your account statements, for example one account for your VISA, one for your MasterCard and one for your giro account statements."></span>
@@ -39,6 +40,7 @@ else
                 @Html.DropDownList("accountId", Model.AvailableAccounts, new { @class = "form-control" })
             </div>
 
+            @* ReSharper disable once Html.IdNotResolved *@
             <label for="importer" class="control-label col-sm-2">
                 Format
                 <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="You need to specify the format of your account statements file, so that Erbsenzähler can read and interpret it correctly."></span>
