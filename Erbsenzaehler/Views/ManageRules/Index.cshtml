@@ -37,7 +37,7 @@ else
                 <textarea ng-model="rule.regex" ng-blur="saveRule(rule, $event)" class="form-control" placeholder="Regular expression?" required></textarea>
             </td>
             <td>
-                <input type="text" ng-model="rule.category" ng-blur="saveRule(rule)" class="form-control" placeholder="Apply a category?" />
+                <input type="text" ng-model="rule.category" ng-blur="saveRule(rule)" class="form-control" placeholder="Apply a category?"/>
             </td>
             <td>
                 <select ng-model="rule.ignore" class="form-control" ng-change="saveRule(rule)" ng-options="o.value as o.name for o in ignoreOptions"></select>
@@ -52,7 +52,7 @@ else
     </table>
 </div>
 
-<hr />
+<hr/>
 <h4>More</h4>
 <div class="row">
     <div class="col-sm-3">
@@ -83,49 +83,43 @@ else
 @section scripts {
     @* ReSharper disable once InconsistentNaming *@
     <script>
-        erbsenzaehlerServices.factory('Rule', function ($resource) {
+        erbsenzaehlerServices.factory('Rule', function($resource) {
             return $resource('@Url.Action("Json")/:id', { id: '@@id' }, {
                 update: {
                     method: 'PUT'
                 }
             });
         });
-
-        erbsenzaehlerControllers.controller('rulesController', function ($scope, Rule) {
+        erbsenzaehlerControllers.controller('rulesController', function($scope, Rule) {
             $scope.ignoreOptions = [
-                 { name: 'Ignore', value: true },
-                 { name: 'Do not ignore', value: false }
+                { name: 'Ignore', value: true }, { name: 'Do not ignore', value: false }
             ];
-
             $scope.dateOptions = [
-                 { name: 'First of current month', value: @((int)Rule.ChangeDateToOption.FirstOfCurrentMonth) },
-                 { name: 'Last of current month', value: @((int)Rule.ChangeDateToOption.LastOfCurrentMonth) },
-                 { name: 'Nearest first of month', value: @((int)Rule.ChangeDateToOption.NearestFirstOfMonth) },
-                 { name: 'Nearest last of month', value: @((int)Rule.ChangeDateToOption.NearestLastOfMonth) }
+                { name: 'First of current month', value: @((int) Rule.ChangeDateToOption.FirstOfCurrentMonth) }, { name: 'Last of current month', value: @((int) Rule.ChangeDateToOption.LastOfCurrentMonth) }, { name: 'Nearest first of month', value: @((int) Rule.ChangeDateToOption.NearestFirstOfMonth) }, { name: 'Nearest last of month', value: @((int) Rule.ChangeDateToOption.NearestLastOfMonth) }
             ];
 
-            $scope.loadRules = function () {
+            $scope.loadRules = function() {
                 $scope.loading = true;
-                $scope.rules = Rule.query(function () {
+                $scope.rules = Rule.query(function() {
                     $scope.loading = false;
                 });
             };
 
-            $scope.addRule = function () {
+            $scope.addRule = function() {
                 $scope.loading = true;
                 var newRule = new Rule();
                 newRule.regex = 'regular expression';
                 newRule.category = 'A category';
-                Rule.save(newRule, function () {
+                Rule.save(newRule, function() {
                     $scope.loadRules();
                 });
             };
 
-            $scope.saveRule = function (updatedRule, event) {
+            $scope.saveRule = function(updatedRule, event) {
                 if (event) {
                     var control = $(event.target);
                     if (control.attr("required") && control.val().length <= 0) {
-                        setTimeout(function () { control.focus(); }, 50);
+                        setTimeout(function() { control.focus(); }, 50);
                         return;
                     }
                 }
@@ -133,8 +127,8 @@ else
                 updatedRule.$update();
             };
 
-            $scope.deleteRule = function (deletedRule) {
-                deletedRule.$delete(function () {
+            $scope.deleteRule = function(deletedRule) {
+                deletedRule.$delete(function() {
                     var index = $scope.rules.indexOf(deletedRule);
                     $scope.rules.splice(index, 1);
                 });

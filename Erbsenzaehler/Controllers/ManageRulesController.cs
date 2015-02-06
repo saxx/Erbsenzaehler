@@ -20,7 +20,6 @@ namespace Erbsenzaehler.Controllers
             return View(new IndexViewModel());
         }
 
-
         #region Apply
 
         [HttpPost]
@@ -44,7 +43,6 @@ namespace Erbsenzaehler.Controllers
         }
 
         #endregion
-
 
         #region Upload
 
@@ -75,7 +73,6 @@ namespace Erbsenzaehler.Controllers
         }
 
         #endregion
-
 
         #region Download
 
@@ -178,7 +175,10 @@ namespace Erbsenzaehler.Controllers
 
         public class JsonRule
         {
-            public JsonRule() { }
+            public JsonRule()
+            {
+            }
+
 
             public JsonRule(Rule rule)
             {
@@ -188,6 +188,7 @@ namespace Erbsenzaehler.Controllers
                 ignore = rule.ChangeIgnoreTo;
                 date = rule.ChangeDateTo;
             }
+
 
             // ReSharper disable InconsistentNaming
             public int id { get; set; }

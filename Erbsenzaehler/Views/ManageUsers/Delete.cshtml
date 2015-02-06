@@ -1,0 +1,30 @@
+﻿@model Erbsenzaehler.ViewModels.ManageUsers.DeleteViewModel
+
+<h2>Delete user '@Model.Email'</h2>
+
+@if (Model.IsCurrentUser)
+{
+    <div class="alert alert-danger">
+        You cannot delete your own user.
+    </div>
+
+    @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-default" })
+}
+else
+{
+    <text>
+        <p>
+            Are you sure you want to delete the user '@Model.Email'? This user will not be able to log in anymore.
+        </p>
+
+        <div>
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-actions no-color">
+                    <input type="submit" value="Delete" class="btn btn-danger"/> @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-default" })
+                </div>
+            }
+        </div>
+    </text>
+}

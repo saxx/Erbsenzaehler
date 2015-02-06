@@ -163,6 +163,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\ManageUsersController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ControllerBase.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -195,6 +196,9 @@
     <Compile Include="Rules\RulesImporter.cs" />
     <Compile Include="Rules\RulesImporterResult.cs" />
     <Compile Include="Rules\RulesApplier.cs" />
+    <Compile Include="ViewModels\ManageUsers\CreateViewModel.cs" />
+    <Compile Include="ViewModels\ManageUsers\DeleteViewModel.cs" />
+    <Compile Include="ViewModels\ManageUsers\IndexViewModel.cs" />
     <Compile Include="ViewModels\Rules\UploadRulesViewModel.cs" />
     <Compile Include="ViewModels\User\AccountViewModels.cs" />
     <Compile Include="Models\User.cs" />
@@ -658,6 +662,9 @@
     <Content Include="Views\ManageClient\Index.cshtml" />
     <Content Include="Views\ManageClient\Delete.cshtml" />
     <Content Include="Views\ManageRules\Upload.cshtml" />
+    <Content Include="Views\ManageUsers\Index.cshtml" />
+    <Content Include="Views\ManageUsers\Create.cshtml" />
+    <Content Include="Views\ManageUsers\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -16,12 +16,11 @@ namespace Erbsenzaehler
                 "~/Scripts/moment.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/app").Include(
-                "~/Scripts/app/*.js"
-            ));
+                "~/Scripts/app/*.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/chartjs").Include(
-                            "~/Scripts/jquery.globalize/globalize.js",
-                            "~/Scripts/dx.chartjs.js"));
+                "~/Scripts/jquery.globalize/globalize.js",
+                "~/Scripts/dx.chartjs.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                 "~/Scripts/jquery.validate*"));
