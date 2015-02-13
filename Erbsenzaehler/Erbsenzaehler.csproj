@@ -181,6 +181,10 @@
     <Compile Include="Migrations\201502051440258_Initial.Designer.cs">
       <DependentUpon>201502051440258_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201502130945410_CompacterLines.cs" />
+    <Compile Include="Migrations\201502130945410_CompacterLines.Designer.cs">
+      <DependentUpon>201502130945410_CompacterLines.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Client.cs" />
@@ -675,6 +679,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201502051440258_Initial.resx">
       <DependentUpon>201502051440258_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502130945410_CompacterLines.resx">
+      <DependentUpon>201502130945410_CompacterLines.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

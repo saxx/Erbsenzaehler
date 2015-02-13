@@ -28,7 +28,7 @@ namespace Erbsenzaehler.ViewModels.Lines
         {
             var uniqueDates = db.Lines
                 .Where(x => x.Account.ClientId == client.Id)
-                .Select(x => x.Date)
+                .Select(x => x.Date ?? x.OriginalDate)
                 .Distinct()
                 .ToList()
                 .Select(x => new DateTime(x.Year, x.Month, 1))
@@ -64,18 +64,19 @@ namespace Erbsenzaehler.ViewModels.Lines
             var query = db.Lines
                 .Where(x => x.Account.ClientId == client.Id)
                 .Include(x => x.Account)
-                .Where(x => x.Date.Year == selectedYear && x.Date.Month == selectedMonth)
-                .OrderByDescending(x => x.Date);
+                .Where(x => (x.Date.HasValue && x.Date.Value.Year == selectedYear && x.Date.Value.Month == selectedMonth) ||
+                            (!x.Date.HasValue && x.OriginalDate.Year == selectedYear && x.OriginalDate.Month == selectedMonth))
+                .OrderByDescending(x => x.Date ?? x.OriginalDate);
 
             Lines = from x in (await query.ToListAsync())
                 select new Line
                 {
                     Account = x.Account.Name,
-                    Amount = x.Amount.ToString("N2"),
+                    Amount = x.OriginalAmount.ToString("N2"),
                     Category = x.Category,
-                    Date = x.Date.ToShortDateString(),
+                    Date = (x.Date ?? x.OriginalDate).ToShortDateString(),
                     Id = x.Id,
-                    Text = x.Text,
+                    Text = x.OriginalText,
                     Ignore = x.Ignore
                 };
         }

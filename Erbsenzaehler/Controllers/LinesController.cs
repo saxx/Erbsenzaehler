@@ -47,9 +47,19 @@ namespace Erbsenzaehler.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
             }
 
-            lineInDatebase.Ignore = line.Ignore;
-            lineInDatebase.Date = DateTime.Parse(line.Date);
-            lineInDatebase.UpdatedManually = true;
+            if (lineInDatebase.Ignore != line.Ignore)
+            {
+                lineInDatebase.Ignore = line.Ignore;
+                lineInDatebase.IgnoreUpdatedManually = true;
+            }
+
+            var newDate = DateTime.Parse(line.Date);
+            if (lineInDatebase.Date != newDate)
+            {
+                lineInDatebase.Date = newDate;
+                lineInDatebase.DateUpdatedManually = true;
+            }
+
             Db.SaveChanges();
 
             return await Json("");

@@ -31,7 +31,7 @@ namespace Erbsenzaehler.Controllers
             var currentClient = await GetCurrentClient();
             var applier = new RulesApplier();
 
-            var lines = Db.Lines.Where(x => !x.UpdatedManually);
+            var lines = Db.Lines;
 
             viewModel.ApplierResult = await applier.Apply(Db, currentClient, lines, true);
             if (viewModel.ApplierResult.LinesUpdated > 0)

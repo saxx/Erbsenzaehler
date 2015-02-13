@@ -17,9 +17,20 @@ namespace Erbsenzaehler.Rules
             {
                 if (resetFirst)
                 {
-                    line.Ignore = false;
-                    line.Date = line.OriginalDate;
-                    line.Category = null;
+                    if (!line.IgnoreUpdatedManually)
+                    {
+                        line.Ignore = false;
+                    }
+
+                    if (!line.DateUpdatedManually)
+                    {
+                        line.Date = line.OriginalDate;
+                    }
+
+                    if (!line.CategoryUpdatedManually)
+                    {
+                        line.Category = null;
+                    }
                 }
 
                 if (await Apply(db, client, line))
@@ -41,17 +52,17 @@ namespace Erbsenzaehler.Rules
                 {
                     if (Regex.IsMatch(line.OriginalText, regex, RegexOptions.IgnoreCase | RegexOptions.Multiline))
                     {
-                        if (rule.ChangeCategoryTo != null)
+                        if (rule.ChangeCategoryTo != null && !line.CategoryUpdatedManually)
                         {
                             line.Category = string.IsNullOrEmpty(rule.ChangeCategoryTo) ? null : rule.ChangeCategoryTo;
                         }
 
-                        if (rule.ChangeIgnoreTo.HasValue)
+                        if (rule.ChangeIgnoreTo.HasValue && !line.IgnoreUpdatedManually)
                         {
                             line.Ignore = rule.ChangeIgnoreTo.Value;
                         }
 
-                        if (rule.ChangeDateTo.HasValue)
+                        if (rule.ChangeDateTo.HasValue && !line.DateUpdatedManually)
                         {
                             switch (rule.ChangeDateTo.Value)
                             {

@@ -18,7 +18,7 @@ namespace Erbsenzaehler.ViewModels.Reports
             allCategories.Add(EmptyCategory);
 
             var amounts = (from x in db.Lines.Where(x => x.Account.ClientId == client.Id && !x.Ignore)
-                group x by new { Category = x.Category ?? EmptyCategory, x.Date.Year, x.Date.Month }
+                group x by new { Category = x.Category ?? EmptyCategory, (x.Date ?? x.OriginalDate).Year, (x.Date ?? x.OriginalDate).Month }
                 into g
                 orderby g.Key.Year, g.Key.Month
                 select new
@@ -26,8 +26,8 @@ namespace Erbsenzaehler.ViewModels.Reports
                     g.Key.Category,
                     g.Key.Year,
                     g.Key.Month,
-                    Income = g.Where(y => y.Amount > 0).Select(y => y.Amount).DefaultIfEmpty(0).Sum(),
-                    Spent = g.Where(y => y.Amount < 0).Select(y => y.Amount).DefaultIfEmpty(0).Sum()
+                    Income = g.Where(y => y.OriginalAmount > 0).Select(y => y.OriginalAmount).DefaultIfEmpty(0).Sum(),
+                    Spent = g.Where(y => y.OriginalAmount < 0).Select(y => y.OriginalAmount).DefaultIfEmpty(0).Sum()
                 }).ToList();
 
             Overview = new OverviewContainer { CategoryHeaders = allCategories };

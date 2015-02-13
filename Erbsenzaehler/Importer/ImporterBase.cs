@@ -32,10 +32,6 @@ namespace Erbsenzaehler.Importer
                 {
                     line.AccountId = account.Id;
 
-                    line.Text = line.OriginalText;
-                    line.Date = line.OriginalDate;
-                    line.Amount = line.OriginalAmount;
-
                     await rulesApplier.Apply(db, client, line);
 
                     db.Lines.Add(line);
