@@ -30,7 +30,8 @@
                 </td>
                 <td>
                     <span style="cursor: pointer;" ng-click="changeDate(line, $event)">
-                        {{line.Date}}
+                        {{line.Date}} 
+                        <span class="text-muted" ng-if="line.Date != line.OriginalDate"><s>{{line.OriginalDate}}</s></span>
                     </span>
                 </td>
                 <td>
@@ -48,74 +49,74 @@
             </tr>
         </table>
 
-        <input id="date" type="text" style="display: none; width: 90px;"/>
+        <input id="date" type="text" style="display: none; width: 90px;" />
     </div>
 
 
-@section scripts {
-    <script>
-        function getParameterByName(name) {
-            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-                results = regex.exec(location.search);
-            return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-        }
-
-        erbsenzaehlerServices.factory('linesResource', [
-            '$resource',
-            function($resource) {
-                return $resource('@Url.Action("Json")?date=:date',
-                { date: '' }, {
-                    query: { method: 'GET', params: { date: '' } },
-                    update: { method: 'POST', params: { date: '' } }
-                });
+    @section scripts {
+        <script>
+            function getParameterByName(name) {
+                name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+                var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                    results = regex.exec(location.search);
+                return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
             }
-        ]);
 
-        erbsenzaehlerControllers.controller('linesController', [
-            '$scope', 'linesResource', function($scope, linesResource) {
-                $scope.LoadLines = function() {
-                    var selectedDate = window.location.hash.substring(1);
-                    if ($scope.viewModel && $scope.viewModel.SelectedDate)
-                        selectedDate = $scope.viewModel.SelectedDate;
-
-                    $scope.loading = true;
-                    $scope.viewModel = linesResource.query({ date: selectedDate }, function(result) {
-                        window.location.hash = "#" + result.SelectedDate;
-                        $scope.loading = false;
+            erbsenzaehlerServices.factory('linesResource', [
+                '$resource',
+                function ($resource) {
+                    return $resource('@Url.Action("Json")?date=:date',
+                    { date: '' }, {
+                        query: { method: 'GET', params: { date: '' } },
+                        update: { method: 'POST', params: { date: '' } }
                     });
-                };
+                }
+            ]);
 
-                $scope.switchIgnore = function(line) {
-                    line.Ignore = !line.Ignore;
-                    linesResource.update(line);
-                };
+            erbsenzaehlerControllers.controller('linesController', [
+                '$scope', 'linesResource', function ($scope, linesResource) {
+                    $scope.LoadLines = function () {
+                        var selectedDate = window.location.hash.substring(1);
+                        if ($scope.viewModel && $scope.viewModel.SelectedDate)
+                            selectedDate = $scope.viewModel.SelectedDate;
 
-                $scope.changeDate = function(line, event) {
-                    var textbox = $("#date");
-                    textbox.val(line.Date);
+                        $scope.loading = true;
+                        $scope.viewModel = linesResource.query({ date: selectedDate }, function (result) {
+                            window.location.hash = "#" + result.SelectedDate;
+                            $scope.loading = false;
+                        });
+                    };
 
-                    var clickedControl = $(event.target);
-                    textbox
-                        .css("position", "absolute")
-                        .css("top", clickedControl.offset().top + "px")
-                        .css("left", clickedControl.offset().left + "px")
-                        .show()
-                        .focus();
-
-                    textbox.off();
-                    textbox.focusout(function() {
-                        line.Date = textbox.val();
-                        textbox.hide();
+                    $scope.switchIgnore = function (line) {
+                        line.Ignore = !line.Ignore;
                         linesResource.update(line);
-                    });
-                };
+                    };
 
-                $scope.LoadLines();
-            }
-        ]);
-    </script>
-}}
+                    $scope.changeDate = function (line, event) {
+                        var textbox = $("#date");
+                        textbox.val(line.Date);
+
+                        var clickedControl = $(event.target);
+                        textbox
+                            .css("position", "absolute")
+                            .css("top", clickedControl.offset().top + "px")
+                            .css("left", clickedControl.offset().left + "px")
+                            .show()
+                            .focus();
+
+                        textbox.off();
+                        textbox.focusout(function () {
+                            line.Date = textbox.val();
+                            textbox.hide();
+                            linesResource.update(line);
+                        });
+                    };
+
+                    $scope.LoadLines();
+                }
+            ]);
+        </script>
+    }}
 else
 {
     <div class="alert alert-warning">

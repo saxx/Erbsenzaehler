@@ -75,6 +75,7 @@ namespace Erbsenzaehler.ViewModels.Lines
                     Amount = x.OriginalAmount.ToString("N2"),
                     Category = x.Category,
                     Date = (x.Date ?? x.OriginalDate).ToShortDateString(),
+                    OriginalDate = x.OriginalDate.ToShortDateString(),
                     Id = x.Id,
                     Text = x.OriginalText,
                     Ignore = x.Ignore
@@ -91,6 +92,7 @@ namespace Erbsenzaehler.ViewModels.Lines
         {
             public string Account { get; set; }
             public string Date { get; set; }
+            public string OriginalDate { get; set; }
             public string Text { get; set; }
             public string Amount { get; set; }
             public string Category { get; set; }
