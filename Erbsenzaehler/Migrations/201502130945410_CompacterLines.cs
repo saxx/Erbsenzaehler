@@ -1,8 +1,7 @@
+using System.Data.Entity.Migrations;
+
 namespace Erbsenzaehler.Migrations
 {
-    using System;
-    using System.Data.Entity.Migrations;
-    
     public partial class CompacterLines : DbMigration
     {
         public override void Up()
@@ -15,7 +14,8 @@ namespace Erbsenzaehler.Migrations
             DropColumn("dbo.Lines", "Text");
             DropColumn("dbo.Lines", "UpdatedManually");
         }
-        
+
+
         public override void Down()
         {
             AddColumn("dbo.Lines", "UpdatedManually", c => c.Boolean(nullable: false));

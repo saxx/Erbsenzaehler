@@ -13,7 +13,7 @@ namespace Erbsenzaehler.Models
 
         public string Category { get; set; }
         public DateTime? Date { get; set; }
-        
+
         public bool Ignore { get; set; }
         public bool IgnoreUpdatedManually { get; set; }
         public bool CategoryUpdatedManually { get; set; }

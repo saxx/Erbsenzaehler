@@ -182,6 +182,7 @@ namespace Erbsenzaehler.Controllers
 
             private readonly Rule _rule;
 
+
             public JsonRule(Rule rule)
             {
                 _rule = rule;

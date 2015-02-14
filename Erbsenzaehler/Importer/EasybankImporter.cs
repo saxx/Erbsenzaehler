@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
+using Erbsenzaehler.ExtensionMethods;
 using Erbsenzaehler.Models;
 
 namespace Erbsenzaehler.Importer
@@ -91,7 +92,7 @@ namespace Erbsenzaehler.Importer
 
                 public object ConvertFromString(TypeConverterOptions options, string text)
                 {
-                    return text.Replace("   ", " ").Replace("  ", " ").Replace("   ", " ").Replace("  ", " ").Trim();
+                    return text.RemoveCrlf().RemoveMultipleBlanks().Trim();
                 }
 
 
