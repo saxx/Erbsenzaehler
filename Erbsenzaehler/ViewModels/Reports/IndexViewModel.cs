@@ -26,8 +26,8 @@ namespace Erbsenzaehler.ViewModels.Reports
                     g.Key.Category,
                     g.Key.Year,
                     g.Key.Month,
-                    Income = g.Where(y => y.OriginalAmount > 0).Select(y => y.OriginalAmount).DefaultIfEmpty(0).Sum(),
-                    Spent = g.Where(y => y.OriginalAmount < 0).Select(y => y.OriginalAmount).DefaultIfEmpty(0).Sum()
+                    Income = g.Where(y => y.OriginalAmount > 0 && y.Category == null).Select(y => y.OriginalAmount).DefaultIfEmpty(0).Sum(),
+                    Spent = g.Where(y => y.OriginalAmount < 0 || y.Category != null).Select(y => y.OriginalAmount).DefaultIfEmpty(0).Sum()
                 }).ToList();
 
             Overview = new OverviewContainer { CategoryHeaders = allCategories };

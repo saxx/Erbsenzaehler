@@ -121,8 +121,8 @@ else
             $scope.addRule = function() {
                 $scope.loading = true;
                 var newRule = new Rule();
-                newRule.regex = 'regular expression';
-                newRule.category = 'A category';
+                newRule.regex = 'Enter your regular expression here';
+                newRule.category = '';
                 Rule.save(newRule, function() {
                     $scope.loadRules();
                 });
