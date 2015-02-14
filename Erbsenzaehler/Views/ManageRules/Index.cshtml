@@ -37,7 +37,7 @@ else
                 <textarea ng-model="rule.regex" ng-blur="saveRule(rule, $event)" class="form-control" placeholder="Regular expression?" required></textarea>
             </td>
             <td>
-                <input type="text" ng-model="rule.category" ng-blur="saveRule(rule)" class="form-control" placeholder="Apply a category?"/>
+                <input type="text" ng-model="rule.category" ng-blur="saveRule(rule)" class="form-control" placeholder="Apply a category?" />
             </td>
             <td>
                 <select ng-model="rule.ignore" class="form-control" ng-change="saveRule(rule)" ng-options="o.value as o.name for o in ignoreOptions"></select>
@@ -46,13 +46,18 @@ else
                 <select ng-model="rule.date" class="form-control" ng-change="saveRule(rule)" ng-options="o.value as o.name for o in dateOptions"></select>
             </td>
             <td>
-                <button class="btn btn-sm btn-danger pull-right" ng-click="deleteRule(rule)">Delete</button>
+                <div>
+                    <button class="btn btn-sm btn-danger btn-block" ng-click="deleteRule(rule)">Delete</button>
+                </div>
+                <div ng-class="{'label label-info': rule.affectedLines != '0', 'label label-warning': rule.affectedLines == '0' }">
+                    {{ rule.affectedLines }} matches
+                </div>
             </td>
         </tr>
     </table>
 </div>
 
-<hr/>
+<hr />
 <h4>More</h4>
 <div class="row">
     <div class="col-sm-3">
@@ -87,6 +92,14 @@ else
             return $resource('@Url.Action("Json")/:id', { id: '@@id' }, {
                 update: {
                     method: 'PUT'
+                },
+                getAffectedLines: {
+                    method: 'GET',
+                    url: '@Url.Action("AffectedLines")/:id',
+                    transformResponse: function(data) {
+                        alert(data);
+                        return data;
+                    }
                 }
             });
         });
@@ -132,7 +145,9 @@ else
                     var index = $scope.rules.indexOf(deletedRule);
                     $scope.rules.splice(index, 1);
                 });
-            }
+            };
+
+
 
             $scope.loadRules();
         });

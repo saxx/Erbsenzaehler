@@ -32,3 +32,8 @@
     width: 1%;
 }
 
+.rules-editor .label {
+    margin-top: 2px;
+    display: block;
+}
+

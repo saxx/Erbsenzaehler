@@ -110,7 +110,7 @@ namespace Erbsenzaehler.Controllers
                 .Where(x => x.ClientId == currentClient.Id)
                 .OrderBy(x => x.Regex)
                 .ToListAsync())
-                .Select(x => new JsonRule(x));
+                .Select(x => new JsonRule(x).LoadAffectedLines(Db, currentClient));
             return base.Json(rules, JsonRequestBehavior.AllowGet);
         }
 
@@ -131,7 +131,7 @@ namespace Erbsenzaehler.Controllers
             Db.Rules.Add(rule);
             await Db.SaveChangesAsync();
 
-            return base.Json(new JsonRule(rule));
+            return base.Json(new JsonRule(rule).LoadAffectedLines(Db, currentClient));
         }
 
 
@@ -153,7 +153,7 @@ namespace Erbsenzaehler.Controllers
             rule.ChangeDateTo = jsonRule.date;
             await Db.SaveChangesAsync();
 
-            return base.Json(new JsonRule(rule));
+            return base.Json(new JsonRule(rule).LoadAffectedLines(Db, currentClient));
         }
 
 
@@ -180,13 +180,37 @@ namespace Erbsenzaehler.Controllers
             }
 
 
+            private readonly Rule _rule;
+
             public JsonRule(Rule rule)
             {
+                _rule = rule;
+
                 id = rule.Id;
                 regex = rule.Regex;
                 category = rule.ChangeCategoryTo;
                 ignore = rule.ChangeIgnoreTo;
                 date = rule.ChangeDateTo;
+            }
+
+
+            public JsonRule LoadAffectedLines(Db db, Client currentClient)
+            {
+                if (_rule != null)
+                {
+                    var rulesApplier = new RulesApplier();
+                    var matchCount = 0;
+                    foreach (var lineText in db.Lines.Where(x => x.Account.ClientId == currentClient.Id).Select(x => x.OriginalText))
+                    {
+                        if (rulesApplier.IsMatch(_rule, lineText))
+                        {
+                            matchCount++;
+                        }
+                    }
+                    affectedLines = matchCount.ToString("N0");
+                }
+
+                return this;
             }
 
 
@@ -196,6 +220,7 @@ namespace Erbsenzaehler.Controllers
             public string category { get; set; }
             public bool? ignore { get; set; }
             public Rule.ChangeDateToOption? date { get; set; }
+            public string affectedLines { get; set; }
             // ReSharper restore InconsistentNaming
         }
 
