@@ -1,0 +1,56 @@
+﻿@using Newtonsoft.Json
+@model Erbsenzaehler.ViewModels.Reports.BalanceViewModel
+@if (Model.BalancePerMonth.Any())
+{
+    <h2>Report: Monthly balance</h2>
+
+    <div id="chartContainer" style="max-width: 100%; height: 600px;"></div>
+    <p>
+        &nbsp;
+    </p>
+
+
+    @section scripts
+{
+        <script>
+            var json = @Html.Raw(JsonConvert.SerializeObject(Model.BalancePerMonth.Select(x=>new
+                   {
+                       Name = x.Key.ToString(),
+                       x.Value
+                   })));
+
+
+            $(function() {
+                $('#chartContainer').dxChart({
+                    dataSource: json,
+                    tooltip: {
+                        enabled: true,
+                        argumentFormat: 'currency',
+                        customizeText: function() {
+                            return this.argumentText + ": " + this.valueText + " €";
+                        }
+                    },
+                    commonSeriesSettings: {
+                        type: 'splineArea',
+                        argumentField: 'Name'
+                    },
+                    legend: {
+                        visible: false  
+                    },
+                    series: [
+                        {
+                            valueField: 'Value',
+                            name: 'Balance',
+                            point: { visible: true }
+                        }
+                    ]
+                });
+            });
+        </script>
+    }}
+else
+{
+    <div class="alert alert-warning">
+        You don't have anything to display here yet. You probably want to @Html.ActionLink("import your data", "Index", "Import", null, new { @class = "alert-link" }) first.
+    </div>
+}
