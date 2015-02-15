@@ -60,6 +60,12 @@ namespace Erbsenzaehler.Controllers
                 lineInDatebase.DateUpdatedManually = true;
             }
 
+            if (lineInDatebase.Category != line.Category)
+            {
+                lineInDatebase.Category = line.Category;
+                lineInDatebase.CategoryUpdatedManually = true;
+            }
+
             Db.SaveChanges();
 
             return await Json("");

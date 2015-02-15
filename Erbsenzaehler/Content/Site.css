@@ -8,9 +8,15 @@
     width: 350px; 
 }
 
-.line-ignore {
+.lines-editor .line-ignore {
     color: silver;
     text-decoration: line-through;
+}
+
+.lines-editor .noCategory {
+    background: transparent;
+    padding: 0.2em 2em 0.3em;
+    font-size: 75%;
 }
 
 .rules-editor textarea {

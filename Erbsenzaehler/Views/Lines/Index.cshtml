@@ -13,7 +13,7 @@
             <select id="dateDropdown" class="form-control" ng-model="viewModel.SelectedDate" ng-change="LoadLines()" ng-options="m.Value as m.Name for m in viewModel.AvailableDates"></select>
         </p>
 
-        <table class="table table-striped" ng-show="!loading">
+        <table class="table table-striped lines-editor" ng-show="!loading">
             <tr>
                 <th>Account</th>
                 <th>Date</th>
@@ -30,7 +30,7 @@
                 </td>
                 <td>
                     <span style="cursor: pointer;" ng-click="changeDate(line, $event)">
-                        {{line.Date}} 
+                        {{line.Date}}
                         <span class="text-muted" ng-if="line.Date != line.OriginalDate"><s>{{line.OriginalDate}}</s></span>
                     </span>
                 </td>
@@ -41,7 +41,9 @@
                     {{line.Amount}}
                 </td>
                 <td>
-                    <span class="label label-success">{{line.Category}}</span>
+                    <span ng-click="changeCategory(line, $event)" ng-class="{'label label-success': line.Category != null, 'noCategory': line.Category == null }" style="cursor: pointer;">
+                        {{line.Category}}
+                    </span>
                 </td>
                 <td>
                     <span class="glyphicon" style="cursor: pointer;" ng-click="switchIgnore(line)" ng-class="{'glyphicon-eye-open': line.Ignore, 'glyphicon-eye-close': !line.Ignore}" title="Ignore"></span>
@@ -50,6 +52,7 @@
         </table>
 
         <input id="date" type="text" style="display: none; width: 90px;" />
+        <input id="category" type="text" style="display: none; width: 90px;" />
     </div>
 
 
@@ -107,6 +110,26 @@
                         textbox.off();
                         textbox.focusout(function () {
                             line.Date = textbox.val();
+                            textbox.hide();
+                            linesResource.update(line);
+                        });
+                    };
+
+                    $scope.changeCategory = function (line, event) {
+                        var textbox = $("#category");
+                        textbox.val(line.Category);
+
+                        var clickedControl = $(event.target);
+                        textbox
+                            .css("position", "absolute")
+                            .css("top", clickedControl.offset().top + "px")
+                            .css("left", clickedControl.offset().left + "px")
+                            .show()
+                            .focus();
+
+                        textbox.off();
+                        textbox.focusout(function () {
+                            line.Category = textbox.val();
                             textbox.hide();
                             linesResource.update(line);
                         });
