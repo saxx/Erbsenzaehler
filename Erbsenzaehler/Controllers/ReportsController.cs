@@ -18,5 +18,11 @@ namespace Erbsenzaehler.Controllers
             var viewModel = await (new BalanceViewModel()).Fill(Db, await GetCurrentClient());
             return View(viewModel);
         }
+
+        public async Task<ActionResult> Amounts()
+        {
+            var viewModel = await (new AmountsViewModel()).Fill(Db, await GetCurrentClient());
+            return View(viewModel);
+        }
     }
 }

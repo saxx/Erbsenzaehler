@@ -204,6 +204,7 @@
     <Compile Include="ViewModels\ManageUsers\CreateViewModel.cs" />
     <Compile Include="ViewModels\ManageUsers\DeleteViewModel.cs" />
     <Compile Include="ViewModels\ManageUsers\IndexViewModel.cs" />
+    <Compile Include="ViewModels\Reports\AmountsViewModel.cs" />
     <Compile Include="ViewModels\Reports\BalanceViewModel.cs" />
     <Compile Include="ViewModels\Reports\Date.cs" />
     <Compile Include="ViewModels\Rules\UploadRulesViewModel.cs" />
@@ -673,6 +674,7 @@
     <Content Include="Views\ManageUsers\Create.cshtml" />
     <Content Include="Views\ManageUsers\Delete.cshtml" />
     <Content Include="Views\Reports\Balance.cshtml" />
+    <Content Include="Views\Reports\Amounts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
