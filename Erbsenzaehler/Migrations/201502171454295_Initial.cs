@@ -28,11 +28,11 @@ namespace Erbsenzaehler.Migrations
                     OriginalDate = c.DateTime(nullable: false),
                     OriginalText = c.String(),
                     Category = c.String(),
-                    Amount = c.Decimal(nullable: false, precision: 18, scale: 2),
-                    Date = c.DateTime(nullable: false),
-                    Text = c.String(),
+                    Date = c.DateTime(),
                     Ignore = c.Boolean(nullable: false),
-                    UpdatedManually = c.Boolean(nullable: false),
+                    IgnoreUpdatedManually = c.Boolean(nullable: false),
+                    CategoryUpdatedManually = c.Boolean(nullable: false),
+                    DateUpdatedManually = c.Boolean(nullable: false),
                 })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Accounts", t => t.AccountId, cascadeDelete: true)

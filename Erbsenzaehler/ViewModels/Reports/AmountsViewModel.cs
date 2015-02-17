@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using Erbsenzaehler.Models;
 
 namespace Erbsenzaehler.ViewModels.Reports
 {
     public class AmountsViewModel
     {
-
         private const string EmptyCategory = "Sonstiges";
         public const string IncomeCategory = "Income";
 
@@ -23,17 +20,17 @@ namespace Erbsenzaehler.ViewModels.Reports
             allCategories.Add(IncomeCategory);
 
             var amounts = await (from x in db.Lines.Where(x => x.Account.ClientId == client.Id && !x.Ignore)
-                                 group x by new { Category = x.Category ?? EmptyCategory, (x.Date ?? x.OriginalDate).Year, (x.Date ?? x.OriginalDate).Month }
+                group x by new { Category = x.Category ?? EmptyCategory, (x.Date ?? x.OriginalDate).Year, (x.Date ?? x.OriginalDate).Month }
                 into g
-                                 orderby g.Key.Year, g.Key.Month
-                                 select new
-                                 {
-                                     g.Key.Category,
-                                     g.Key.Year,
-                                     g.Key.Month,
-                                     Income = g.Where(y => y.OriginalAmount > 0 && y.Category == null).Select(y => y.OriginalAmount).DefaultIfEmpty(0).Sum(),
-                                     Spent = g.Where(y => y.OriginalAmount < 0 || y.Category != null).Select(y => y.OriginalAmount).DefaultIfEmpty(0).Sum()
-                                 }).ToListAsync();
+                orderby g.Key.Year, g.Key.Month
+                select new
+                {
+                    g.Key.Category,
+                    g.Key.Year,
+                    g.Key.Month,
+                    Income = g.Where(y => y.OriginalAmount > 0 && y.Category == null).Select(y => y.OriginalAmount).DefaultIfEmpty(0).Sum(),
+                    Spent = g.Where(y => y.OriginalAmount < 0 || y.Category != null).Select(y => y.OriginalAmount).DefaultIfEmpty(0).Sum()
+                }).ToListAsync();
 
             var minDate = new Date(DateTime.MaxValue.Year, 12);
             var maxDate = new Date(DateTime.MinValue.Year, 1);
@@ -90,8 +87,6 @@ namespace Erbsenzaehler.ViewModels.Reports
 
                 AmountPerMonth[category] = AmountPerMonth[category].OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
             }
-
-
 
 
             AmountPerMonth = AmountPerMonth.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);

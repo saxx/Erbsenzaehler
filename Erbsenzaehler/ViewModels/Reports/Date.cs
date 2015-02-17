@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Erbsenzaehler.ViewModels.Reports
 {
@@ -13,8 +10,10 @@ namespace Erbsenzaehler.ViewModels.Reports
             Month = month;
         }
 
+
         public int Month { get; }
         public int Year { get; }
+
 
         public override bool Equals(object obj)
         {
@@ -39,43 +38,57 @@ namespace Erbsenzaehler.ViewModels.Reports
             return new DateTime(Year, Month, 1).ToString("MMM yyyy");
         }
 
+
         public int CompareTo(Date other)
         {
             if (other == null)
+            {
                 return 1;
+            }
 
             if (Year == other.Year)
             {
                 if (Month == other.Month)
+                {
                     return 0;
+                }
                 if (Month < other.Month)
+                {
                     return -1;
+                }
                 return 1;
             }
             if (Year < other.Year)
+            {
                 return -1;
+            }
             return 1;
         }
+
 
         public static bool operator <(Date d1, Date d2)
         {
             return d1.CompareTo(d2) < 0;
         }
 
+
         public static bool operator >(Date d1, Date d2)
         {
             return d1.CompareTo(d2) > 0;
         }
+
 
         public static bool operator <=(Date d1, Date d2)
         {
             return d1.CompareTo(d2) <= 0;
         }
 
+
         public static bool operator >=(Date d1, Date d2)
         {
             return d1.CompareTo(d2) >= 0;
         }
+
 
         public static Date operator +(Date date, int months)
         {

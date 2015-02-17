@@ -10,44 +10,44 @@
     </p>
 
 
-    @section scripts
+@section scripts
 {
-        <script>
-            var json = @Html.Raw(JsonConvert.SerializeObject(Model.BalancePerMonth.Select(x=>new
+    <script>
+        var json = @Html.Raw(JsonConvert.SerializeObject(Model.BalancePerMonth.Select(x => new
                    {
                        Name = x.Key.ToString(),
                        x.Value
                    })));
 
 
-            $(function() {
-                $('#chartContainer').dxChart({
-                    dataSource: json,
-                    tooltip: {
-                        enabled: true,
-                        argumentFormat: 'currency',
-                        customizeText: function() {
-                            return this.argumentText + ": " + this.valueText + " €";
-                        }
-                    },
-                    commonSeriesSettings: {
-                        type: 'splineArea',
-                        argumentField: 'Name'
-                    },
-                    legend: {
-                        visible: false  
-                    },
-                    series: [
-                        {
-                            valueField: 'Value',
-                            name: 'Balance',
-                            point: { visible: true }
-                        }
-                    ]
-                });
+        $(function() {
+            $('#chartContainer').dxChart({
+                dataSource: json,
+                tooltip: {
+                    enabled: true,
+                    argumentFormat: 'currency',
+                    customizeText: function() {
+                        return this.argumentText + ": " + this.valueText + " €";
+                    }
+                },
+                commonSeriesSettings: {
+                    type: 'splineArea',
+                    argumentField: 'Name'
+                },
+                legend: {
+                    visible: false
+                },
+                series: [
+                    {
+                        valueField: 'Value',
+                        name: 'Balance',
+                        point: { visible: true }
+                    }
+                ]
             });
-        </script>
-    }}
+        });
+    </script>
+}}
 else
 {
     <div class="alert alert-warning">
