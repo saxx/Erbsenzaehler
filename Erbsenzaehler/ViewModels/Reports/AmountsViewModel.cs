@@ -28,8 +28,8 @@ namespace Erbsenzaehler.ViewModels.Reports
                     g.Key.Category,
                     g.Key.Year,
                     g.Key.Month,
-                    Income = g.Where(y => y.OriginalAmount > 0 && y.Category == null).Select(y => y.OriginalAmount).DefaultIfEmpty(0).Sum(),
-                    Spent = g.Where(y => y.OriginalAmount < 0 || y.Category != null).Select(y => y.OriginalAmount).DefaultIfEmpty(0).Sum()
+                    Income = g.Where(y => (y.Amount ?? y.OriginalAmount) > 0 && y.Category == null).Select(y => (y.Amount ?? y.OriginalAmount)).DefaultIfEmpty(0).Sum(),
+                    Spent = g.Where(y => (y.Amount ?? y.OriginalAmount) < 0 || y.Category != null).Select(y => (y.Amount ?? y.OriginalAmount)).DefaultIfEmpty(0).Sum()
                 }).ToListAsync();
 
             var minDate = new Date(DateTime.MaxValue.Year, 12);

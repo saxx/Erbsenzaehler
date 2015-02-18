@@ -13,11 +13,13 @@ namespace Erbsenzaehler.Models
 
         public string Category { get; set; }
         public DateTime? Date { get; set; }
+        public decimal? Amount { get; set; }
 
         public bool Ignore { get; set; }
         public bool IgnoreUpdatedManually { get; set; }
         public bool CategoryUpdatedManually { get; set; }
         public bool DateUpdatedManually { get; set; }
+        public bool AmountUpdatedManually { get; set; }
 
         public virtual Account Account { get; set; }
     }

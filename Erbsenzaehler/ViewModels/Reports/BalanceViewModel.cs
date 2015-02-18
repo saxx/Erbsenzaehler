@@ -18,7 +18,7 @@ namespace Erbsenzaehler.ViewModels.Reports
                 {
                     g.Key.Year,
                     g.Key.Month,
-                    Balance = g.Select(y => y.OriginalAmount).DefaultIfEmpty(0).Sum()
+                    Balance = g.Select(y => (y.Amount ?? y.OriginalAmount)).DefaultIfEmpty(0).Sum()
                 }).ToListAsync();
 
             BalancePerMonth = new Dictionary<Date, decimal>();

@@ -38,7 +38,10 @@
                     {{line.Text}}
                 </td>
                 <td class="amount">
-                    {{line.Amount}}
+                    <span style="cursor: pointer;" ng-click="changeAmount(line, $event)">
+                        {{line.Amount}}
+                        <span class="text-muted" ng-if="line.Amount != line.OriginalAmount"><s>{{line.OriginalAmount}}</s></span>
+                    </span>
                 </td>
                 <td>
                     <span ng-click="changeCategory(line, $event)" ng-class="{'label label-success': line.Category != null, 'noCategory': line.Category == null }" style="cursor: pointer;">
@@ -52,7 +55,8 @@
         </table>
 
         <input id="date" type="text" style="display: none; width: 90px;"/>
-        <input id="category" type="text" style="display: none; width: 90px;"/>
+        <input id="category" type="text" style="display: none; width: 75px;"/>
+        <input id="amount" type="text" style="display: none; width: 60px;" />
     </div>
 
 
@@ -130,6 +134,26 @@
                     textbox.off();
                     textbox.focusout(function() {
                         line.Category = textbox.val();
+                        textbox.hide();
+                        linesResource.update(line);
+                    });
+                };
+
+                $scope.changeAmount = function (line, event) {
+                    var textbox = $("#amount");
+                    textbox.val(line.Amount);
+
+                    var clickedControl = $(event.target);
+                    textbox
+                        .css("position", "absolute")
+                        .css("top", clickedControl.offset().top + "px")
+                        .css("left", clickedControl.offset().left + "px")
+                        .show()
+                        .focus();
+
+                    textbox.off();
+                    textbox.focusout(function () {
+                        line.Amount = textbox.val();
                         textbox.hide();
                         linesResource.update(line);
                     });

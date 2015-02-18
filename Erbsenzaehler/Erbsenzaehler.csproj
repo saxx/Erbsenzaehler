@@ -188,6 +188,10 @@
     <Compile Include="Migrations\201502171454295_Initial.Designer.cs">
       <DependentUpon>201502171454295_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201502181433402_EditableAmounts.cs" />
+    <Compile Include="Migrations\201502181433402_EditableAmounts.Designer.cs">
+      <DependentUpon>201502181433402_EditableAmounts.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Client.cs" />
@@ -687,6 +691,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201502171454295_Initial.resx">
       <DependentUpon>201502171454295_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502181433402_EditableAmounts.resx">
+      <DependentUpon>201502181433402_EditableAmounts.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

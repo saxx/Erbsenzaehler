@@ -66,6 +66,16 @@ namespace Erbsenzaehler.Controllers
                 lineInDatebase.CategoryUpdatedManually = true;
             }
 
+            decimal amountAsDecimal;
+            if (decimal.TryParse(line.Amount, out amountAsDecimal))
+            {
+                if (lineInDatebase.Amount != amountAsDecimal)
+                {
+                    lineInDatebase.Amount = amountAsDecimal;
+                    lineInDatebase.AmountUpdatedManually = true;
+                }
+            }
+
             Db.SaveChanges();
 
             return await Json("");
