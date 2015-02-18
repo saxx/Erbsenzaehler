@@ -14,7 +14,7 @@ namespace Erbsenzaehler.Importer
         public TsvImporter(TextReader reader) : base(reader)
         {
             Configuration.RegisterClassMap<LineMap>();
-            Configuration.HasHeaderRecord = false;
+            Configuration.HasHeaderRecord = true;
             Configuration.Delimiter = "\t";
             Configuration.Encoding = Encoding.Unicode;
         }
@@ -24,9 +24,9 @@ namespace Erbsenzaehler.Importer
         {
             public LineMap()
             {
-                Map(x => x.OriginalText).Index(0).TypeConverter<TextConverter>();
-                Map(x => x.OriginalDate).Index(1).TypeConverter<DateConverter>();
-                Map(x => x.OriginalAmount).Index(2).TypeConverter<AmountConverter>();
+                Map(x => x.OriginalText).Name("Text", "OriginalText", "Buchungstext").TypeConverter<TextConverter>();
+                Map(x => x.OriginalDate).Name("Date", "OriginalDate", "Datum", "Buchungsdatum").TypeConverter<DateConverter>();
+                Map(x => x.OriginalAmount).Name("Amount", "OriginalAmount", "Betrag").TypeConverter<AmountConverter>();
             }
 
 
@@ -40,19 +40,28 @@ namespace Erbsenzaehler.Importer
 
                 public object ConvertFromString(TypeConverterOptions options, string text)
                 {
-                    return decimal.Parse(text.Replace(" ", "").Replace("€", ""), new CultureInfo("de-DE"));
+                    try
+                    {
+                        if (text.Contains(",") && text.Length <= 6)
+                            return decimal.Parse(text.Replace(".", "").Replace(" ", "").Replace("€", ""), new CultureInfo("de-DE"));
+                        return decimal.Parse(text.Replace(",", "").Replace(" ", "").Replace("€", ""), new CultureInfo("en-US"));
+                    }
+                    catch
+                    {
+                        throw new Exception("Unable to parse amount '" + text + "'.");
+                    }
                 }
 
 
                 public bool CanConvertFrom(Type type)
                 {
-                    return type == typeof (string);
+                    return type == typeof(string);
                 }
 
 
                 public bool CanConvertTo(Type type)
                 {
-                    return type == typeof (string);
+                    return type == typeof(string);
                 }
             }
 
@@ -60,29 +69,42 @@ namespace Erbsenzaehler.Importer
             {
                 public string ConvertToString(TypeConverterOptions options, object value)
                 {
-                    return ((DateTime) value).ToShortDateString();
+                    return ((DateTime)value).ToShortDateString();
                 }
 
 
                 public object ConvertFromString(TypeConverterOptions options, string text)
                 {
-                    if (text.Contains("/"))
+                    DateTime result;
+
+                    if (text.Contains("/") && DateTime.TryParse(text, new CultureInfo("en-US"), DateTimeStyles.None, out result))
                     {
-                        return DateTime.Parse(text, new CultureInfo("en-US"));
+                        return result;
                     }
-                    return DateTime.Parse(text, new CultureInfo("de-DE"));
+
+                    if (DateTime.TryParse(text, new CultureInfo("de-DE"), DateTimeStyles.None, out result))
+                    {
+                        return result;
+                    }
+
+                    if (DateTime.TryParse(text, CultureInfo.InvariantCulture, DateTimeStyles.None, out result))
+                    {
+                        return result;
+                    }
+
+                    throw new Exception("Unable to parse date '" + text + "'.");
                 }
 
 
                 public bool CanConvertFrom(Type type)
                 {
-                    return type == typeof (string);
+                    return type == typeof(string);
                 }
 
 
                 public bool CanConvertTo(Type type)
                 {
-                    return type == typeof (string);
+                    return type == typeof(string);
                 }
             }
 
@@ -102,13 +124,13 @@ namespace Erbsenzaehler.Importer
 
                 public bool CanConvertFrom(Type type)
                 {
-                    return type == typeof (string);
+                    return type == typeof(string);
                 }
 
 
                 public bool CanConvertTo(Type type)
                 {
-                    return type == typeof (string);
+                    return type == typeof(string);
                 }
             }
         }

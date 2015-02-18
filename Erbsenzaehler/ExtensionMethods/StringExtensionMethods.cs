@@ -10,7 +10,17 @@
 
         public static string RemoveMultipleBlanks(this string s)
         {
-            return s?.Replace("   ", " ").Replace("  ", " ");
+            if (s == null)
+            {
+                return null;
+            }
+
+            while (s.Contains("   ") || s.Contains("  "))
+            {
+                s = s.Replace("   ", " ");
+                s = s.Replace("  ", " ");
+            }
+            return s;
         }
     }
 }
