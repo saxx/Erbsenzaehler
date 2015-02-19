@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Erbsenzaehler.ViewModels.Reports
+namespace Erbsenzaehler.Reporting
 {
     public class Date : IComparable<Date>
     {

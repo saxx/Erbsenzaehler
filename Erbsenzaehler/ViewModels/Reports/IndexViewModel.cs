@@ -1,76 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Erbsenzaehler.Models;
+using Erbsenzaehler.Reporting;
 
 namespace Erbsenzaehler.ViewModels.Reports
 {
     public class IndexViewModel
     {
-        private const string EmptyCategory = "Sonstiges";
-
-
         public async Task<IndexViewModel> Calculate(Client client, Db db)
         {
-            var allCategories = await db.Lines.Where(x => x.Account.ClientId == client.Id && x.Category != null).Select(x => x.Category).Distinct().ToListAsync();
-            allCategories.Add(EmptyCategory);
+            var overviewCalculator = new OverviewCalculator(db, client);
 
-            var amountsQuery = from x in db.Lines.Where(x => x.Account.ClientId == client.Id && !x.Ignore)
-                               group x by new
-                               {
-                                   Category = x.Category ?? EmptyCategory,
-                                   (x.Date ?? x.OriginalDate).Year,
-                                   (x.Date ?? x.OriginalDate).Month
-                               } into g
-                               orderby g.Key.Year, g.Key.Month
-                               select
-                           new
-                           {
-                               g.Key.Category,
-                               g.Key.Year,
-                               g.Key.Month,
-                               Income = g.Where(y => (y.Amount ?? y.OriginalAmount) > 0 && y.Category == null).Select(y => (y.Amount ?? y.OriginalAmount)).DefaultIfEmpty(0).Sum(),
-                               Spent = g.Where(y => (y.Amount ?? y.OriginalAmount) < 0 || y.Category != null).Select(y => (y.Amount ?? y.OriginalAmount)).DefaultIfEmpty(0).Sum()
-                           };
-            var amounts = await amountsQuery.ToListAsync();
-
-            Overview = new OverviewContainer { CategoryHeaders = allCategories };
-
-            if (amounts.Any())
+            var allCategories = (await overviewCalculator.GetCategories()).ToList();
+            Overview = new OverviewContainer
             {
-                for (var year = amounts.Select(x => x.Year).Min(); year <= amounts.Select(x => x.Year).Max(); year++)
+                CategoryHeaders = allCategories
+            };
+
+            var overview = await overviewCalculator.Calculate();
+            foreach (var monthPair in overview)
+            {
+                var monthContainer = new MonthContainer
                 {
-                    for (var month = 1; month <= 12; month++)
-                    {
-                        var yearClosure = year;
-                        var monthClosure = month;
+                    Year = monthPair.Key.Year,
+                    Month = monthPair.Key.Month,
+                    Name = monthPair.Key.ToString(),
+                    Income = monthPair.Value[OverviewCalculator.IncomeCategory],
+                    Spent = monthPair.Value.Where(x => x.Key != OverviewCalculator.IncomeCategory).Sum(x => x.Value)
+                };
 
-                        var filteredAmounts = amounts.Where(x => x.Year == yearClosure && x.Month == monthClosure).ToList();
+                foreach (var category in allCategories)
+                {
+                    monthContainer[category] = monthPair.Value[category];
+                }
 
-                        // first, add up all the spent amounts
-                        var monthContainer = new MonthContainer
-                        {
-                            Year = year,
-                            Month = month,
-                            Name = new DateTime(year, month, 1).ToString("MMM yyyy"),
-                            Income = filteredAmounts.Sum(x => x.Income),
-                            Spent = filteredAmounts.Sum(x => x.Spent)
-                        };
-
-                        foreach (var category in allCategories)
-                        {
-                            monthContainer[category] = filteredAmounts.Where(x => x.Category == category).Select(x => x.Spent).DefaultIfEmpty(0).Sum();
-                        }
-
-
-                        if (monthContainer.Income > 0 || monthContainer.Spent < 0)
-                        {
-                            Overview.Months.Insert(0, monthContainer);
-                        }
-                    }
+                if (monthContainer.Income > 0 || monthContainer.Spent < 0)
+                {
+                    Overview.Months.Insert(0, monthContainer);
                 }
             }
 

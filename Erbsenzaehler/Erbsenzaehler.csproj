@@ -192,10 +192,6 @@
     <Compile Include="Migrations\201502181433402_EditableAmounts.Designer.cs">
       <DependentUpon>201502181433402_EditableAmounts.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201502191207451_OptimizeIndexes.cs" />
-    <Compile Include="Migrations\201502191207451_OptimizeIndexes.Designer.cs">
-      <DependentUpon>201502191207451_OptimizeIndexes.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Client.cs" />
@@ -207,6 +203,7 @@
     <Compile Include="Importer\ImporterFactory.cs" />
     <Compile Include="Importer\TsvImporter.cs" />
     <Compile Include="Models\Rule.cs" />
+    <Compile Include="Reporting\OverviewCalculator.cs" />
     <Compile Include="Rules\RulesApplierResult.cs" />
     <Compile Include="Rules\RulesImporter.cs" />
     <Compile Include="Rules\RulesImporterResult.cs" />
@@ -216,7 +213,7 @@
     <Compile Include="ViewModels\ManageUsers\IndexViewModel.cs" />
     <Compile Include="ViewModels\Reports\AmountsViewModel.cs" />
     <Compile Include="ViewModels\Reports\BalanceViewModel.cs" />
-    <Compile Include="ViewModels\Reports\Date.cs" />
+    <Compile Include="Reporting\Date.cs" />
     <Compile Include="ViewModels\Rules\UploadRulesViewModel.cs" />
     <Compile Include="ViewModels\User\AccountViewModels.cs" />
     <Compile Include="Models\User.cs" />
@@ -698,9 +695,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201502181433402_EditableAmounts.resx">
       <DependentUpon>201502181433402_EditableAmounts.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201502191207451_OptimizeIndexes.resx">
-      <DependentUpon>201502191207451_OptimizeIndexes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
