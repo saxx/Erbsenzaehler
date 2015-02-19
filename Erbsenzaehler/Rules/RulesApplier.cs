@@ -31,6 +31,11 @@ namespace Erbsenzaehler.Rules
                     {
                         line.Category = null;
                     }
+
+                    if (!line.AmountUpdatedManually)
+                    {
+                        line.Amount = null;
+                    }
                 }
 
                 if (await Apply(db, client, line))
