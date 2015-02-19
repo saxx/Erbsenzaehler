@@ -1,76 +1,93 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Erbsenzähler is my very own to to track my expenses."/>
+    <meta name="description" content="Erbsenzähler is my very own to to track my expenses." />
     <title>Erbsenzähler</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-<div class="container">
-    <div class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Erbsenzähler", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+    <div class="container">
+        <div class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    @Html.ActionLink("Erbsenzähler", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                </div>
+                <div class="navbar-collapse collapse">
+                    @if (Request.IsAuthenticated)
+                    {
+                        <ul class="nav navbar-nav">
+                            <li class="dropdown">
+                                <a aria-expanded="false" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Reports <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li>@Html.ActionLink("Overview", "Index", "Reports")</li>
+                                    <li>@Html.ActionLink("Balance", "Balance", "Reports")</li>
+                                    <li>@Html.ActionLink("Per category", "Amounts", "Reports")</li>
+                                </ul>
+                            </li>
+
+                            <li>@Html.ActionLink("Details", "Index", "Lines")</li>
+                            <li>@Html.ActionLink("Import", "Index", "Import")</li>
+
+                            <li class="dropdown">
+                                <a aria-expanded="false" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Manage <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li>@Html.ActionLink("Rules", "Index", "ManageRules")</li>
+                                    <li>@Html.ActionLink("Accounts", "Index", "ManageAccounts")</li>
+                                    <li>@Html.ActionLink("Users", "Index", "ManageUsers")</li>
+                                    <li>@Html.ActionLink("Change Password", "ChangePassword", "ManageUser")</li>
+                                    <li>@Html.ActionLink("Settings", "Index", "ManageClient")</li>
+                                </ul>
+                            </li>
+
+
+                        </ul>
+                    }
+                    @Html.Partial("_LoginPartial")
+                </div>
             </div>
-            <div class="navbar-collapse collapse">
-                @if (Request.IsAuthenticated)
-                {
-                    <ul class="nav navbar-nav">
-                        <li class="dropdown">
-                            <a aria-expanded="false" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Reports <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("Overview", "Index", "Reports")</li>
-                                <li>@Html.ActionLink("Balance", "Balance", "Reports")</li>
-                                <li>@Html.ActionLink("Per category", "Amounts", "Reports")</li>
-                            </ul>
-                        </li>
+        </div>
 
-                        <li>@Html.ActionLink("Details", "Index", "Lines")</li>
-                        <li>@Html.ActionLink("Import", "Index", "Import")</li>
-
-                        <li class="dropdown">
-                            <a aria-expanded="false" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Manage <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("Rules", "Index", "ManageRules")</li>
-                                <li>@Html.ActionLink("Accounts", "Index", "ManageAccounts")</li>
-                                <li>@Html.ActionLink("Users", "Index", "ManageUsers")</li>
-                                <li>@Html.ActionLink("Change Password", "ChangePassword", "ManageUser")</li>
-                                <li>@Html.ActionLink("Settings", "Index", "ManageClient")</li>
-                            </ul>
-                        </li>
-
-
-                    </ul>
-                }
-                @Html.Partial("_LoginPartial")
-            </div>
+        <div class="body-content">
+            @RenderBody()
         </div>
     </div>
 
-    <div class="body-content">
-        @RenderBody()
-    </div>
-</div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/angular")
+    @Scripts.Render("~/bundles/chartjs")
+    @Scripts.Render("~/bundles/app")
+    @RenderSection("scripts", required: false)
 
-@Scripts.Render("~/bundles/jquery")
-@Scripts.Render("~/bundles/bootstrap")
-@Scripts.Render("~/bundles/angular")
-@Scripts.Render("~/bundles/chartjs")
-@Scripts.Render("~/bundles/app")
-@RenderSection("scripts", required: false)
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        })
+    </script>
 
-<script>
-    $(function() {
-        $('[data-toggle="tooltip"]').tooltip();
-    })
-</script>
+@* ReSharper disable StatementIsNotTerminated *@
+@* ReSharper disable UnusedParameter *@
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-3250157-10', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+@* ReSharper restore UnusedParameter *@
+@* ReSharper restore StatementIsNotTerminated *@
 </body>
 </html>
