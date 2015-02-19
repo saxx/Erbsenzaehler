@@ -192,6 +192,10 @@
     <Compile Include="Migrations\201502181433402_EditableAmounts.Designer.cs">
       <DependentUpon>201502181433402_EditableAmounts.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201502191207451_OptimizeIndexes.cs" />
+    <Compile Include="Migrations\201502191207451_OptimizeIndexes.Designer.cs">
+      <DependentUpon>201502191207451_OptimizeIndexes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Client.cs" />
@@ -694,6 +698,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201502181433402_EditableAmounts.resx">
       <DependentUpon>201502181433402_EditableAmounts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502191207451_OptimizeIndexes.resx">
+      <DependentUpon>201502191207451_OptimizeIndexes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

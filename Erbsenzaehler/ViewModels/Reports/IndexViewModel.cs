@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Erbsenzaehler.Models;
@@ -17,18 +18,24 @@ namespace Erbsenzaehler.ViewModels.Reports
             var allCategories = await db.Lines.Where(x => x.Account.ClientId == client.Id && x.Category != null).Select(x => x.Category).Distinct().ToListAsync();
             allCategories.Add(EmptyCategory);
 
-            var amounts = (from x in db.Lines.Where(x => x.Account.ClientId == client.Id && !x.Ignore)
-                group x by new { Category = x.Category ?? EmptyCategory, (x.Date ?? x.OriginalDate).Year, (x.Date ?? x.OriginalDate).Month }
-                into g
-                orderby g.Key.Year, g.Key.Month
-                select new
-                {
-                    g.Key.Category,
-                    g.Key.Year,
-                    g.Key.Month,
-                    Income = g.Where(y => (y.Amount ?? y.OriginalAmount) > 0 && y.Category == null).Select(y => (y.Amount ?? y.OriginalAmount)).DefaultIfEmpty(0).Sum(),
-                    Spent = g.Where(y => (y.Amount ?? y.OriginalAmount) < 0 || y.Category != null).Select(y => (y.Amount ?? y.OriginalAmount)).DefaultIfEmpty(0).Sum()
-                }).ToList();
+            var amountsQuery = from x in db.Lines.Where(x => x.Account.ClientId == client.Id && !x.Ignore)
+                               group x by new
+                               {
+                                   Category = x.Category ?? EmptyCategory,
+                                   (x.Date ?? x.OriginalDate).Year,
+                                   (x.Date ?? x.OriginalDate).Month
+                               } into g
+                               orderby g.Key.Year, g.Key.Month
+                               select
+                           new
+                           {
+                               g.Key.Category,
+                               g.Key.Year,
+                               g.Key.Month,
+                               Income = g.Where(y => (y.Amount ?? y.OriginalAmount) > 0 && y.Category == null).Select(y => (y.Amount ?? y.OriginalAmount)).DefaultIfEmpty(0).Sum(),
+                               Spent = g.Where(y => (y.Amount ?? y.OriginalAmount) < 0 || y.Category != null).Select(y => (y.Amount ?? y.OriginalAmount)).DefaultIfEmpty(0).Sum()
+                           };
+            var amounts = await amountsQuery.ToListAsync();
 
             Overview = new OverviewContainer { CategoryHeaders = allCategories };
 
@@ -93,7 +100,7 @@ namespace Erbsenzaehler.ViewModels.Reports
             {
                 get
                 {
-                    return (int) this["Year"];
+                    return (int)this["Year"];
                 }
                 set
                 {
@@ -105,7 +112,7 @@ namespace Erbsenzaehler.ViewModels.Reports
             {
                 get
                 {
-                    return (int) this["Month"];
+                    return (int)this["Month"];
                 }
                 set
                 {
@@ -117,7 +124,7 @@ namespace Erbsenzaehler.ViewModels.Reports
             {
                 get
                 {
-                    return (decimal) this["Income"];
+                    return (decimal)this["Income"];
                 }
                 set
                 {
@@ -129,7 +136,7 @@ namespace Erbsenzaehler.ViewModels.Reports
             {
                 get
                 {
-                    return (decimal) this["Spent"];
+                    return (decimal)this["Spent"];
                 }
                 set
                 {

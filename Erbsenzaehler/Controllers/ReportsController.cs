@@ -9,7 +9,6 @@ namespace Erbsenzaehler.Controllers
         public async Task<ActionResult> Index()
         {
             var viewModel = await (new IndexViewModel()).Calculate(await GetCurrentClient(), Db);
-
             return View(viewModel);
         }
 
