@@ -11,7 +11,7 @@
 
 .tooltip-inner {
     max-width: 350px;
-    width: 350px; 
+    width: 350px;
 }
 
 .lines-editor .line-ignore {
@@ -29,11 +29,11 @@
     font-size: 80%;
     font-family: monospace;
     height: 7em;
-}  
+}
 
 .rules-editor input, .rules-editor select {
     font-size: 80%;
-}   
+}
 
 
 .rules-editor th:nth-child(2), .rules-editor th:nth-child(3), .rules-editor th:nth-child(4) {
@@ -49,3 +49,20 @@
     display: block;
 }
 
+#carousel {
+    border: 1px solid #e7e7e7;
+}
+
+    #carousel .item img {
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    #carousel .carousel-caption {
+        color: black;
+        text-shadow: 2px 0 0 #fff, -2px 0 0 #fff, 0 2px 0 #fff, 0 -2px 0 #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
+    }
+
+    #carousel .carousel-control {
+        background: none;
+    }
