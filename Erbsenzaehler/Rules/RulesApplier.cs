@@ -110,7 +110,7 @@ namespace Erbsenzaehler.Rules
         public bool IsMatch(Rule rule, string lineText)
         {
             // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var regex in rule.Regex.Split('\n').Select(x => x.Trim()).Where(x => !string.IsNullOrEmpty(x)))
+            foreach (var regex in (rule.Regex ?? "").Split('\n').Select(x => x.Trim()).Where(x => !string.IsNullOrEmpty(x)))
             {
                 if (Regex.IsMatch(lineText, regex, RegexOptions.IgnoreCase | RegexOptions.Multiline))
                 {

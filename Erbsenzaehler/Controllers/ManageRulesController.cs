@@ -108,7 +108,7 @@ namespace Erbsenzaehler.Controllers
             var currentClient = await GetCurrentClient();
             var rules = (await Db.Rules
                 .Where(x => x.ClientId == currentClient.Id)
-                .OrderBy(x => x.Regex)
+                .OrderBy(x => x.Regex ?? "")
                 .ToListAsync())
                 .Select(x => new JsonRule(x).LoadAffectedLines(Db, currentClient));
             return base.Json(rules, JsonRequestBehavior.AllowGet);

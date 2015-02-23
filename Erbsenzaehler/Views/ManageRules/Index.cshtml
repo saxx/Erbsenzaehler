@@ -37,7 +37,7 @@ else
                 <textarea ng-model="rule.regex" ng-blur="saveRule(rule, $event)" class="form-control" placeholder="Regular expression?" required></textarea>
             </td>
             <td>
-                <input type="text" ng-model="rule.category" ng-blur="saveRule(rule)" class="form-control" placeholder="Apply a category?"/>
+                <input type="text" ng-model="rule.category" ng-blur="saveRule(rule)" class="form-control" placeholder="Apply a category?" />
             </td>
             <td>
                 <select ng-model="rule.ignore" class="form-control" ng-change="saveRule(rule)" ng-options="o.value as o.name for o in ignoreOptions"></select>
@@ -60,7 +60,7 @@ else
 
 <div class="row">
     <div class="col-sm-4">
-        <hr/>
+        <hr />
         <h4>Import/Export</h4>
 
         @using (Html.BeginForm("Download", "ManageRules"))
@@ -76,7 +76,7 @@ else
     <div class="col-sm-4"></div>
 
     <div class="col-sm-4">
-        <hr/>
+        <hr />
         <h4>Bulk operations</h4>
 
         @using (Html.BeginForm("Apply", "ManageRules"))
@@ -113,20 +113,31 @@ else
                 { name: 'First of current month', value: @((int) Rule.ChangeDateToOption.FirstOfCurrentMonth) }, { name: 'Last of current month', value: @((int) Rule.ChangeDateToOption.LastOfCurrentMonth) }, { name: 'Nearest first of month', value: @((int) Rule.ChangeDateToOption.NearestFirstOfMonth) }, { name: 'Nearest last of month', value: @((int) Rule.ChangeDateToOption.NearestLastOfMonth) }
             ];
 
-            $scope.loadRules = function() {
+            $scope.loadRules = function(callback) {
                 $scope.loading = true;
                 $scope.rules = Rule.query(function() {
                     $scope.loading = false;
+                    if (callback) {
+                        callback();
+                    }
                 });
             };
 
             $scope.addRule = function() {
                 $scope.loading = true;
                 var newRule = new Rule();
-                newRule.regex = 'Enter your regular expression here';
+                newRule.regex = '';
                 newRule.category = '';
                 Rule.save(newRule, function() {
-                    $scope.loadRules();
+                    $scope.loadRules(function() {
+                        // set focus to the first textarea, this should be the just added line.
+                        setTimeout(function() {
+                            var requiredFields = $(".rules-editor textarea");
+                            if (requiredFields.length > 0) {
+                                requiredFields[0].focus();
+                            }
+                        }, 100);
+                    });
                 });
             };
 
