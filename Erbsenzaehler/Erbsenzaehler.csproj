@@ -278,6 +278,7 @@
     <Content Include="Content\Icons\favicon-96x96.png" />
     <Content Include="Content\Icons\favicon.ico" />
     <Content Include="Content\Icons\largetile.png" />
+    <Content Include="Content\Icons\logo-original.png" />
     <Content Include="Content\Icons\logo.png" />
     <Content Include="Content\Icons\mediumtile.png" />
     <Content Include="Content\Icons\smalltile.png" />
