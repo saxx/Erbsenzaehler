@@ -233,6 +233,25 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Icons\android-chrome-192x192.png" />
+    <Content Include="Content\Icons\apple-touch-icon-114x114.png" />
+    <Content Include="Content\Icons\apple-touch-icon-120x120.png" />
+    <Content Include="Content\Icons\apple-touch-icon-144x144.png" />
+    <Content Include="Content\Icons\apple-touch-icon-152x152.png" />
+    <Content Include="Content\Icons\apple-touch-icon-180x180.png" />
+    <Content Include="Content\Icons\apple-touch-icon-57x57.png" />
+    <Content Include="Content\Icons\apple-touch-icon-60x60.png" />
+    <Content Include="Content\Icons\apple-touch-icon-72x72.png" />
+    <Content Include="Content\Icons\apple-touch-icon-76x76.png" />
+    <Content Include="Content\Icons\favicon-16x16.png" />
+    <Content Include="Content\Icons\favicon-32x32.png" />
+    <Content Include="Content\Icons\favicon-96x96.png" />
+    <Content Include="Content\Icons\favicon.ico" />
+    <Content Include="Content\Icons\largetile.png" />
+    <Content Include="Content\Icons\logo.png" />
+    <Content Include="Content\Icons\mediumtile.png" />
+    <Content Include="Content\Icons\smalltile.png" />
+    <Content Include="Content\Icons\widetile.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -668,7 +687,7 @@
     <Content Include="Views\Lines\Index.cshtml" />
     <Content Include="Views\Reports\Index.cshtml" />
     <Content Include="Views\ManageRules\Index.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\ManageUser\ChangePassword.cshtml" />
     <Content Include="Views\ManageAccounts\Create.cshtml" />
     <Content Include="Views\ManageAccounts\Delete.cshtml" />
@@ -682,6 +701,7 @@
     <Content Include="Views\ManageUsers\Delete.cshtml" />
     <Content Include="Views\Reports\Balance.cshtml" />
     <Content Include="Views\Reports\Amounts.cshtml" />
+    <Content Include="Views\Home\Attribution.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

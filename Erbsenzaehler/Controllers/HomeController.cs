@@ -32,7 +32,12 @@ namespace Erbsenzaehler.Controllers
         }
 
 
-        public ActionResult Contact()
+        public ActionResult About()
+        {
+            return View();
+        }
+
+        public ActionResult Attribution()
         {
             return View();
         }
