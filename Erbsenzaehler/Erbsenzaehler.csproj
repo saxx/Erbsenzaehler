@@ -252,7 +252,6 @@
     <Content Include="Content\Icons\mediumtile.png" />
     <Content Include="Content\Icons\smalltile.png" />
     <Content Include="Content\Icons\widetile.png" />
-    <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
