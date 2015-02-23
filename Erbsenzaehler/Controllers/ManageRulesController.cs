@@ -96,7 +96,7 @@ namespace Erbsenzaehler.Controllers
                 NullValueHandling = NullValueHandling.Ignore
             });
 
-            return File(Encoding.Default.GetBytes(json), "text/json", "rules.json");
+            return File(Encoding.UTF8.GetBytes(json), "text/json", "rules.json");
         }
 
         #endregion
