@@ -37,6 +37,7 @@ namespace Erbsenzaehler.Controllers
             return View();
         }
 
+
         public ActionResult Attribution()
         {
             return View();

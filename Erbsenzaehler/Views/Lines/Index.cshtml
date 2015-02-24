@@ -56,7 +56,7 @@
 
         <input id="date" type="text" style="display: none; width: 90px;"/>
         <input id="category" type="text" style="display: none; width: 75px;"/>
-        <input id="amount" type="text" style="display: none; width: 60px;" />
+        <input id="amount" type="text" style="display: none; width: 60px;"/>
     </div>
 
 
@@ -139,7 +139,7 @@
                     });
                 };
 
-                $scope.changeAmount = function (line, event) {
+                $scope.changeAmount = function(line, event) {
                     var textbox = $("#amount");
                     textbox.val(line.Amount);
 
@@ -152,7 +152,7 @@
                         .focus();
 
                     textbox.off();
-                    textbox.focusout(function () {
+                    textbox.focusout(function() {
                         line.Amount = textbox.val();
                         textbox.hide();
                         linesResource.update(line);

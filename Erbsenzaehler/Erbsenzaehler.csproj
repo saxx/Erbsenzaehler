@@ -214,6 +214,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Importer\Converters\InvariantDateConverter.cs" />
+    <Compile Include="Importer\Converters\GermanDateConverter.cs" />
+    <Compile Include="Importer\Converters\InvariantAmountConverter.cs" />
+    <Compile Include="Importer\Converters\GermanAmountConverter.cs" />
+    <Compile Include="Importer\Converters\TextConverter.cs" />
+    <Compile Include="Importer\ElbaCsvImporter.cs" />
+    <Compile Include="Importer\ElbaTsvImporter.cs" />
     <Compile Include="Migrations\201502171454295_Initial.cs" />
     <Compile Include="Migrations\201502171454295_Initial.Designer.cs">
       <DependentUpon>201502171454295_Initial.cs</DependentUpon>

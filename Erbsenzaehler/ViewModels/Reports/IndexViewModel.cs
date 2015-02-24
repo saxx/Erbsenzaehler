@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Erbsenzaehler.Models;
@@ -68,7 +67,7 @@ namespace Erbsenzaehler.ViewModels.Reports
             {
                 get
                 {
-                    return (int)this["Year"];
+                    return (int) this["Year"];
                 }
                 set
                 {
@@ -80,7 +79,7 @@ namespace Erbsenzaehler.ViewModels.Reports
             {
                 get
                 {
-                    return (int)this["Month"];
+                    return (int) this["Month"];
                 }
                 set
                 {
@@ -92,7 +91,7 @@ namespace Erbsenzaehler.ViewModels.Reports
             {
                 get
                 {
-                    return (decimal)this["Income"];
+                    return (decimal) this["Income"];
                 }
                 set
                 {
@@ -104,7 +103,7 @@ namespace Erbsenzaehler.ViewModels.Reports
             {
                 get
                 {
-                    return (decimal)this["Spent"];
+                    return (decimal) this["Spent"];
                 }
                 set
                 {

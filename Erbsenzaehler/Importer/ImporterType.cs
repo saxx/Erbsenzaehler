@@ -3,6 +3,8 @@
     public enum ImporterType
     {
         Easybank,
-        Tsv
+        Tsv,
+        ElbaCsv,
+        ElbaTsv
     }
 }

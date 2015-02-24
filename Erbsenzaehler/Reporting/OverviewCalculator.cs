@@ -41,43 +41,45 @@ namespace Erbsenzaehler.Reporting
             // but I think it shouldn't matter that much because no client should have more than a few thousand lines
 
             var linesQuery = from x in _db.Lines
-                             where x.Account.ClientId == _client.Id && !x.Ignore
-                             select new
-                             {
-                                 x.Category,
-                                 Amount = x.Amount ?? x.OriginalAmount,
-                                 Date = x.Date ?? x.OriginalDate
-                             };
+                where x.Account.ClientId == _client.Id && !x.Ignore
+                select new
+                {
+                    x.Category,
+                    Amount = x.Amount ?? x.OriginalAmount,
+                    Date = x.Date ?? x.OriginalDate
+                };
             var lines = await linesQuery.ToListAsync();
 
             var income = (from x in lines.Where(x => x.Category == null && x.Amount > 0)
-                          group x by new
-                          {
-                              x.Date.Year,
-                              x.Date.Month
-                          } into g
-                          select
-                              new
-                              {
-                                  g.Key.Year,
-                                  g.Key.Month,
-                                  Amount = g.Select(x => x.Amount).DefaultIfEmpty(0).Sum()
-                              }).ToList();
+                group x by new
+                {
+                    x.Date.Year,
+                    x.Date.Month
+                }
+                into g
+                select
+                    new
+                    {
+                        g.Key.Year,
+                        g.Key.Month,
+                        Amount = g.Select(x => x.Amount).DefaultIfEmpty(0).Sum()
+                    }).ToList();
             var spent = (from x in lines.Where(y => y.Category != null || y.Amount < 0)
-                         group x by new
-                         {
-                             x.Category,
-                             x.Date.Year,
-                             x.Date.Month
-                         } into g
-                         select
-                     new
-                     {
-                         g.Key.Category,
-                         g.Key.Year,
-                         g.Key.Month,
-                         Amount = g.Select(x => x.Amount).DefaultIfEmpty(0).Sum()
-                     }).ToList();
+                group x by new
+                {
+                    x.Category,
+                    x.Date.Year,
+                    x.Date.Month
+                }
+                into g
+                select
+                    new
+                    {
+                        g.Key.Category,
+                        g.Key.Year,
+                        g.Key.Month,
+                        Amount = g.Select(x => x.Amount).DefaultIfEmpty(0).Sum()
+                    }).ToList();
 
 
             var allCategories = (await GetCategories()).ToList();

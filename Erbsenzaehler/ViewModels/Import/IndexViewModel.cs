@@ -28,8 +28,18 @@ namespace Erbsenzaehler.ViewModels.Import
                 },
                 new SelectListItem
                 {
-                    Text = "TSV",
+                    Text = "Generic TSV",
                     Value = ImporterType.Tsv.ToString()
+                },
+                new SelectListItem
+                {
+                    Text = "Elba TSV",
+                    Value = ImporterType.ElbaTsv.ToString()
+                },
+                new SelectListItem
+                {
+                    Text = "Elba CSV",
+                    Value = ImporterType.ElbaCsv.ToString()
                 }
             };
             return this;

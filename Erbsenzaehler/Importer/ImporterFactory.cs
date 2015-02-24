@@ -13,6 +13,10 @@ namespace Erbsenzaehler.Importer
                     return new EasybankImporter(reader);
                 case ImporterType.Tsv:
                     return new TsvImporter(reader);
+                case ImporterType.ElbaTsv:
+                    return new ElbaTsvImporter(reader);
+                case ImporterType.ElbaCsv:
+                    return new ElbaCsvImporter(reader);
                 default:
                     throw new ApplicationException("Unknown importer '" + importer + "'.");
             }

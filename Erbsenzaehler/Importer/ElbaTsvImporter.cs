@@ -6,14 +6,14 @@ using Erbsenzaehler.Models;
 
 namespace Erbsenzaehler.Importer
 {
-    public sealed class EasybankImporter : ImporterBase
+    public sealed class ElbaTsvImporter : ImporterBase
     {
-        public EasybankImporter(TextReader reader) : base(reader)
+        public ElbaTsvImporter(TextReader reader) : base(reader)
         {
             Configuration.RegisterClassMap<LineMap>();
             Configuration.HasHeaderRecord = false;
-            Configuration.Delimiter = ";";
-            Configuration.Encoding = Encoding.Default;
+            Configuration.Delimiter = "\t";
+            Configuration.Encoding = Encoding.ASCII;
         }
 
 
@@ -22,8 +22,8 @@ namespace Erbsenzaehler.Importer
             public LineMap()
             {
                 Map(x => x.OriginalText).Index(1).TypeConverter<TextConverter>();
-                Map(x => x.OriginalDate).Index(2).TypeConverter<GermanDateConverter>();
-                Map(x => x.OriginalAmount).Index(4).TypeConverter<GermanAmountConverter>();
+                Map(x => x.OriginalDate).Index(0).TypeConverter<GermanDateConverter>();
+                Map(x => x.OriginalAmount).Index(3).TypeConverter<GermanAmountConverter>();
             }
         }
     }
