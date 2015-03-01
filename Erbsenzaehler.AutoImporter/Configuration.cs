@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Configuration;
 using CommandLine;
 using CommandLine.Text;
 
@@ -14,6 +11,7 @@ namespace Erbsenzaehler.AutoImporter
         {
             Recipe = "Easybank";
         }
+
 
         [Option("ErbsenzaehlerUrl", Required = false, HelpText = "The URL to Erbsenzähler. Set this value only if your Erbsenzähler URL differs from the default.")]
         public string ErbsenzaehlerUrl { get; set; }
@@ -42,11 +40,13 @@ namespace Erbsenzaehler.AutoImporter
             HelpText = "The account number of your Easybank account that should be imported into Erbsenzähler.")]
         public string EasybankAccount { get; set; }
 
+
         [HelpOption]
         public string GetUsage()
         {
             return HelpText.AutoBuild(this, (current) => HelpText.DefaultParsingErrorsHandler(this, current));
         }
+
 
         public void LoadFromEnvironmentVariables()
         {
@@ -60,12 +60,13 @@ namespace Erbsenzaehler.AutoImporter
             }
         }
 
+
         public void LoadFromAppSettings()
         {
             foreach (var property in GetType().GetProperties())
             {
                 var appSetting =
-                    System.Configuration.ConfigurationManager.AppSettings["Erbsenzaehler.AutoImporter." + property.Name];
+                    ConfigurationManager.AppSettings["Erbsenzaehler.AutoImporter." + property.Name];
                 if (!string.IsNullOrWhiteSpace(appSetting))
                 {
                     property.SetValue(this, appSetting);

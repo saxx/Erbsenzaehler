@@ -2,7 +2,6 @@
 using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
-using System.Threading;
 using NLog;
 using OpenQA.Selenium.PhantomJS;
 using OpenQA.Selenium.Support.Extensions;
@@ -15,12 +14,14 @@ namespace Erbsenzaehler.AutoImporter.Recipies
         public string Password { get; set; }
         public string Account { get; set; }
 
+
         public EasybankRecipe(string username, string password, string account)
         {
             Username = username;
             Password = password;
             Account = account;
         }
+
 
         public void DownloadFile(string filePath)
         {
@@ -90,6 +91,7 @@ namespace Erbsenzaehler.AutoImporter.Recipies
                 }
             }
         }
+
 
         private static Logger Log => LogManager.GetCurrentClassLogger();
     }

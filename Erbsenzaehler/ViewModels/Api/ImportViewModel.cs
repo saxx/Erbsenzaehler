@@ -1,5 +1,4 @@
-﻿
-namespace Erbsenzaehler.ViewModels.Api
+﻿namespace Erbsenzaehler.ViewModels.Api
 {
     public class ImportViewModel
     {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using CommandLine;
 using Erbsenzaehler.AutoImporter.Recipies;
 using Erbsenzaehler.AutoImporter.Uploader;
 using NLog;
@@ -8,11 +9,12 @@ namespace Erbsenzaehler.AutoImporter
 {
     public static class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Log.Info("Erbsenzähler AutoImporter starting ...");
 
             #region Configuration
+
             Configuration = new Configuration();
 
             Log.Trace("Loading configuration from app settings ...");
@@ -40,11 +42,12 @@ namespace Erbsenzaehler.AutoImporter
             }
 
             Log.Trace("Loading configuration from command line ...");
-            if (!CommandLine.Parser.Default.ParseArguments(args, Configuration))
+            if (!Parser.Default.ParseArguments(args, Configuration))
             {
                 Log.Fatal("Unable to parse commandline parameters.");
                 Environment.Exit(-1);
             }
+
             #endregion
 
             var tempFilePath = Path.GetTempFileName();
@@ -81,6 +84,7 @@ namespace Erbsenzaehler.AutoImporter
 
             Log.Info("Quitting ...");
         }
+
 
         private static Logger Log => LogManager.GetCurrentClassLogger();
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using Newtonsoft.Json;
@@ -8,12 +9,12 @@ namespace Erbsenzaehler.AutoImporter.Uploader
 {
     public class ErbsenzaehlerUploader
     {
-
         public string Username { get; set; }
         public string Password { get; set; }
         public string BaseUrl { get; set; } = "http://erbsenzaehler.azurewebsites.net/";
         public string Account { get; set; }
         public string Importer { get; set; } = "Easybank";
+
 
         public ErbsenzaehlerUploader(string username, string password, string account)
         {
@@ -21,6 +22,7 @@ namespace Erbsenzaehler.AutoImporter.Uploader
             Password = password;
             Account = account;
         }
+
 
         public void Upload(string filePath)
         {
@@ -33,13 +35,13 @@ namespace Erbsenzaehler.AutoImporter.Uploader
             };
 
             Log.Trace("Building POST content ...");
-            var postContent = new ObjectContent(typeof(object), new
+            var postContent = new ObjectContent(typeof (object), new
             {
                 Username,
                 Password,
                 Account,
                 Importer,
-                File = System.IO.File.ReadAllBytes(filePath)
+                File = File.ReadAllBytes(filePath)
             }, new JsonMediaTypeFormatter());
 
             Log.Trace("Uploading ...");
@@ -57,6 +59,7 @@ namespace Erbsenzaehler.AutoImporter.Uploader
             var importResult = JsonConvert.DeserializeObject<dynamic>(postResult.Content.ReadAsStringAsync().Result);
             Log.Info("Upload completed. {0} lines imported, {1} lines ignored.", importResult.ImportedCount, importResult.IgnoredCount);
         }
+
 
         private static Logger Log => LogManager.GetCurrentClassLogger();
     }
