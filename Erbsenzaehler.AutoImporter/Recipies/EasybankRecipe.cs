@@ -66,13 +66,13 @@ namespace Erbsenzaehler.AutoImporter.Recipies
                                               "$('body').html('').append(resultField);" +
                                               "resultField.html(response);" +
                                               "}});";
-
                         driver.ExecuteScript(script);
-                        Log.Trace("Saved screenshot as Easybank-4.png");
-                        driver.TakeScreenshot().SaveAsFile("Easybank-4.png", ImageFormat.Png);
 
                         Log.Trace("Loading file content from page and saving to {0} ...", filePath);
                         var text = driver.FindElementById("csv_result").Text;
+                        Log.Trace("Saved screenshot as Easybank-4.png");
+                        driver.TakeScreenshot().SaveAsFile("Easybank-4.png", ImageFormat.Png);
+
                         using (var writer = new StreamWriter(filePath, false, Encoding.UTF8))
                         {
                             writer.Write(text);
