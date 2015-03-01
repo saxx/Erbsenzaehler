@@ -199,6 +199,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\ApiController.cs" />
     <Compile Include="Controllers\ManageUsersController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ControllerBase.cs" />
@@ -245,6 +246,8 @@
     <Compile Include="Rules\RulesImporter.cs" />
     <Compile Include="Rules\RulesImporterResult.cs" />
     <Compile Include="Rules\RulesApplier.cs" />
+    <Compile Include="ViewModels\Api\ImportResultViewModel.cs" />
+    <Compile Include="ViewModels\Api\ImportViewModel.cs" />
     <Compile Include="ViewModels\ManageUsers\CreateViewModel.cs" />
     <Compile Include="ViewModels\ManageUsers\DeleteViewModel.cs" />
     <Compile Include="ViewModels\ManageUsers\IndexViewModel.cs" />
