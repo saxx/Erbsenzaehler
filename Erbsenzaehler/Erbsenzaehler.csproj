@@ -254,6 +254,7 @@
     <Compile Include="Rules\RulesApplier.cs" />
     <Compile Include="ViewModels\Api\ImportResultViewModel.cs" />
     <Compile Include="ViewModels\Api\ImportViewModel.cs" />
+    <Compile Include="ViewModels\ManageBudgets\IndexViewModel.cs" />
     <Compile Include="ViewModels\ManageUsers\CreateViewModel.cs" />
     <Compile Include="ViewModels\ManageUsers\DeleteViewModel.cs" />
     <Compile Include="ViewModels\ManageUsers\IndexViewModel.cs" />
@@ -754,6 +755,7 @@
     <Content Include="Views\Reports\Balance.cshtml" />
     <Content Include="Views\Reports\Amounts.cshtml" />
     <Content Include="Views\Home\Attribution.cshtml" />
+    <Content Include="Views\ManageBudgets\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

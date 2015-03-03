@@ -1,25 +1,21 @@
 ﻿using System.Data.Entity;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using Erbsenzaehler.Models;
-using Erbsenzaehler.Rules;
-using Erbsenzaehler.ViewModels.Rules;
-using Newtonsoft.Json;
+using Erbsenzaehler.ViewModels.ManageBudgets;
 
 namespace Erbsenzaehler.Controllers
 {
     [Authorize]
     public class ManageBudgetsController : ControllerBase
     {
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            var viewModel = await new IndexViewModel().Fill(Db, await GetCurrentClient());
+            return View(viewModel);
         }
-        
+
         #region Json 
 
         public async Task<ActionResult> Json()
@@ -95,8 +91,8 @@ namespace Erbsenzaehler.Controllers
             public JsonBudget()
             {
             }
-            
-         
+
+
             public JsonBudget(Budget budget)
             {
                 id = budget.Id;
@@ -104,7 +100,7 @@ namespace Erbsenzaehler.Controllers
                 limit = budget.Limit;
                 period = budget.Period;
             }
-            
+
 
             // ReSharper disable InconsistentNaming
             public int id { get; set; }

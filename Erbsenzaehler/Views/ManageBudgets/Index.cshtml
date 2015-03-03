@@ -1,41 +1,61 @@
 ﻿@using Erbsenzaehler.Models
+@model Erbsenzaehler.ViewModels.ManageBudgets.IndexViewModel
 
 <h2>Manage budgets</h2>
 
-<div class="alert alert-info">
-    Use budgets to create spending limits for certain categories.
-</div>
-
+<datalist id="categoriesDatalist">
+    @foreach (var category in Model.Categories)
+    {
+        <option value="@category"></option>
+    }
+</datalist>
 
 <div ng-app="erbsenzaehlerApp" ng-controller="budgetsController">
     <p ng-show="loading">
         Loading your budgets, please give it a second or two ...
     </p>
 
-    <table class="table table-striped budgets-editor" ng-show="!loading">
+    <table class="table table-striped budgets-editor" ng-show="!loading && budgets.length > 0">
         <tr>
             <th>Category</th>
             <th>Limit?</th>
             <th>
-                <button class="btn btn-sm btn-success btn-block" ng-click="addBudget()">Add new budget</button>
+                <button class="btn btn-sm btn-success pull-right" ng-click="addBudget()">Add additional budget</button>
             </th>
         </tr>
 
         <tr ng-repeat="budget in budgets">
             <td>
-                <input type="text" ng-model="budget.category" ng-blur="saveBudget(budget)" class="form-control" placeholder="Category?" required />
+                <input type="text" list="categoriesDatalist" ng-model="budget.category" ng-blur="saveBudget(budget, $event)" class="form-control" placeholder="Category?" required/>
             </td>
             <td>
-                <input type="number" ng-model="budget.limit" ng-blur="saveBudget(budget)" class="form-control" placeholder="Limit?"´required /> € per
-                <select ng-model="budget.period" class="form-control" ng-change="saveBudget(budget)" ng-options="o.value as o.name for o in periodOptions"></select>
+                <input type="number" step="10" ng-model="budget.limit" ng-blur="saveBudget(budget, $event)" class="form-control" placeholder="Limit?" required/> € per
+                <select ng-model="budget.period" class="form-control" ng-change="saveBudget(budget, $event)" ng-options="o.value as o.name for o in periodOptions" ng-init="Monthly"></select>
             </td>
             <td>
                 <div>
-                    <button class="btn btn-sm btn-danger btn-block" ng-click="deleteBudget(budget)">Delete</button>
+                    <button class="btn btn-sm btn-danger pull-right" ng-click="deleteBudget(budget)">Delete</button>
                 </div>
             </td>
         </tr>
     </table>
+
+    <div class="alert alert-warning" ng-show="!loading && budgets.length <= 0">
+        <button class="btn btn-success pull-right" ng-click="addBudget()">Create a first budget</button>
+
+        <p>
+            You don't have any budgets configured yet. You can use budgets to create spending limits for certain categories;
+            for example, you could create a budget for the category "Party" with a limit of € 100 a month.
+        </p>
+
+        <p>
+            Erbsenzähler cannot really force you to stop spending, of course, but it can warn you if you are about to exceed such a spending limit.
+        </p>
+
+        <p>
+            Tipp: Use <a href="@Url.Action("Index", "ManageRules")" class="alert-link">rules</a> to automatically assign categories to certain lines in your account statements.
+        </p>
+    </div>
 </div>
 
 @section scripts {
@@ -50,7 +70,7 @@
         });
         erbsenzaehlerControllers.controller('budgetsController', function($scope, Budget) {
             $scope.periodOptions = [
-                { name: 'month', value: @((int) Budget.LimitPeriod.Monthly) }, { name: 'week', value: @((int)Budget.LimitPeriod.Weekly) }, { name: 'year', value: @((int)Budget.LimitPeriod.Yearly) }
+                { name: 'month', value: @((int) Budget.LimitPeriod.Monthly) }, { name: 'week', value: @((int) Budget.LimitPeriod.Weekly) }, { name: 'year', value: @((int) Budget.LimitPeriod.Yearly) }
             ];
 
             $scope.loadBudgets = function(callback) {
@@ -66,8 +86,11 @@
             $scope.addBudget = function() {
                 $scope.loading = true;
                 var newBudget = new Budget();
+
                 newBudget.category = '';
                 newBudget.limit = 100;
+                newBudget.period = $scope.periodOptions[0].value;
+
                 Budget.save(newBudget, function() {
                     $scope.loadBudgets(function() {
                         // set focus to the first input, this should be the just added line.
@@ -84,8 +107,13 @@
             $scope.saveBudget = function(updatedBudget, event) {
                 if (event) {
                     var control = $(event.target);
+                    control.parent().removeClass("has-error");
+
                     if (control.attr("required") && control.val().length <= 0) {
-                        setTimeout(function() { control.focus(); }, 50);
+                        setTimeout(function() {
+                            control.focus();
+                            control.parent().addClass("has-error");
+                        }, 50);
                         return;
                     }
                 }
