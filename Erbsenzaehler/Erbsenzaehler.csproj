@@ -230,6 +230,10 @@
     <Compile Include="Migrations\201502181433402_EditableAmounts.Designer.cs">
       <DependentUpon>201502181433402_EditableAmounts.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201503030454435_Budgets.cs" />
+    <Compile Include="Migrations\201503030454435_Budgets.Designer.cs">
+      <DependentUpon>201503030454435_Budgets.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Client.cs" />
@@ -240,6 +244,7 @@
     <Compile Include="Importer\ImporterType.cs" />
     <Compile Include="Importer\ImporterFactory.cs" />
     <Compile Include="Importer\TsvImporter.cs" />
+    <Compile Include="Models\Budget.cs" />
     <Compile Include="Models\Rule.cs" />
     <Compile Include="Reporting\OverviewCalculator.cs" />
     <Compile Include="Rules\RulesApplierResult.cs" />
@@ -761,6 +766,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201502181433402_EditableAmounts.resx">
       <DependentUpon>201502181433402_EditableAmounts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503030454435_Budgets.resx">
+      <DependentUpon>201503030454435_Budgets.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
