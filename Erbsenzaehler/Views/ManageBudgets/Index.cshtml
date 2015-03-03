@@ -1,0 +1,107 @@
+﻿@using Erbsenzaehler.Models
+
+<h2>Manage budgets</h2>
+
+<div class="alert alert-info">
+    Use budgets to create spending limits for certain categories.
+</div>
+
+
+<div ng-app="erbsenzaehlerApp" ng-controller="budgetsController">
+    <p ng-show="loading">
+        Loading your budgets, please give it a second or two ...
+    </p>
+
+    <table class="table table-striped budgets-editor" ng-show="!loading">
+        <tr>
+            <th>Category</th>
+            <th>Limit?</th>
+            <th>
+                <button class="btn btn-sm btn-success btn-block" ng-click="addBudget()">Add new budget</button>
+            </th>
+        </tr>
+
+        <tr ng-repeat="budget in budgets">
+            <td>
+                <input type="text" ng-model="budget.category" ng-blur="saveBudget(budget)" class="form-control" placeholder="Category?" required />
+            </td>
+            <td>
+                <input type="number" ng-model="budget.limit" ng-blur="saveBudget(budget)" class="form-control" placeholder="Limit?"´required /> € per
+                <select ng-model="budget.period" class="form-control" ng-change="saveBudget(budget)" ng-options="o.value as o.name for o in periodOptions"></select>
+            </td>
+            <td>
+                <div>
+                    <button class="btn btn-sm btn-danger btn-block" ng-click="deleteBudget(budget)">Delete</button>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+@section scripts {
+    @* ReSharper disable once InconsistentNaming *@
+    <script>
+        erbsenzaehlerServices.factory('Budget', function($resource) {
+            return $resource('@Url.Action("Json")/:id', { id: '@@id' }, {
+                update: {
+                    method: 'PUT'
+                }
+            });
+        });
+        erbsenzaehlerControllers.controller('budgetsController', function($scope, Budget) {
+            $scope.periodOptions = [
+                { name: 'month', value: @((int) Budget.LimitPeriod.Monthly) }, { name: 'week', value: @((int)Budget.LimitPeriod.Weekly) }, { name: 'year', value: @((int)Budget.LimitPeriod.Yearly) }
+            ];
+
+            $scope.loadBudgets = function(callback) {
+                $scope.loading = true;
+                $scope.budgets = Budget.query(function() {
+                    $scope.loading = false;
+                    if (callback) {
+                        callback();
+                    }
+                });
+            };
+
+            $scope.addBudget = function() {
+                $scope.loading = true;
+                var newBudget = new Budget();
+                newBudget.category = '';
+                newBudget.limit = 100;
+                Budget.save(newBudget, function() {
+                    $scope.loadBudgets(function() {
+                        // set focus to the first input, this should be the just added line.
+                        setTimeout(function() {
+                            var requiredFields = $(".budgets-editor input");
+                            if (requiredFields.length > 0) {
+                                requiredFields[0].focus();
+                            }
+                        }, 100);
+                    });
+                });
+            };
+
+            $scope.saveBudget = function(updatedBudget, event) {
+                if (event) {
+                    var control = $(event.target);
+                    if (control.attr("required") && control.val().length <= 0) {
+                        setTimeout(function() { control.focus(); }, 50);
+                        return;
+                    }
+                }
+
+                updatedBudget.$update();
+            };
+
+            $scope.deleteBudget = function(deletedBudget) {
+                deletedBudget.$delete(function() {
+                    var index = $scope.budgets.indexOf(deletedBudget);
+                    $scope.budgets.splice(index, 1);
+                });
+            };
+
+
+            $scope.loadBudgets();
+        });
+    </script>
+}
