@@ -247,6 +247,7 @@
     <Compile Include="Importer\TsvImporter.cs" />
     <Compile Include="Models\Budget.cs" />
     <Compile Include="Models\Rule.cs" />
+    <Compile Include="Reporting\BudgetCalculator.cs" />
     <Compile Include="Reporting\OverviewCalculator.cs" />
     <Compile Include="Rules\RulesApplierResult.cs" />
     <Compile Include="Rules\RulesImporter.cs" />
@@ -261,6 +262,7 @@
     <Compile Include="ViewModels\Reports\AmountsViewModel.cs" />
     <Compile Include="ViewModels\Reports\BalanceViewModel.cs" />
     <Compile Include="Reporting\Date.cs" />
+    <Compile Include="ViewModels\Reports\BudgetViewModel.cs" />
     <Compile Include="ViewModels\Rules\UploadRulesViewModel.cs" />
     <Compile Include="ViewModels\User\AccountViewModels.cs" />
     <Compile Include="Models\User.cs" />
@@ -756,6 +758,7 @@
     <Content Include="Views\Reports\Amounts.cshtml" />
     <Content Include="Views\Home\Attribution.cshtml" />
     <Content Include="Views\ManageBudgets\Index.cshtml" />
+    <Content Include="Views\Reports\Budget.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

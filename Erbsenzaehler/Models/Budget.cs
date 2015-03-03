@@ -1,4 +1,6 @@
-﻿namespace Erbsenzaehler.Models
+﻿using System;
+
+namespace Erbsenzaehler.Models
 {
     public class Budget
     {
@@ -18,6 +20,26 @@
             Monthly,
             Yearly,
             Daily
+        }
+
+        public decimal LimitInDays
+        {
+            get
+            {
+                switch (Period)
+                {
+                    case LimitPeriod.Weekly:
+                        return Limit / 7;
+                    case LimitPeriod.Monthly:
+                        return Limit / 30;
+                    case LimitPeriod.Yearly:
+                        return Limit / 365;
+                    case LimitPeriod.Daily:
+                        return Limit;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
         }
     }
 }
