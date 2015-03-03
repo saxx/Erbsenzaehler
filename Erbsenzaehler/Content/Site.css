@@ -49,6 +49,24 @@
     display: block;
 }
 
+/* category */
+.budgets-editor td:nth-child(1) input {
+    width: 10em;
+}
+
+/* limit */
+.budgets-editor td:nth-child(2) input {
+    width: 6em;
+    display: inline;
+    text-align: right;
+}
+
+/* period */
+.budgets-editor td:nth-child(2) select {
+    width: 7em;
+    display: inline;
+}
+
 #carousel {
     border: 1px solid #e7e7e7;
 }

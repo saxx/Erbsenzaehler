@@ -200,6 +200,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\ApiController.cs" />
+    <Compile Include="Controllers\ManageBudgetsController.cs" />
     <Compile Include="Controllers\ManageUsersController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ControllerBase.cs" />
@@ -230,6 +231,10 @@
     <Compile Include="Migrations\201502181433402_EditableAmounts.Designer.cs">
       <DependentUpon>201502181433402_EditableAmounts.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201503030454435_Budgets.cs" />
+    <Compile Include="Migrations\201503030454435_Budgets.Designer.cs">
+      <DependentUpon>201503030454435_Budgets.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Client.cs" />
@@ -240,7 +245,9 @@
     <Compile Include="Importer\ImporterType.cs" />
     <Compile Include="Importer\ImporterFactory.cs" />
     <Compile Include="Importer\TsvImporter.cs" />
+    <Compile Include="Models\Budget.cs" />
     <Compile Include="Models\Rule.cs" />
+    <Compile Include="Reporting\BudgetCalculator.cs" />
     <Compile Include="Reporting\OverviewCalculator.cs" />
     <Compile Include="Rules\RulesApplierResult.cs" />
     <Compile Include="Rules\RulesImporter.cs" />
@@ -248,12 +255,14 @@
     <Compile Include="Rules\RulesApplier.cs" />
     <Compile Include="ViewModels\Api\ImportResultViewModel.cs" />
     <Compile Include="ViewModels\Api\ImportViewModel.cs" />
+    <Compile Include="ViewModels\ManageBudgets\IndexViewModel.cs" />
     <Compile Include="ViewModels\ManageUsers\CreateViewModel.cs" />
     <Compile Include="ViewModels\ManageUsers\DeleteViewModel.cs" />
     <Compile Include="ViewModels\ManageUsers\IndexViewModel.cs" />
     <Compile Include="ViewModels\Reports\AmountsViewModel.cs" />
     <Compile Include="ViewModels\Reports\BalanceViewModel.cs" />
     <Compile Include="Reporting\Date.cs" />
+    <Compile Include="ViewModels\Reports\BudgetViewModel.cs" />
     <Compile Include="ViewModels\Rules\UploadRulesViewModel.cs" />
     <Compile Include="ViewModels\User\AccountViewModels.cs" />
     <Compile Include="Models\User.cs" />
@@ -748,6 +757,8 @@
     <Content Include="Views\Reports\Balance.cshtml" />
     <Content Include="Views\Reports\Amounts.cshtml" />
     <Content Include="Views\Home\Attribution.cshtml" />
+    <Content Include="Views\ManageBudgets\Index.cshtml" />
+    <Content Include="Views\Reports\Budget.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -761,6 +772,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201502181433402_EditableAmounts.resx">
       <DependentUpon>201502181433402_EditableAmounts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503030454435_Budgets.resx">
+      <DependentUpon>201503030454435_Budgets.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

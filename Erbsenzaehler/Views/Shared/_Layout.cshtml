@@ -85,6 +85,7 @@
                             </ul>
                         </li>
 
+                        <li>@Html.ActionLink("Budget", "Budget", "Reports")</li>
                         <li>@Html.ActionLink("Details", "Index", "Lines")</li>
                         <li>@Html.ActionLink("Import", "Index", "Import")</li>
 
@@ -92,6 +93,7 @@
                             <a aria-expanded="false" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Manage <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li>@Html.ActionLink("Rules", "Index", "ManageRules")</li>
+                                <li>@Html.ActionLink("Budgets", "Index", "ManageBudgets")</li>
                                 <li>@Html.ActionLink("Accounts", "Index", "ManageAccounts")</li>
                                 <li>@Html.ActionLink("Users", "Index", "ManageUsers")</li>
                                 <li>@Html.ActionLink("Change Password", "ChangePassword", "ManageUser")</li>
