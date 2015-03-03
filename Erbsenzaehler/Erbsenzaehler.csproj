@@ -200,6 +200,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\ApiController.cs" />
+    <Compile Include="Controllers\ManageBudgetsController.cs" />
     <Compile Include="Controllers\ManageUsersController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ControllerBase.cs" />
