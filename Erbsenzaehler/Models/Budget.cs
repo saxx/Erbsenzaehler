@@ -16,7 +16,8 @@
         {
             Weekly,
             Monthly,
-            Yearly
+            Yearly,
+            Daily
         }
     }
 }
