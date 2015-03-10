@@ -81,10 +81,11 @@ namespace Erbsenzaehler.Reporting
                         Amount = g.Select(x => x.Amount).DefaultIfEmpty(0).Sum()
                     }).ToList();
 
-
             var allCategories = (await GetCategories()).ToList();
             var result = new Dictionary<Date, IDictionary<string, decimal>>();
 
+
+            // ReSharper disable PossibleMultipleEnumeration
             if (income.Any() || spent.Any())
             {
                 var minYear = Math.Min(income.Select(x => x.Year).Min(), spent.Select(x => x.Year).Min());
@@ -116,6 +117,7 @@ namespace Erbsenzaehler.Reporting
                     }
                 }
             }
+            // ReSharper restore PossibleMultipleEnumeration
             return result;
         }
     }

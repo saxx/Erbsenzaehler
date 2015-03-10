@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Erbsenzaehler.Models;
 using Erbsenzaehler.Reporting;
 
-namespace Erbsenzaehler.ViewModels.Reports
+namespace Erbsenzaehler.ViewModels.HistoricalReports
 {
     public class AmountsViewModel
     {

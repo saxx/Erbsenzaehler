@@ -210,7 +210,7 @@
     <Compile Include="Controllers\ManageAccountsController.cs" />
     <Compile Include="Controllers\ManageClientController.cs" />
     <Compile Include="Controllers\ManageUserController.cs" />
-    <Compile Include="Controllers\ReportsController.cs" />
+    <Compile Include="Controllers\HistoricalReportsController.cs" />
     <Compile Include="Controllers\ManageRulesController.cs" />
     <Compile Include="ExtensionMethods\StringExtensionMethods.cs" />
     <Compile Include="Global.asax.cs">
@@ -259,10 +259,10 @@
     <Compile Include="ViewModels\ManageUsers\CreateViewModel.cs" />
     <Compile Include="ViewModels\ManageUsers\DeleteViewModel.cs" />
     <Compile Include="ViewModels\ManageUsers\IndexViewModel.cs" />
-    <Compile Include="ViewModels\Reports\AmountsViewModel.cs" />
-    <Compile Include="ViewModels\Reports\BalanceViewModel.cs" />
+    <Compile Include="ViewModels\HistoricalReports\AmountsViewModel.cs" />
+    <Compile Include="ViewModels\HistoricalReports\BalanceViewModel.cs" />
     <Compile Include="Reporting\Date.cs" />
-    <Compile Include="ViewModels\Reports\BudgetViewModel.cs" />
+    <Compile Include="ViewModels\HistoricalReports\BudgetViewModel.cs" />
     <Compile Include="ViewModels\Rules\UploadRulesViewModel.cs" />
     <Compile Include="ViewModels\User\AccountViewModels.cs" />
     <Compile Include="Models\User.cs" />
@@ -274,7 +274,7 @@
     <Compile Include="ViewModels\ManageClient\IndexViewModel.cs" />
     <Compile Include="ViewModels\ManageUser\ChangePasswordViewModel.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="ViewModels\Reports\IndexViewModel.cs" />
+    <Compile Include="ViewModels\HistoricalReports\IndexViewModel.cs" />
     <Compile Include="ViewModels\Rules\IndexViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -740,7 +740,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Import\Index.cshtml" />
     <Content Include="Views\Lines\Index.cshtml" />
-    <Content Include="Views\Reports\Index.cshtml" />
+    <Content Include="Views\HistoricalReports\Index.cshtml" />
     <Content Include="Views\ManageRules\Index.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\ManageUser\ChangePassword.cshtml" />
@@ -754,11 +754,11 @@
     <Content Include="Views\ManageUsers\Index.cshtml" />
     <Content Include="Views\ManageUsers\Create.cshtml" />
     <Content Include="Views\ManageUsers\Delete.cshtml" />
-    <Content Include="Views\Reports\Balance.cshtml" />
-    <Content Include="Views\Reports\Amounts.cshtml" />
+    <Content Include="Views\HistoricalReports\Balance.cshtml" />
+    <Content Include="Views\HistoricalReports\Amounts.cshtml" />
     <Content Include="Views\Home\Attribution.cshtml" />
     <Content Include="Views\ManageBudgets\Index.cshtml" />
-    <Content Include="Views\Reports\Budget.cshtml" />
+    <Content Include="Views\HistoricalReports\Budget.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

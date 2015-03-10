@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Erbsenzaehler.ViewModels.Reports;
+using Erbsenzaehler.ViewModels.HistoricalReports;
 
 namespace Erbsenzaehler.Controllers
 {
-    public class ReportsController : ControllerBase
+    public class HistoricalReportsController : ControllerBase
     {
         public async Task<ActionResult> Index()
         {

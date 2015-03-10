@@ -25,7 +25,7 @@ namespace Erbsenzaehler.Controllers
                     return Redirect("~/");
                 }
 
-                return RedirectToAction("Index", "Reports");
+                return RedirectToAction("Index", "HistoricalReports");
             }
 
             return View();

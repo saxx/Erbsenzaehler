@@ -1,9 +1,9 @@
-﻿@using Erbsenzaehler.ViewModels.Reports
+﻿@using Erbsenzaehler.ViewModels.HistoricalReports
 @using Newtonsoft.Json
-@model Erbsenzaehler.ViewModels.Reports.AmountsViewModel
+@model  AmountsViewModel
 @if (Model.AmountPerMonth.Any())
 {
-    <h2>Report: Monthly per category</h2>
+    <h2>Historical report: Income & spendings</h2>
 
     <div id="categoriesContainer"></div>
 
@@ -63,7 +63,7 @@
         }
 
         $(function() {
-            $.each(json, function(propertyName, propertyValue) {
+            $.each(json, function(propertyName) {
                 categoriesContainer.append($("<a />")
                     .html(propertyName)
                     .addClass("btn")
