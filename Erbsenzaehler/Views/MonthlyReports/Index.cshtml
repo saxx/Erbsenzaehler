@@ -1,0 +1,51 @@
+﻿@model Erbsenzaehler.ViewModels.MonthlyReports.IndexViewModel
+
+@{
+    var currentMonth = Model.CurrentDate;
+
+    var previousMonth = currentMonth.Date.AddMonths(-1);
+    var nextMonth = currentMonth.Date.AddMonths(1);
+}
+
+<nav>
+    <ul class="pager">
+        @if (Model.MinDate < previousMonth)
+            {
+            <li><a href="@Url.Action("Index")?month=@previousMonth.ToString("yyyy-MM")">&laquo; @previousMonth.ToString("MMMM yyyy")</a></li>
+        }
+        <li>@currentMonth.ToString("MMMM yyyy")</li>
+        @if (Model.MaxDate > nextMonth)
+            {
+            <li><a href="@Url.Action("Index")?month=@nextMonth.ToString("yyyy-MM")">@nextMonth.ToString("MMMM yyyy") &raquo;</a></li>
+        }
+    </ul>
+</nav>
+
+
+<!--
+<div class="row">
+    <div class="col-sm-3">
+        <h4>Budget</h4>
+    </div>
+    <div class="col-sm-1"></div>
+    <div class="col-sm-3">
+        <h4>Balance</h4>
+    </div>
+    <div class="col-sm-1"></div>
+    <div class="col-sm-3">
+        <h4>Spendings</h4>
+    </div>
+</div>
+-->
+<div class="row">
+    @if (Model.HasLines)
+    {
+        <div class="col-sm-12">
+            @Html.Action("Index", "LinesEditor")
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">There are no account statements for the selected month.</div>
+    }
+</div>

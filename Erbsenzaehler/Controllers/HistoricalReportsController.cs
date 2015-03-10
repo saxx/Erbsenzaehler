@@ -5,6 +5,7 @@ using Erbsenzaehler.ViewModels.HistoricalReports;
 
 namespace Erbsenzaehler.Controllers
 {
+    [Authorize]
     public class HistoricalReportsController : ControllerBase
     {
         public async Task<ActionResult> Index()

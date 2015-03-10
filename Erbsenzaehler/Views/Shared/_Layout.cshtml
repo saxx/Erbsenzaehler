@@ -76,8 +76,7 @@
                     @if (Request.IsAuthenticated)
                     {
                         <ul class="nav navbar-nav">
-                            <li>@Html.ActionLink("Budget", "Budget", "HistoricalReports")</li>
-                            <li>@Html.ActionLink("Details", "Index", "Lines")</li>
+                            <li>@Html.ActionLink("Overview", "Index", "MonthlyReports")</li>
                             
                             <li class="dropdown">
                                 <a aria-expanded="false" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Historical reports <span class="caret"></span></a>

@@ -3,28 +3,27 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Erbsenzaehler.ViewModels.Lines;
+using Erbsenzaehler.ViewModels.LinesEditor;
 
 namespace Erbsenzaehler.Controllers
 {
     [Authorize]
-    public class LinesController : ControllerBase
+    public class LinesEditorController : ControllerBase
     {
-        public async Task<ActionResult> Index(string date)
+        [ChildActionOnly]
+        public ActionResult Index(string month)
         {
-            var viewModel = await new IndexViewModel().Fill(Db, await GetCurrentClient());
-            return View(viewModel);
+            return PartialView("_LinesEditor");
         }
 
-
-        public async Task<ActionResult> Json(string date)
+        public async Task<ActionResult> Json(string month)
         {
             int? selectedYear = null;
             int? selectedMonth = null;
-            if (!string.IsNullOrEmpty(date) && date.Contains("-"))
+            if (!string.IsNullOrEmpty(month) && month.Contains("-"))
             {
-                selectedYear = int.Parse(date.Split('-')[0]);
-                selectedMonth = int.Parse(date.Split('-')[1]);
+                selectedYear = int.Parse(month.Split('-')[0]);
+                selectedMonth = int.Parse(month.Split('-')[1]);
             }
 
             var viewModel = await new JsonViewModel().Fill(await GetCurrentClient(), Db, selectedYear, selectedMonth);
@@ -45,6 +44,17 @@ namespace Erbsenzaehler.Controllers
             if (lineInDatebase == null || lineInDatebase.Account.ClientId != currentClient.Id)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            // sanitize the category
+            if (line.Category != null)
+            {
+                line.Category = line.Category.Replace("\n", "").Replace("\r", "").Replace("\t", "");
+                line.Category = line.Category.Trim();
+                if (line.Category == "")
+                {
+                    line.Category = null;
+                }
             }
 
             if (lineInDatebase.Ignore != line.Ignore)
