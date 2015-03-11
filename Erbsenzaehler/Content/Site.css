@@ -21,8 +21,13 @@
 
 .lines-editor .noCategory {
     background: transparent;
-    padding: 0.2em 2em 0.3em;
+    padding: 0.2em 0.6em 0.3em;
+    width: 100px;
     font-size: 75%;
+}
+
+.lines-editor [contenteditable] {
+    cursor: pointer;
 }
 
 .rules-editor textarea {

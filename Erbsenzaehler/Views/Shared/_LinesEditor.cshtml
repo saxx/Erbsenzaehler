@@ -15,18 +15,18 @@
                 <span class="label label-info">{{line.Account}}</span>
             </td>
             <td>
-                <div contenteditable="true" style="cursor: pointer;" ng-blur="changeDate(line, $event)">{{line.Date}}</div>
+                <div contenteditable spellcheck="false" nobreaks nospaces nochars ng-blur="save(line)" ng-model="line.Date"></div>
                 <div class="text-muted" ng-if="line.Date != line.OriginalDate"><s>{{line.OriginalDate}}</s></div>
             </td>
             <td>
                 {{line.Text}}
             </td>
             <td class="amount">
-                <div contenteditable="true" style="cursor: pointer;" ng-blur="changeAmount(line, $event)">{{line.Amount}}</div>
+                <div contenteditable spellcheck="false" nobreaks nospaces nochars ng-blur="save(line)" ng-model="line.Amount"></div>
                 <div class="text-muted" ng-if="line.Amount != line.OriginalAmount"><s>{{line.OriginalAmount}}</s></div>
             </td>
             <td>
-                <span contenteditable="true" style="cursor: pointer;" ng-blur="changeCategory(line, $event)" ng-class="{'label label-success': line.Category != null && line.Category != '', 'noCategory': line.Category == null || line.Category == ''}">{{line.Category}}</span>
+                <span contenteditable spellcheck="false" nobreaks nospaces ng-blur="save(line)" ng-model="line.Category" ng-class="{'label label-success': line.Category != null && line.Category != '', 'noCategory': line.Category == null || line.Category == ''}"></span>
             </td>
             <td>
                 <span class="glyphicon" style="cursor: pointer;" ng-click="switchIgnore(line)" ng-class="{'glyphicon-eye-open': line.Ignore, 'glyphicon-eye-close': !line.Ignore}" title="Ignore"></span>

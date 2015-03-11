@@ -11,23 +11,12 @@
             });
         };
 
+        $scope.save = function (line) {
+            resource.update(line);
+        };
+
         $scope.switchIgnore = function (line) {
             line.Ignore = !line.Ignore;
-            resource.update(line);
-        };
-
-        $scope.changeDate = function (line, event) {
-            line.Date = $(event.target).html();
-            resource.update(line);
-        };
-
-        $scope.changeCategory = function (line, event) {
-            line.Category = $(event.target).html();
-            resource.update(line);
-        };
-
-        $scope.changeAmount = function (line, event) {
-            line.Amount = $(event.target).html();
             resource.update(line);
         };
 
