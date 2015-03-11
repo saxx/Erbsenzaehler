@@ -49,7 +49,7 @@ namespace Erbsenzaehler.Controllers
             // sanitize the category
             if (line.Category != null)
             {
-                line.Category = line.Category.Replace("\n", "").Replace("\r", "").Replace("\t", "");
+                line.Category = line.Category.Replace("\n", "").Replace("\r", "").Replace("\t", "").Replace("<br>", "");
                 line.Category = line.Category.Trim();
                 if (line.Category == "")
                 {

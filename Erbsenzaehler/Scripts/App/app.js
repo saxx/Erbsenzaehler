@@ -52,24 +52,30 @@ erbsenzaehlerApp.directive('nochars', function () {
     }
 });
 
-erbsenzaehlerApp.directive("contenteditable", function () {
+erbsenzaehlerApp.directive('contenteditable', function () {
     return {
-        require: "?ngModel",
+        restrict: 'A',
+        require: '?ngModel',
         link: function (scope, element, attrs, ngModel) {
-
             if (!ngModel) {
                 return;
             }
 
             function read() {
-                ngModel.$setViewValue(element.html());
+                var html = element.text();
+
+                if (html === '') {
+                    html = null;
+                }
+
+                ngModel.$setViewValue(html);
             }
 
             ngModel.$render = function () {
                 element.html(ngModel.$viewValue || "");
             };
 
-            element.bind("blur keyup change", function () {
+            element.bind('DOMCharacterDataModified keyup', function () {
                 scope.$apply(read);
             });
         }

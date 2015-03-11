@@ -22,7 +22,7 @@
 </nav>
 
 
-<!--
+
 <div class="row">
     <div class="col-sm-3">
         <h4>Budget</h4>
@@ -34,9 +34,10 @@
     <div class="col-sm-1"></div>
     <div class="col-sm-3">
         <h4>Spendings</h4>
+        <div id="spendingsChart" style="width: 100%; height: 200px;"></div>
     </div>
 </div>
--->
+
 <div class="row">
     @if (Model.HasLines)
     {
@@ -49,3 +50,34 @@
         <div class="alert alert-warning">There are no account statements for the selected month.</div>
     }
 </div>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            function loadSpendingsChart() {
+                $.getJSON('@Url.Action("SpendingsChart")?month=@currentMonth.ToString("yyyy-MM")', function (data) {
+                    $('#spendingsChart').dxPieChart({
+                        dataSource: data,
+                        legend: {
+                            visible: false
+                        },
+                        tooltip: {
+                            enabled: true,
+                            argumentFormat: 'currency',
+                            customizeText: function () {
+                                return this.argumentText + ": -" + this.valueText + " €";
+                            }
+                        },
+                        series: {
+                            valueField: 'amount',
+                            argumentField: 'category'
+                        }
+                    });
+                });
+            }
+
+            loadSpendingsChart();
+        });
+    </script>
+}

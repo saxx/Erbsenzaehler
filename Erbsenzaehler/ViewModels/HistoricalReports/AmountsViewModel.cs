@@ -57,6 +57,6 @@ namespace Erbsenzaehler.ViewModels.HistoricalReports
 
 
         public IDictionary<string, IDictionary<Date, decimal>> AmountPerMonth { get; set; }
-        public static string IncomeCategory => OverviewCalculator.IncomeCategory;
+        public static string IncomeCategory => Constants.IncomeCategory;
     }
 }
