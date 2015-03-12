@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Erbsenzaehler.Models
@@ -16,6 +17,42 @@ namespace Erbsenzaehler.Models
         public static IQueryable<Line> ByMonth(this IQueryable<Line> q, Month month)
         {
             return ByMonth(q, month.Date);
+        }
+
+        public static IQueryable<Line> ByCategoryNotEmpty(this IQueryable<Line> q)
+        {
+            return q.Where(x => x.Category != null && x.Category != "");
+        }
+
+        public static IEnumerable<Line> ByCategoryNotEmpty(this IEnumerable<Line> q)
+        {
+            return q.Where(x => !string.IsNullOrEmpty(x.Category));
+        }
+
+        public static IQueryable<Line> ByCategory(this IQueryable<Line> q, string category)
+        {
+            if (string.IsNullOrEmpty(category))
+            {
+                throw new ArgumentOutOfRangeException("category");
+            }
+            category = category.ToLower();
+            return q.ByCategoryNotEmpty().Where(x => x.Category.ToLower() == category);
+        }
+
+
+        public static IEnumerable<Line> ByCategory(this IEnumerable<Line> q, string category)
+        {
+            if (string.IsNullOrEmpty(category))
+            {
+                throw new ArgumentOutOfRangeException("category");
+            }
+            return q.ByCategoryNotEmpty().Where(x => x.Category.Equals(category, StringComparison.CurrentCultureIgnoreCase));
+        }
+
+
+        public static IQueryable<Line> ByNotIgnored(this IQueryable<Line> q)
+        {
+            return q.Where(x => !x.Ignore);
         }
 
         public static IQueryable<Line> ByClient(this IQueryable<Line> q, int clientId)

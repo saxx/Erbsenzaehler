@@ -266,7 +266,6 @@
     <Compile Include="ViewModels\HistoricalReports\AmountsViewModel.cs" />
     <Compile Include="ViewModels\HistoricalReports\BalanceViewModel.cs" />
     <Compile Include="Reporting\Date.cs" />
-    <Compile Include="ViewModels\HistoricalReports\BudgetViewModel.cs" />
     <Compile Include="ViewModels\MonthlyReports\IndexViewModel.cs" />
     <Compile Include="ViewModels\Rules\UploadRulesViewModel.cs" />
     <Compile Include="ViewModels\User\AccountViewModels.cs" />
@@ -764,7 +763,6 @@
     <Content Include="Views\HistoricalReports\Amounts.cshtml" />
     <Content Include="Views\Home\Attribution.cshtml" />
     <Content Include="Views\ManageBudgets\Index.cshtml" />
-    <Content Include="Views\HistoricalReports\Budget.cshtml" />
     <Content Include="Views\MonthlyReports\Index.cshtml" />
     <Content Include="Views\Shared\_LinesEditor.cshtml" />
   </ItemGroup>

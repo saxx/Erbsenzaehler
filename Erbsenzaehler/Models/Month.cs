@@ -39,5 +39,29 @@ namespace Erbsenzaehler.Models
         {
             return Date.ToString("yyyy-MM");
         }
+
+        public bool IsCurrentMonth => Date.Year == DateTime.Now.Year && Date.Month == DateTime.Now.Month;
+
+        public Month PreviousMonth => new Month(Date.AddMonths(-1).ToString("yyyy-MM"), false);
+
+        public Month NextMonth => new Month(Date.AddMonths(1).ToString("yyyy-MM"), false);
+
+        public int NumberOfDays => DateTime.DaysInMonth(Date.Year, Date.Month);
+
+        public int NumberOfDaysLeft
+        {
+            get
+            {
+                if (IsCurrentMonth)
+                {
+                    return NumberOfDays - DateTime.Now.Day;
+                }
+                if (DateTime.Now < Date)
+                {
+                    return NumberOfDays;
+                }
+                return 0;
+            }
+        }
     }
 }
