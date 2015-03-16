@@ -5,23 +5,29 @@
 
     var previousMonth = currentMonth.Date.AddMonths(-1);
     var nextMonth = currentMonth.Date.AddMonths(1);
+
+    var showPager = Model.MinDate > DateTime.MinValue && Model.MaxDate > DateTime.MinValue;
 }
 
 
-
-<nav>
-    <ul class="pager">
-        @if (Model.MinDate < previousMonth)
+@if (showPager)
+{
+    <nav>
+        <ul class="pager">
+            @if (Model.MinDate < previousMonth && Model.MinDate > DateTime.MinValue)
             {
-            <li><a href="@Url.Action("Index")?month=@previousMonth.ToString("yyyy-MM")">&laquo; @previousMonth.ToString("MMMM yyyy")</a></li>
-        }
-        <li><h2>@currentMonth.ToString("MMMM yyyy")</h2></li>
-        @if (Model.MaxDate > nextMonth)
+                <li><a href="@Url.Action("Index")?month=@previousMonth.ToString("yyyy-MM")">&laquo; @previousMonth.ToString("MMMM yyyy")</a></li>
+            }
+            <li>
+                <h2>@currentMonth.ToString("MMMM yyyy")</h2>
+            </li>
+            @if (Model.MaxDate > nextMonth)
             {
-            <li><a href="@Url.Action("Index")?month=@nextMonth.ToString("yyyy-MM")">@nextMonth.ToString("MMMM yyyy") &raquo;</a></li>
-        }
-    </ul>
-</nav>
+                <li><a href="@Url.Action("Index")?month=@nextMonth.ToString("yyyy-MM")">@nextMonth.ToString("MMMM yyyy") &raquo;</a></li>
+            }
+        </ul>
+    </nav>
+}
 
 @if (Model.HasLines)
 {
