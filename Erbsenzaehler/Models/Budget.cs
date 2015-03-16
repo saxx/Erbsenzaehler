@@ -1,7 +1,22 @@
 ﻿using System;
+using System.Linq;
 
 namespace Erbsenzaehler.Models
 {
+    public static class BudgetExtensionMethods
+    {
+        public static IQueryable<Budget> ByClient(this IQueryable<Budget> q, int clientId)
+        {
+            return q.Where(x => x.ClientId == clientId);
+        }
+
+        public static IQueryable<Budget> ByClient(this IQueryable<Budget> q, Client client)
+        {
+            return q.Where(x => x.ClientId == client.Id);
+        }
+    }
+
+
     public class Budget
     {
         public int Id { get; set; }
@@ -27,6 +42,7 @@ namespace Erbsenzaehler.Models
             switch (Period)
             {
                 case LimitPeriod.Weekly:
+                    // ReSharper disable once PossibleLossOfFraction
                     return Limit * (DateTime.DaysInMonth(month.Date.Year, month.Date.Month) / 7);
                 case LimitPeriod.Monthly:
                     return Limit;

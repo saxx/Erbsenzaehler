@@ -20,10 +20,13 @@ namespace Erbsenzaehler.ViewModels.MonthlyReports
             MinDate = await linesQuery.Select(x => x.Date ?? x.OriginalDate).DefaultIfEmpty().MinAsync();
             MaxDate = await linesQuery.Select(x => x.Date ?? x.OriginalDate).DefaultIfEmpty().MaxAsync();
 
+            HasBudgets = await db.Budgets.ByClient(currentClient).AnyAsync();
+
             return this;
         }
 
         public bool HasLines { get; set; }
+        public bool HasBudgets { get; set; }
         public DateTime CurrentDate { get; set; }
         public DateTime MinDate { get; set; }
         public DateTime MaxDate { get; set; }

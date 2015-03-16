@@ -25,7 +25,23 @@
 
 <div class="row">
     <div class="col-sm-4">
-        <div id="budgetChart" style="width: 100%; height: 250px;"></div>
+        @if (Model.HasBudgets)
+        {
+            <div id="budgetChart" style="width: 100%; height: 250px;"></div>
+        }
+        else
+        {
+            <div class="alert alert-warning">
+                <p>
+                    You don't have any budgets configured yet.
+                    Use budgets to create and track spending limits for certain categories.
+                </p>
+                <p>
+                    <a href="@Url.Action("Index", "ManageBudgets")" class="btn btn-default pull-right">Create budgets</a>
+                </p>
+                <p class="clearfix"></p>
+            </div>
+        }
     </div>
     <div class="col-sm-4">
         <div id="balanceChart" style="width: 100%; height: 250px;"></div>
@@ -50,6 +66,7 @@
         <div class="alert alert-warning">There are no account statements for the selected month.</div>
     }
 </div>
+
 
 @section scripts
 {
