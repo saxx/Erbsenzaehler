@@ -22,23 +22,20 @@ namespace Erbsenzaehler.Models
             Daily
         }
 
-        public decimal LimitInDays
+        public decimal NormalizeLimit(Month month)
         {
-            get
+            switch (Period)
             {
-                switch (Period)
-                {
-                    case LimitPeriod.Weekly:
-                        return Limit / 7;
-                    case LimitPeriod.Monthly:
-                        return Limit / 30;
-                    case LimitPeriod.Yearly:
-                        return Limit / 365;
-                    case LimitPeriod.Daily:
-                        return Limit;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                case LimitPeriod.Weekly:
+                    return Limit * (DateTime.DaysInMonth(month.Date.Year, month.Date.Month) / 7);
+                case LimitPeriod.Monthly:
+                    return Limit;
+                case LimitPeriod.Yearly:
+                    return Limit / 12;
+                case LimitPeriod.Daily:
+                    return Limit * DateTime.DaysInMonth(month.Date.Year, month.Date.Month);
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }

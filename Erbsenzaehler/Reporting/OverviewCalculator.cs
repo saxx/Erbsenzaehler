@@ -11,9 +11,6 @@ namespace Erbsenzaehler.Reporting
     {
         private readonly Db _db;
         private readonly Client _client;
-        public const string EmptyCategory = "Other";
-        public const string IncomeCategory = "Income";
-
 
         public OverviewCalculator(Db db, Client client)
         {
@@ -25,10 +22,10 @@ namespace Erbsenzaehler.Reporting
         public async Task<IEnumerable<string>> GetCategories(bool includeIncome = false)
         {
             var allCategories = await _db.Lines.Where(x => x.Account.ClientId == _client.Id && x.Category != null).Select(x => x.Category).Distinct().ToListAsync();
-            allCategories.Add(EmptyCategory);
+            allCategories.Add(Constants.EmptyCategory);
             if (includeIncome)
             {
-                allCategories.Add(IncomeCategory);
+                allCategories.Add(Constants.IncomeCategory);
             }
             return allCategories;
         }
@@ -81,10 +78,11 @@ namespace Erbsenzaehler.Reporting
                         Amount = g.Select(x => x.Amount).DefaultIfEmpty(0).Sum()
                     }).ToList();
 
-
             var allCategories = (await GetCategories()).ToList();
             var result = new Dictionary<Date, IDictionary<string, decimal>>();
 
+
+            // ReSharper disable PossibleMultipleEnumeration
             if (income.Any() || spent.Any())
             {
                 var minYear = Math.Min(income.Select(x => x.Year).Min(), spent.Select(x => x.Year).Min());
@@ -100,12 +98,12 @@ namespace Erbsenzaehler.Reporting
                         result[date] = new Dictionary<string, decimal>();
 
                         var filteredIncome = income.Where(x => x.Year == yearClosure && x.Month == monthClosure).ToList();
-                        result[date][IncomeCategory] = filteredIncome.Select(x => x.Amount).DefaultIfEmpty(0).Sum();
+                        result[date][Constants.IncomeCategory] = filteredIncome.Select(x => x.Amount).DefaultIfEmpty(0).Sum();
 
                         var filteredSpent = spent.Where(x => x.Year == yearClosure && x.Month == monthClosure).ToList();
                         foreach (var category in allCategories)
                         {
-                            result[date][category] = filteredSpent.Where(x => x.Category == category || (x.Category == null && category == EmptyCategory)).Select(x => x.Amount).DefaultIfEmpty(0).Sum();
+                            result[date][category] = filteredSpent.Where(x => x.Category == category || (x.Category == null && category == Constants.EmptyCategory)).Select(x => x.Amount).DefaultIfEmpty(0).Sum();
                         }
 
                         // remove month if it does not have any value at all
@@ -116,6 +114,7 @@ namespace Erbsenzaehler.Reporting
                     }
                 }
             }
+            // ReSharper restore PossibleMultipleEnumeration
             return result;
         }
     }

@@ -1,0 +1,36 @@
+﻿<div ng-app="erbsenzaehlerApp" ng-controller="linesEditorController">
+    <table class="table table-striped lines-editor" ng-show="!loading" data-action="@Url.Action("Json", "LinesEditor")">
+        <tr>
+            <th>Account</th>
+            <th>Date</th>
+            <th>Text</th>
+            <th>Amount</th>
+            <th>Category</th>
+            <th></th>
+            <th></th>
+        </tr>
+
+        <tr ng-repeat="line in viewModel.Lines" class="line" ng-class="{'line-ignore': line.Ignore}">
+            <td>
+                <span class="label label-info">{{line.Account}}</span>
+            </td>
+            <td>
+                <div contenteditable spellcheck="false" nobreaks nospaces nochars ng-blur="save(line)" ng-model="line.Date"></div>
+                <div class="text-muted" ng-if="line.Date != line.OriginalDate"><s>{{line.OriginalDate}}</s></div>
+            </td>
+            <td>
+                {{line.Text}}
+            </td>
+            <td class="amount">
+                <div contenteditable spellcheck="false" nobreaks nospaces nochars ng-blur="save(line)" ng-model="line.Amount"></div>
+                <div class="text-muted" ng-if="line.Amount != line.OriginalAmount"><s>{{line.OriginalAmount}}</s></div>
+            </td>
+            <td>
+                <span contenteditable spellcheck="false" nobreaks nospaces ng-blur="save(line)" ng-model="line.Category" ng-class="{'label label-success': line.Category != null && line.Category != '', 'noCategory': line.Category == null || line.Category == ''}"></span>
+            </td>
+            <td>
+                <span class="glyphicon" style="cursor: pointer;" ng-click="switchIgnore(line)" ng-class="{'glyphicon-eye-open': line.Ignore, 'glyphicon-eye-close': !line.Ignore}" title="Ignore"></span>
+            </td>
+        </tr>
+    </table>
+</div>

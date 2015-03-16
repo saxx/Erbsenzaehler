@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using Erbsenzaehler.Models;
 
 namespace Erbsenzaehler.Reporting
@@ -20,79 +19,73 @@ namespace Erbsenzaehler.Reporting
         }
 
 
-        public async Task Calculate(DateTime startDate, DateTime endDate)
+        public async Task<IEnumerable<BudgetResult>> CalculateForMonth(Month month)
         {
-            if (startDate > endDate)
-            {
-                throw new Exception("The start-date must not be larger than the end-date.");
-            }
-
-            // make sure we select entire days
-            startDate = startDate.Date;
-            endDate = endDate.Date.AddDays(1).AddSeconds(-1);
-
-            StartDate = startDate;
-            EndDate = endDate;
-
-            var allBudgets = await _db.Budgets.Where(x => x.ClientId == _currentClient.Id && x.Category != null && x.Category != "")
+            var allBudgets = await _db.Budgets
+                .Where(x => x.ClientId == _currentClient.Id && x.Category != null && x.Category != "")
                 .OrderBy(x => x.Category)
                 .ToListAsync();
 
-            var allLines = await _db.Lines.Where(x => x.Account.ClientId == _currentClient.Id && x.Category != null && x.Category != "")
-                .Where(x => (x.Date ?? x.OriginalDate) >= startDate && (x.Date ?? x.OriginalDate) <= endDate)
-                .Select(x =>
-                    new
-                    {
-                        Amount = x.Amount ?? x.OriginalAmount,
-                        x.Category
-                    }).ToListAsync();
 
-            var days = (int)Math.Ceiling((EndDate - StartDate).TotalDays);
+            var allLines = await _db.Lines.ByClient(_currentClient).ByMonth(month).ByNotIgnored().ByCategoryNotEmpty().Select(x => new
+            {
+                Amount = x.Amount ?? x.OriginalAmount,
+                x.Category
+            }).ToListAsync();
+
+            // correction factor if we're calculating the current month
+            double factor = 1;
+            if (month.NumberOfDays == month.NumberOfDaysLeft)
+            {
+                factor = 0;
+            }
+            else if (month.NumberOfDaysLeft > 0)
+            {
+                factor = 1.0 / month.NumberOfDays * month.NumberOfDaysLeft;
+            }
+
+
             var result = new List<BudgetResult>();
             foreach (var budget in allBudgets)
             {
-                var budgetResult = new BudgetResult(budget.Category, days);
+                var budgetResult = new BudgetResult(budget.Category);
                 var budgetCategory = budget.Category.ToLower();
 
-                budgetResult.TotalAmount = allLines.Where(x => x.Category.ToLower() == budgetCategory).Select(x => x.Amount).Sum();
-                budgetResult.TotalLimit = budget.LimitInDays * days;
+                budgetResult.Amount = allLines.Where(x => x.Category.ToLower() == budgetCategory).Select(x => x.Amount).Sum() * (decimal)factor;
+                budgetResult.Limit = budget.NormalizeLimit(month) * (decimal)factor;
 
                 result.Add(budgetResult);
             }
 
-            BudgetResults = result;
+            return result;
         }
-
-
-        public DateTime StartDate { get; private set; }
-        public DateTime EndDate { get; private set; }
-
-        public IEnumerable<BudgetResult> BudgetResults { get; private set; }
 
 
         public class BudgetResult
         {
 
-            public BudgetResult(string category, int days)
+            public BudgetResult(string category)
             {
-                Days = days;
                 Category = category;
             }
 
 
             public string Category { get; set; }
 
-            public int Days { get; set; }
+            public decimal Limit { get; set; }
 
-            public decimal TotalLimit { get; set; }
+            public decimal Amount { get; set; }
 
-            public decimal TotalAmount { get; set; }
-
-            public int CurrentPercentage
+            public int Percentage
             {
                 get
                 {
-                    var i = (int)Math.Round(100 / TotalLimit * (TotalLimit + TotalAmount));
+                    if (Limit <= 0)
+                    {
+                        return 0;
+                    }
+
+                    var i = (int)Math.Round(100 / Limit * (Limit + Amount));
 
                     if (i < 100)
                     {

@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity;
 
 namespace Erbsenzaehler.Controllers
 {
+    [Authorize]
     public class ManageUsersController : ControllerBase
     {
         public async Task<ActionResult> Index()

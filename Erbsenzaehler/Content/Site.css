@@ -21,8 +21,12 @@
 
 .lines-editor .noCategory {
     background: transparent;
-    padding: 0.2em 2em 0.3em;
+    padding: 0.2em 5em 0.3em 0.6em;
     font-size: 75%;
+}
+
+.lines-editor [contenteditable] {
+    cursor: pointer;
 }
 
 .rules-editor textarea {
@@ -83,4 +87,9 @@
 
     #carousel .carousel-control {
         background: none;
+    }
+
+    .pager h2 {
+        display: inline;
+        vertical-align: bottom;
     }

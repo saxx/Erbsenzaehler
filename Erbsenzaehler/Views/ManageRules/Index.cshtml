@@ -94,14 +94,6 @@ else
             return $resource('@Url.Action("Json")/:id', { id: '@@id' }, {
                 update: {
                     method: 'PUT'
-                },
-                getAffectedLines: {
-                    method: 'GET',
-                    url: '@Url.Action("AffectedLines")/:id',
-                    transformResponse: function(data) {
-                        alert(data);
-                        return data;
-                    }
                 }
             });
         });

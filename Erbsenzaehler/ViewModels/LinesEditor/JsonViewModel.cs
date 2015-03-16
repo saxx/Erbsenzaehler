@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Erbsenzaehler.Models;
 
-namespace Erbsenzaehler.ViewModels.Lines
+namespace Erbsenzaehler.ViewModels.LinesEditor
 {
     public class JsonViewModel
     {

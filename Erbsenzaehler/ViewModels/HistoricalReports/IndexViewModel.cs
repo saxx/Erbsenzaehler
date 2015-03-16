@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Erbsenzaehler.Models;
 using Erbsenzaehler.Reporting;
 
-namespace Erbsenzaehler.ViewModels.Reports
+namespace Erbsenzaehler.ViewModels.HistoricalReports
 {
     public class IndexViewModel
     {
@@ -26,8 +26,8 @@ namespace Erbsenzaehler.ViewModels.Reports
                     Year = monthPair.Key.Year,
                     Month = monthPair.Key.Month,
                     Name = monthPair.Key.ToString(),
-                    Income = monthPair.Value[OverviewCalculator.IncomeCategory],
-                    Spent = monthPair.Value.Where(x => x.Key != OverviewCalculator.IncomeCategory).Sum(x => x.Value)
+                    Income = monthPair.Value[Constants.IncomeCategory],
+                    Spent = monthPair.Value.Where(x => x.Key != Constants.IncomeCategory).Sum(x => x.Value)
                 };
 
                 foreach (var category in allCategories)
