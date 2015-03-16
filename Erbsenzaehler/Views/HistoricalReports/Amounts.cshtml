@@ -80,7 +80,5 @@
 }}
 else
 {
-    <div class="alert alert-warning">
-        You don't have anything to display here yet. You probably want to @Html.ActionLink("import your data", "Index", "Import", null, new { @class = "alert-link" }) first.
-    </div>
+    @Html.Partial("_NoLinesWarning")
 }

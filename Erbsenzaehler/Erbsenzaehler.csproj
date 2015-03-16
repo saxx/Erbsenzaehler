@@ -765,6 +765,7 @@
     <Content Include="Views\ManageBudgets\Index.cshtml" />
     <Content Include="Views\MonthlyReports\Index.cshtml" />
     <Content Include="Views\Shared\_LinesEditor.cshtml" />
+    <Content Include="Views\Shared\_NoLinesWarning.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
