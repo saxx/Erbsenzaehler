@@ -13,7 +13,7 @@
             {
             <li><a href="@Url.Action("Index")?month=@previousMonth.ToString("yyyy-MM")">&laquo; @previousMonth.ToString("MMMM yyyy")</a></li>
         }
-        <li>@currentMonth.ToString("MMMM yyyy")</li>
+        <li><h2>@currentMonth.ToString("MMMM yyyy")</h2></li>
         @if (Model.MaxDate > nextMonth)
             {
             <li><a href="@Url.Action("Index")?month=@nextMonth.ToString("yyyy-MM")">@nextMonth.ToString("MMMM yyyy") &raquo;</a></li>
@@ -35,7 +35,7 @@
     </div>
 </div>
 
-   <p></p>
+<p></p>
 
 
 <div class="row">
@@ -58,7 +58,12 @@
             function loadSpendingsChart() {
                 $.getJSON('@Url.Action("SpendingsChart")?month=@currentMonth.ToString("yyyy-MM")', function (data) {
                     $('#spendingsChart').dxPieChart({
-                        title: 'Spendings',
+                        title: {
+                            text: 'Spendings',
+                            font: {
+                                size: '1.25em'
+                            }
+                        },
                         dataSource: data,
                         palette: 'Vintage',
                         legend: {
@@ -82,7 +87,12 @@
             function loadBalanceChart() {
                 $.getJSON('@Url.Action("BalanceChart")?month=@currentMonth.ToString("yyyy-MM")', function (data) {
                     $('#balanceChart').dxChart({
-                        title: 'Income vs. Spendings',
+                        title: {
+                            text: 'Income vs. Spendings',
+                            font: {
+                                size: '1.25em'
+                            }
+                        },
                         dataSource: data,
                         legend: {
                             visible: false
@@ -112,19 +122,21 @@
                                 return this.argumentText + ": " + this.valueText + " €";
                             }
                         },
-                        series: [{
-                            name: 'Income',
-                            type: 'bar',
-                            valueField: 'income',
-                            argumentField: 'month',
-                            color: '#9999cc'
-                        }, {
-                            name: 'Spendings',
-                            type: 'bar',
-                            valueField: 'spendings',
-                            argumentField: 'month',
-                            color: '#ff9999'
-                        }]
+                        series: [
+                            {
+                                name: 'Income',
+                                type: 'bar',
+                                valueField: 'income',
+                                argumentField: 'month',
+                                color: '#9999cc'
+                            }, {
+                                name: 'Spendings',
+                                type: 'bar',
+                                valueField: 'spendings',
+                                argumentField: 'month',
+                                color: '#ff9999'
+                            }
+                        ]
                     });
                 });
             }
@@ -132,7 +144,7 @@
             function loadBudgetChart() {
                 $.getJSON('@Url.Action("BudgetChart")?month=@currentMonth.ToString("yyyy-MM")', function (data) {
                     var max = 100;
-                    $.each(data, function(i, val) {
+                    $.each(data, function (i, val) {
                         if (val.percentage >= 100) {
                             max = null;
                             return;
@@ -141,13 +153,18 @@
 
 
                     $('#budgetChart').dxChart({
-                        title: 'Budgets',
+                        title: {
+                            text: 'Budgets',
+                            font: {
+                                size: '1.25em'
+                            }
+                        },
                         dataSource: data,
                         legend: {
                             visible: false
                         },
-                        customizePoint: function() {
-                            if(this.value > 100) {
+                        customizePoint: function () {
+                            if (this.value > 100) {
                                 return {
                                     color: '#ff9999'
                                 };
@@ -159,7 +176,7 @@
                         tooltip: {
                             enabled: true,
                             argumentFormat: 'currency',
-                            customizeText: function() {
+                            customizeText: function () {
                                 return this.argumentText + ": " + this.valueText + " %";
                             }
                         },
@@ -173,22 +190,25 @@
                                 visible: false
                             },
                             constantLines: [
-                            {
-                                label: {
-                                    text: 'Limit'
-                                },
-                                width: 2,
-                                value: 100,
-                                color: '#000000',
-                                dashStyle: 'dash'
-                            }]
+                                {
+                                    label: {
+                                        text: 'Limit'
+                                    },
+                                    width: 2,
+                                    value: 100,
+                                    color: '#000000',
+                                    dashStyle: 'dash'
+                                }
+                            ]
                         },
-                        series: [{
-                            type: 'bar',
-                            valueField: 'percentage',
-                            argumentField: 'category',
+                        series: [
+                            {
+                                type: 'bar',
+                                valueField: 'percentage',
+                                argumentField: 'category',
 
-                        }]
+                            }
+                        ]
                     });
                 });
             }

@@ -88,3 +88,8 @@
     #carousel .carousel-control {
         background: none;
     }
+
+    .pager h2 {
+        display: inline;
+        vertical-align: bottom;
+    }
