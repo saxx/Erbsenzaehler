@@ -12,12 +12,16 @@
         };
 
         $scope.save = function (line) {
-            resource.update(line);
+            resource.update(line, function() {
+                if (window.reloadCallback) {
+                    window.reloadCallback();
+                }
+            });
         };
 
         $scope.switchIgnore = function (line) {
             line.Ignore = !line.Ignore;
-            resource.update(line);
+            $scope.save(line);
         };
 
         $scope.loadLines();
