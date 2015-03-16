@@ -10,6 +10,10 @@ namespace Erbsenzaehler.Models
             {
                 if (string.IsNullOrEmpty(yearAndMonth))
                 {
+                    if (useCurrentAsFallback)
+                    {
+                        Date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                    }
                     throw new Exception("No year and month specified.");
                 }
 

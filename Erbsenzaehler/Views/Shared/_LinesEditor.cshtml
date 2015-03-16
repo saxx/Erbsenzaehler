@@ -7,7 +7,7 @@
             <th>Amount</th>
             <th>Category</th>
             <th></th>
-            <th></th>
+            <th><button class="btn btn-xs btn-success glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="left" title="Add a new account statement"></button></th>
         </tr>
 
         <tr ng-repeat="line in viewModel.Lines" class="line" ng-class="{'line-ignore': line.Ignore}">
@@ -29,7 +29,10 @@
                 <span contenteditable spellcheck="false" nobreaks nospaces ng-blur="save(line)" ng-model="line.Category" ng-class="{'label label-success': line.Category != null && line.Category != '', 'noCategory': line.Category == null || line.Category == ''}"></span>
             </td>
             <td>
-                <span class="glyphicon" style="cursor: pointer;" ng-click="switchIgnore(line)" ng-class="{'glyphicon-eye-open': line.Ignore, 'glyphicon-eye-close': !line.Ignore}" title="Ignore"></span>
+                <button class="btn btn-xs btn-default glyphicon" ng-click="switchIgnore(line)" ng-class="{'glyphicon-eye-open': line.Ignore, 'glyphicon-eye-close': !line.Ignore}" data-toggle="tooltip" data-placement="left" title="Toggle to ignore/include this account statement in all reports and charts"></button>
+            </td>
+            <td>
+                <button class="btn btn-xs btn-danger glyphicon glyphicon-trash" ng-click="delete(line)" data-toggle="tooltip" data-placement="left" title="Delete this account statement"></button>
             </td>
         </tr>
     </table>

@@ -35,8 +35,8 @@ namespace Erbsenzaehler.Controllers
         }
 
 
-        [HttpPost]
-        public async Task<ActionResult> Json(JsonViewModel.Line line)
+        [HttpPut]
+        public async Task<ActionResult> Json(JsonViewModel.Line line, string month)
         {
             var currentClient = await GetCurrentClient();
 
@@ -88,7 +88,16 @@ namespace Erbsenzaehler.Controllers
 
             Db.SaveChanges();
 
-            return await Json("");
+            return await Json(month);
+        }
+
+
+        [HttpDelete]
+        [Route("Json")]
+        public async Task<ActionResult> DeleteLine(JsonViewModel.Line line, string month)
+        {
+
+            return await Json(month);
         }
     }
 }

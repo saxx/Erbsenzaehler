@@ -4,6 +4,25 @@ var erbsenzaehlerAnimations = angular.module('erbsenzaehlerAnimations', ['ngAnim
 var erbsenzaehlerServices = angular.module('erbsenzaehlerServices', ['ngResource']);
 var erbsenzaehlerControllers = angular.module('erbsenzaehlerControllers', []);
 
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+});
+
+erbsenzaehlerApp.directive('title', function () {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            $(element).hover(function () {
+                // on mouseenter
+                $(element).tooltip('show');
+            }, function () {
+                // on mouseleave
+                $(element).tooltip('hide');
+            });
+        }
+    };
+});
+
 erbsenzaehlerApp.directive('nobreaks', function () {
     return {
         restrict: 'A',
