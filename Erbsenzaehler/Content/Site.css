@@ -21,8 +21,7 @@
 
 .lines-editor .noCategory {
     background: transparent;
-    padding: 0.2em 0.6em 0.3em;
-    width: 100px;
+    padding: 0.2em 5em 0.3em 0.6em;
     font-size: 75%;
 }
 
