@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -8,15 +9,19 @@ using Erbsenzaehler.ViewModels.LinesEditor;
 namespace Erbsenzaehler.Controllers
 {
     [Authorize]
+    [RoutePrefix("LinesEditor")]
     public class LinesEditorController : ControllerBase
     {
         [ChildActionOnly]
+        [Route("")]
         public ActionResult Index(string month)
         {
             return PartialView("_LinesEditor");
         }
 
-        public async Task<ActionResult> Json(string month)
+        [HttpGet]
+        [Route("Json")]
+        public async Task<ActionResult> LoadLines(string month)
         {
             int? selectedYear = null;
             int? selectedMonth = null;
@@ -36,7 +41,8 @@ namespace Erbsenzaehler.Controllers
 
 
         [HttpPut]
-        public async Task<ActionResult> Json(JsonViewModel.Line line, string month)
+        [Route("Json")]
+        public async Task<ActionResult> UpdateLine(JsonViewModel.Line line, string month)
         {
             var currentClient = await GetCurrentClient();
 
@@ -88,16 +94,26 @@ namespace Erbsenzaehler.Controllers
 
             Db.SaveChanges();
 
-            return await Json(month);
+            return await LoadLines(month);
         }
 
 
         [HttpDelete]
-        [Route("Json")]
-        public async Task<ActionResult> DeleteLine(JsonViewModel.Line line, string month)
+        [Route("Json/{id}/")]
+        public async Task<ActionResult> DeleteLine(int id, string month)
         {
+            var currentClient = await GetCurrentClient();
 
-            return await Json(month);
+            var lineInDatebase = await Db.Lines.FirstOrDefaultAsync(x => x.Id == id);
+            if (lineInDatebase == null || lineInDatebase.Account.ClientId != currentClient.Id)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            Db.Lines.Remove(lineInDatebase);
+            await Db.SaveChangesAsync();
+            
+            return await LoadLines(month);
         }
     }
 }
