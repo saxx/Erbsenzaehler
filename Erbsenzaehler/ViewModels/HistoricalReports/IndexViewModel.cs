@@ -27,7 +27,7 @@ namespace Erbsenzaehler.ViewModels.HistoricalReports
                     Year = monthPair.Key.Date.Year,
                     Month = monthPair.Key.Date.Month,
                     Name = monthPair.Key.ToString(),
-                    Income = monthPair.Value[Constants.IncomeCategory],
+                    Income = monthPair.Value.Where(x => x.Key == Constants.IncomeCategory).Sum(x => x.Value),
                     Spent = monthPair.Value.Where(x => x.Key != Constants.IncomeCategory).Sum(x => x.Value)
                 };
 
