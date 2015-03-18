@@ -3,81 +3,85 @@
 @model  AmountsViewModel
 @if (Model.AmountPerMonth.Any())
 {
-    <h2>Historical report: Income & spendings</h2>
+    <div id="chartContainer" style="max-width: 100%; height: 600px;"></div>
+
+    <hr />
 
     <div id="categoriesContainer"></div>
 
-    <div id="chartContainer" style="max-width: 100%; height: 600px;"></div>
-    <p>
-        &nbsp;
-    </p>
-
-@section scripts
+    @section scripts
 {
-    <script>
-        var json = @Html.Raw(JsonConvert.SerializeObject(Model.AmountPerMonth));
+        <script>
+            var json = @Html.Raw(JsonConvert.SerializeObject(Model.AmountPerMonth));
 
-        var categoriesContainer = $("#categoriesContainer");
+            var categoriesContainer = $("#categoriesContainer");
 
-        function printChart(category) {
-            $.each(categoriesContainer.find("a"), function(i, val) {
-                var button = $(val);
-                button.removeClass("active");
+            function printChart(category) {
+                $.each(categoriesContainer.find("a"), function(i, val) {
+                    var button = $(val);
+                    button.removeClass("active");
 
-                if (button.text() === category) {
-                    button.addClass("active");
-                }
-            });
-
-            var amounts = new Array();
-            $.each(json[category], function(propertyName, propertyValue) {
-                amounts.push({
-                    name: propertyName,
-                    value: (category === "@AmountsViewModel.IncomeCategory") ? propertyValue : -propertyValue
+                    if (button.text() === category) {
+                        button.addClass("active");
+                    }
                 });
-            });
 
-            $('#chartContainer').dxChart({
-                dataSource: amounts,
-                tooltip: {
-                    enabled: true,
-                    argumentFormat: 'currency',
-                    customizeText: function() {
-                        return this.argumentText + ": " + this.valueText + " €";
-                    }
-                },
-                commonSeriesSettings: {
-                    type: 'splineArea',
-                    argumentField: 'name'
-                },
-                legend: {
-                    visible: false
-                },
-                series: [
-                    {
-                        valueField: 'value',
-                        point: { visible: true }
-                    }
-                ]
-            });
-        }
+                var amounts = new Array();
+                $.each(json[category], function(propertyName, propertyValue) {
+                    amounts.push({
+                        name: propertyName,
+                        value: (category === "@AmountsViewModel.IncomeCategory") ? propertyValue : -propertyValue
+                    });
+                });
 
-        $(function() {
-            $.each(json, function(propertyName) {
-                categoriesContainer.append($("<a />")
-                    .html(propertyName)
-                    .addClass("btn")
-                    .addClass("btn-default")
-                    .click(function() {
-                        printChart(propertyName);
-                    }));
-                categoriesContainer.append(" ");
-            });
+                $('#chartContainer').dxChart({
+                    title: {
+                        text: 'Historical income & spendings',
+                        font: {
+                            size: '1.25em'
+                        }
+                    },
+                    dataSource: amounts,
+                    palette: 'Soft Pastel',
+                    tooltip: {
+                        enabled: true,
+                        argumentFormat: 'currency',
+                        customizeText: function() {
+                            return this.argumentText + ": " + this.valueText + " €";
+                        }
+                    },
+                    commonSeriesSettings: {
+                        type: 'splineArea',
+                        argumentField: 'name'
+                    },
+                    legend: {
+                        visible: false
+                    },
+                    series: [
+                        {
+                            valueField: 'value',
+                            point: { visible: true }
+                        }
+                    ]
+                });
+            }
 
-            categoriesContainer.find("a")[0].click();
-        });
-    </script>
-}}
+            $(function() {
+                $.each(json, function(propertyName) {
+                    categoriesContainer.append($("<a />")
+                        .html(propertyName)
+                        .addClass("btn")
+                        .addClass("btn-default")
+                        .click(function() {
+                            printChart(propertyName);
+                        }));
+                    categoriesContainer.append(" ");
+                });
+
+                categoriesContainer.find("a")[0].click();
+            });
+        </script>
+    }}
 else
 {
     @Html.Partial("_NoLinesWarning")

@@ -27,7 +27,7 @@
 
     <h2 class="text-center">@currentMonth.ToString("MMMM yyyy")</h2>
 
-    <hr/>
+    <hr />
 }
 
 @if (Model.HasLines)
@@ -82,7 +82,7 @@
                                 }
                             },
                             dataSource: data,
-                            palette: 'Vintage',
+                            palette: 'Soft Pastel',
                             legend: {
                                 visible: true
                             },
@@ -140,19 +140,25 @@
                                 }
                             },
                             series: [
-                                {
-                                    name: 'Income',
-                                    type: 'bar',
-                                    valueField: 'income',
-                                    argumentField: 'month',
-                                    color: '#9999cc'
-                                }, {
-                                    name: 'Spendings',
-                                    type: 'bar',
-                                    valueField: 'spendings',
-                                    argumentField: 'month',
-                                    color: '#ff9999'
+                            {
+                                name: 'Income',
+                                type: 'spline',
+                                valueField: 'income',
+                                argumentField: 'month',
+                                color: '#78b6d9',
+                                point: {
+                                    visible: false
                                 }
+                            }, {
+                                name: 'Spendings',
+                                type: 'spline',
+                                valueField: 'spendings',
+                                argumentField: 'month',
+                                color: '#a37182',
+                                point: {
+                                    visible: false
+                                }
+                            }
                             ]
                         });
                     });
@@ -183,11 +189,11 @@
                             customizePoint: function () {
                                 if (this.value > 100) {
                                     return {
-                                        color: '#ff9999'
+                                        color: '#a37182'
                                     };
                                 }
                                 return {
-                                    color: '#99cc99'
+                                    color: '#90ba58'
                                 };
                             },
                             tooltip: {

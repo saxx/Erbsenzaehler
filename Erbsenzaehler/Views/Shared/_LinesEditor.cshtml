@@ -30,7 +30,7 @@
                 </div>
             </td>
             <td>
-                <span contenteditable spellcheck="false" nobreaks nospaces ng-blur="saveLine(line)" ng-model="line.Category" ng-class="{'label label-success': line.Category != null && line.Category != '', 'noCategory': line.Category == null || line.Category == ''}"></span>
+                <span contenteditable spellcheck="false" nobreaks nospaces ng-blur="saveLine(line)" ng-model="line.Category" ng-class="{'label label-info': line.Category != null && line.Category != '', 'noCategory': line.Category == null || line.Category == ''}"></span>
             </td>
             <td>
                 <button class="btn btn-xs btn-default glyphicon" ng-click="switchIgnore(line)" ng-class="{'glyphicon-eye-open': line.Ignore, 'glyphicon-eye-close': !line.Ignore}" data-toggle="tooltip" data-placement="left" title="Toggle to ignore/include this account statement in all reports and charts"></button>

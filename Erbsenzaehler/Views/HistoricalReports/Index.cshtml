@@ -2,12 +2,9 @@
 @model Erbsenzaehler.ViewModels.HistoricalReports.IndexViewModel
 @if (Model.Overview.Months.Any())
 {
-    <h2>Historical report: Overview</h2>
-
     <div id="chartContainer" style="max-width: 100%; height: 600px;"></div>
-    <p>
-        &nbsp;
-    </p>
+
+    <hr/>
 
     <table class="table table-striped">
         <tr>
@@ -60,7 +57,14 @@
 
 
                 $("#chartContainer").dxChart({
+                    title: {
+                        text: 'Historical overview',
+                        font: {
+                            size: '1.25em'
+                        }
+                    },
                     dataSource: json.Months,
+                    palette: 'Soft Pastel',
                     tooltip: {
                         enabled: true,
                         argumentFormat: 'currency',

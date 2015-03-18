@@ -46,6 +46,8 @@ namespace Erbsenzaehler.Controllers
 
             var months = new List<Month>
             {
+                monthParam.IsCurrentMonth ? monthParam.PreviousMonth.PreviousMonth.PreviousMonth.PreviousMonth: monthParam.PreviousMonth.PreviousMonth.PreviousMonth,
+                monthParam.IsCurrentMonth ? monthParam.PreviousMonth.PreviousMonth.PreviousMonth : monthParam.PreviousMonth.PreviousMonth,
                 monthParam.IsCurrentMonth ? monthParam.PreviousMonth.PreviousMonth : monthParam.PreviousMonth,
                 monthParam.IsCurrentMonth ? monthParam.PreviousMonth : monthParam,
                 monthParam.IsCurrentMonth ? monthParam : monthParam.NextMonth
