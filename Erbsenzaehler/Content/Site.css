@@ -89,7 +89,11 @@
         background: none;
     }
 
-    .pager h2 {
-        display: inline;
-        vertical-align: bottom;
-    }
+.pager h2 {
+    display: inline;
+    vertical-align: bottom;
+}
+
+.tooltip-inner {
+    max-width: 150px;
+}

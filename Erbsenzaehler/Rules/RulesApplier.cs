@@ -53,7 +53,7 @@ namespace Erbsenzaehler.Rules
             var rules = await LoadRules(db, client);
             foreach (var rule in rules)
             {
-                if (IsMatch(rule, line.OriginalText))
+                if (IsMatch(rule, line.Text ?? line.OriginalText))
                 {
                     if (rule.ChangeCategoryTo != null && !line.CategoryUpdatedManually)
                     {

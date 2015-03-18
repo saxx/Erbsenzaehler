@@ -94,7 +94,7 @@
                                 enabled: true,
                                 argumentFormat: 'currency',
                                 customizeText: function () {
-                                    return this.argumentText + ": -" + this.valueText + " €";
+                                    return this.argumentText + ": " + this.valueText + " €";
                                 }
                             },
                             series: {
@@ -238,8 +238,6 @@
                     loadBalanceChart();
                     loadSpendingsChart();
                 };
-
-                window.reloadCallback();
             });
         </script>
     }

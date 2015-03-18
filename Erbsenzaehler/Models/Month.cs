@@ -10,15 +10,23 @@ namespace Erbsenzaehler.Models
             {
                 if (string.IsNullOrEmpty(yearAndMonth))
                 {
-                    throw new Exception("No year and month specified.");
+                    if (useCurrentAsFallback)
+                    {
+                        Date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                    }
+                    else
+                    {
+                        throw new Exception("No year and month specified.");
+                    }
                 }
-
-                if (yearAndMonth.IndexOf("-", StringComparison.InvariantCulture) != 4)
+                else if (yearAndMonth.IndexOf("-", StringComparison.InvariantCulture) != 4)
                 {
                     throw new Exception("'" + yearAndMonth + "' is not a valid year and month.");
                 }
-
-                Date = new DateTime(int.Parse(yearAndMonth.Substring(0, 4)), int.Parse(yearAndMonth.Substring(5)), 1);
+                else
+                {
+                    Date = new DateTime(int.Parse(yearAndMonth.Substring(0, 4)), int.Parse(yearAndMonth.Substring(5)), 1);
+                }
             }
             catch
             {

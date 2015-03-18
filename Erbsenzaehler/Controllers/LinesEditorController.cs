@@ -1,22 +1,28 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Erbsenzaehler.Models;
 using Erbsenzaehler.ViewModels.LinesEditor;
 
 namespace Erbsenzaehler.Controllers
 {
     [Authorize]
+    [RoutePrefix("LinesEditor")]
     public class LinesEditorController : ControllerBase
     {
         [ChildActionOnly]
+        [Route("")]
         public ActionResult Index(string month)
         {
             return PartialView("_LinesEditor");
         }
 
-        public async Task<ActionResult> Json(string month)
+        [HttpGet]
+        [Route("Json")]
+        public async Task<ActionResult> LoadLines(string month)
         {
             int? selectedYear = null;
             int? selectedMonth = null;
@@ -36,7 +42,38 @@ namespace Erbsenzaehler.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> Json(JsonViewModel.Line line)
+        [Route("Json")]
+        public async Task<ActionResult> CreateLine(string month)
+        {
+            var currentClient = await GetCurrentClient();
+            var m = new Month(month);
+            var account = currentClient.Accounts.First();
+
+            var date = m.Date.AddMonths(1).AddDays(-1);
+            if (m.IsCurrentMonth)
+            {
+                date = DateTime.Now.Date;
+            }
+
+            var line = new Line
+            {
+                Account = account,
+                AccountId = account.Id,
+                OriginalAmount = 0,
+                OriginalDate = date,
+                OriginalText = "Account statement added manually on " + DateTime.Now.ToShortDateString() + ".",
+                LineAddedManually = true
+            };
+            Db.Lines.Add(line);
+            await Db.SaveChangesAsync();
+
+            return await LoadLines(month);
+        }
+
+
+        [HttpPut]
+        [Route("Json")]
+        public async Task<ActionResult> UpdateLine(JsonViewModel.Line line, string month)
         {
             var currentClient = await GetCurrentClient();
 
@@ -45,6 +82,8 @@ namespace Erbsenzaehler.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
             }
+
+            var anythingHasChanged = false;
 
             // sanitize the category
             if (line.Category != null)
@@ -61,6 +100,7 @@ namespace Erbsenzaehler.Controllers
             {
                 lineInDatebase.Ignore = line.Ignore;
                 lineInDatebase.IgnoreUpdatedManually = true;
+                anythingHasChanged = true;
             }
 
             var newDate = DateTime.Parse(line.Date);
@@ -68,12 +108,14 @@ namespace Erbsenzaehler.Controllers
             {
                 lineInDatebase.Date = newDate;
                 lineInDatebase.DateUpdatedManually = true;
+                anythingHasChanged = true;
             }
 
             if (lineInDatebase.Category != line.Category)
             {
                 lineInDatebase.Category = line.Category;
                 lineInDatebase.CategoryUpdatedManually = true;
+                anythingHasChanged = true;
             }
 
             decimal amountAsDecimal;
@@ -83,12 +125,43 @@ namespace Erbsenzaehler.Controllers
                 {
                     lineInDatebase.Amount = amountAsDecimal;
                     lineInDatebase.AmountUpdatedManually = true;
+                    anythingHasChanged = true;
                 }
             }
 
-            Db.SaveChanges();
+            var newText = (line.Text ?? "").Replace("\n", "").Replace("\r", "").Trim();
+            if (!string.IsNullOrWhiteSpace(newText) && lineInDatebase.Text != newText)
+            {
+                lineInDatebase.Text = newText;
+                lineInDatebase.TextUpdatedManually = true;
+                anythingHasChanged = true;
+            }
 
-            return await Json("");
+            if (anythingHasChanged)
+            {
+                await Db.SaveChangesAsync();
+            }
+
+            return await LoadLines(month);
+        }
+
+
+        [HttpDelete]
+        [Route("Json/{id}/")]
+        public async Task<ActionResult> DeleteLine(int id, string month)
+        {
+            var currentClient = await GetCurrentClient();
+
+            var lineInDatebase = await Db.Lines.FirstOrDefaultAsync(x => x.Id == id);
+            if (lineInDatebase == null || lineInDatebase.Account.ClientId != currentClient.Id)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+
+            Db.Lines.Remove(lineInDatebase);
+            await Db.SaveChangesAsync();
+
+            return await LoadLines(month);
         }
     }
 }

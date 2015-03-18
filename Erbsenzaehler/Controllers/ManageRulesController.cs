@@ -201,7 +201,7 @@ namespace Erbsenzaehler.Controllers
                 {
                     var rulesApplier = new RulesApplier();
                     var matchCount = 0;
-                    foreach (var lineText in db.Lines.Where(x => x.Account.ClientId == currentClient.Id).Select(x => x.OriginalText))
+                    foreach (var lineText in db.Lines.Where(x => x.Account.ClientId == currentClient.Id).Select(x => x.Text ?? x.OriginalText))
                     {
                         if (rulesApplier.IsMatch(_rule, lineText))
                         {
