@@ -73,7 +73,7 @@ namespace Erbsenzaehler.Controllers
 
         [HttpPut]
         [Route("Json")]
-        public async Task<ActionResult> UpdateLine(JsonViewModel.Line line, string month)
+        public async Task<ActionResult> UpdateLine(JsonViewModel.Line line)
         {
             var currentClient = await GetCurrentClient();
 
@@ -142,13 +142,13 @@ namespace Erbsenzaehler.Controllers
                 await Db.SaveChangesAsync();
             }
 
-            return await LoadLines(month);
+            return Json(true);
         }
 
 
         [HttpDelete]
         [Route("Json/{id}/")]
-        public async Task<ActionResult> DeleteLine(int id, string month)
+        public async Task<ActionResult> DeleteLine(int id)
         {
             var currentClient = await GetCurrentClient();
 
@@ -161,7 +161,7 @@ namespace Erbsenzaehler.Controllers
             Db.Lines.Remove(lineInDatebase);
             await Db.SaveChangesAsync();
 
-            return await LoadLines(month);
+            return Json(true);
         }
     }
 }

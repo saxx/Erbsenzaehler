@@ -14,7 +14,20 @@ namespace Erbsenzaehler.Models
             return q.Where(x => (x.Date ?? x.OriginalDate) >= date && (x.Date ?? x.OriginalDate) <= endDate);
         }
 
+        public static IEnumerable<Line> ByMonth(this IEnumerable<Line> q, DateTime date)
+        {
+            var startDate = new DateTime(date.Year, date.Month, 1);
+            var endDate = startDate.AddMonths(1).AddSeconds(-1);
+
+            return q.Where(x => (x.Date ?? x.OriginalDate) >= date && (x.Date ?? x.OriginalDate) <= endDate);
+        }
+
         public static IQueryable<Line> ByMonth(this IQueryable<Line> q, Month month)
+        {
+            return ByMonth(q, month.Date);
+        }
+
+        public static IEnumerable<Line> ByMonth(this IEnumerable<Line> q, Month month)
         {
             return ByMonth(q, month.Date);
         }
@@ -51,6 +64,12 @@ namespace Erbsenzaehler.Models
 
 
         public static IQueryable<Line> ByNotIgnored(this IQueryable<Line> q)
+        {
+            return q.Where(x => !x.Ignore);
+        }
+
+
+        public static IEnumerable<Line> ByNotIgnored(this IEnumerable<Line> q)
         {
             return q.Where(x => !x.Ignore);
         }

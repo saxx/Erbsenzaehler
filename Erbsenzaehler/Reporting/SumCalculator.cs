@@ -17,18 +17,25 @@ namespace Erbsenzaehler.Reporting
             _client = client;
         }
 
+
         public async Task<IDictionary<string, decimal>> CalculateForMonth(Month month)
         {
-            var lines = await (from x in _db.Lines.ByClient(_client).ByMonth(month)
-                               where !x.Ignore
-                               select new
-                               {
-                                   x.Category,
-                                   Amount = x.Amount ?? x.OriginalAmount
-                               }).ToListAsync();
+            var lines = await _db.Lines.ByClient(_client).ByMonth(month).ByNotIgnored().ToListAsync();
+            return CalculateForMonth(lines, month);
+        }
+
+
+        public IDictionary<string, decimal> CalculateForMonth(IList<Line> lines, Month month)
+        {
+            var linesList = (from x in lines.ByMonth(month).ByNotIgnored()
+                             select new
+                             {
+                                 x.Category,
+                                 Amount = x.Amount ?? x.OriginalAmount
+                             }).ToList();
 
             var result = new Dictionary<string, decimal>();
-            foreach (var line in lines)
+            foreach (var line in linesList)
             {
                 var category = line.Category ?? (line.Amount > 0 ? Constants.IncomeCategory : Constants.EmptyCategory);
                 if (!result.ContainsKey(category))
