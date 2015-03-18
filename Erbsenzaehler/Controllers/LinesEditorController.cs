@@ -62,7 +62,7 @@ namespace Erbsenzaehler.Controllers
                 OriginalAmount = 0,
                 OriginalDate = date,
                 OriginalText = "Account statement added manually on " + DateTime.Now.ToShortDateString() + ".",
-                LineAddedManually = true,
+                LineAddedManually = true
             };
             Db.Lines.Add(line);
             await Db.SaveChangesAsync();

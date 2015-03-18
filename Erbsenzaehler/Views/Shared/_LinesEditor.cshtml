@@ -16,7 +16,7 @@
             </td>
             <td>
                 <div contenteditable spellcheck="false" nobreaks nospaces nochars ng-blur="saveLine(line)" ng-model="line.Date"></div>
-                <div class="text-muted" ng-if="line.Date != line.OriginalDate">
+                <div class="text-muted" ng-if="line.ManuallyAdded == false && line.Date != line.OriginalDate">
                     <s>{{line.OriginalDate}}</s>
                 </div>
             </td>
@@ -25,7 +25,7 @@
             </td>
             <td class="amount">
                 <div contenteditable spellcheck="false" nobreaks nospaces nochars ng-blur="saveLine(line)" ng-model="line.Amount"></div>
-                <div class="text-muted" ng-if="line.Amount != line.OriginalAmount">
+                <div class="text-muted" ng-if="line.ManuallyAdded == false && line.Amount != line.OriginalAmount">
                     <s>{{line.OriginalAmount}}</s>
                 </div>
             </td>
