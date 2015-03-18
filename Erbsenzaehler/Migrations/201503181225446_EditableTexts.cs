@@ -1,7 +1,7 @@
+using System.Data.Entity.Migrations;
+
 namespace Erbsenzaehler.Migrations
 {
-    using System.Data.Entity.Migrations;
-    
     public partial class EditableTexts : DbMigration
     {
         public override void Up()
@@ -10,7 +10,8 @@ namespace Erbsenzaehler.Migrations
             AddColumn("dbo.Lines", "TextUpdatedManually", c => c.Boolean(nullable: false));
             AddColumn("dbo.Lines", "LineAddedManually", c => c.Boolean(nullable: false));
         }
-        
+
+
         public override void Down()
         {
             DropColumn("dbo.Lines", "LineAddedManually");

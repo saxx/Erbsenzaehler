@@ -1,5 +1,4 @@
-﻿
-namespace Erbsenzaehler.Reporting
+﻿namespace Erbsenzaehler.Reporting
 {
     public static class Constants
     {

@@ -16,18 +16,22 @@
         <ul class="pager">
             @if (Model.MinDate < previousMonth && Model.MinDate > DateTime.MinValue)
             {
-                <li><a href="@Url.Action("Index")?month=@previousMonth.ToString("yyyy-MM")">&laquo; @previousMonth.ToString("MMMM yyyy")</a></li>
+                <li>
+                    <a href="@Url.Action("Index")?month=@previousMonth.ToString("yyyy-MM")">&laquo; @previousMonth.ToString("MMMM yyyy")</a>
+                </li>
             }
             @if (Model.MaxDate > nextMonth)
             {
-                <li><a href="@Url.Action("Index")?month=@nextMonth.ToString("yyyy-MM")">@nextMonth.ToString("MMMM yyyy") &raquo;</a></li>
+                <li>
+                    <a href="@Url.Action("Index")?month=@nextMonth.ToString("yyyy-MM")">@nextMonth.ToString("MMMM yyyy") &raquo;</a>
+                </li>
             }
         </ul>
     </nav>
 
     <h2 class="text-center">@currentMonth.ToString("MMMM yyyy")</h2>
 
-    <hr />
+    <hr/>
 }
 
 @if (Model.HasLines)
@@ -60,7 +64,7 @@
         </div>
     </div>
 
-    <hr />
+    <hr/>
 
     <div class="row">
         <div class="col-sm-12">
@@ -68,78 +72,78 @@
         </div>
     </div>
 
-    @section scripts
+@section scripts
 {
-        <script>
-            $(document).ready(function () {
-                function loadSpendingsChart() {
-                    $.getJSON('@Url.Action("SpendingsChart")?month=@currentMonth.ToString("yyyy-MM")', function (data) {
-                        $('#spendingsChart').dxPieChart({
-                            title: {
-                                text: 'Spendings',
-                                font: {
-                                    size: '1.25em'
-                                }
-                            },
-                            dataSource: data,
-                            palette: 'Soft Pastel',
-                            legend: {
-                                visible: true
-                            },
-                            tooltip: {
-                                enabled: true,
-                                argumentFormat: 'currency',
-                                customizeText: function () {
-                                    return this.argumentText + ": " + this.valueText + " €";
-                                }
-                            },
-                            series: {
-                                valueField: 'amount',
-                                argumentField: 'category'
+    <script>
+        $(document).ready(function() {
+            function loadSpendingsChart() {
+                $.getJSON('@Url.Action("SpendingsChart")?month=@currentMonth.ToString("yyyy-MM")', function(data) {
+                    $('#spendingsChart').dxPieChart({
+                        title: {
+                            text: 'Spendings',
+                            font: {
+                                size: '1.25em'
                             }
-                        });
+                        },
+                        dataSource: data,
+                        palette: 'Soft Pastel',
+                        legend: {
+                            visible: true
+                        },
+                        tooltip: {
+                            enabled: true,
+                            argumentFormat: 'currency',
+                            customizeText: function() {
+                                return this.argumentText + ": " + this.valueText + " €";
+                            }
+                        },
+                        series: {
+                            valueField: 'amount',
+                            argumentField: 'category'
+                        }
                     });
-                }
+                });
+            }
 
-                function loadBalanceChart() {
-                    $.getJSON('@Url.Action("BalanceChart")?month=@currentMonth.ToString("yyyy-MM")', function (data) {
-                        $('#balanceChart').dxChart({
-                            title: {
-                                text: 'Income vs. Spendings',
-                                font: {
-                                    size: '1.25em'
-                                }
-                            },
-                            dataSource: data,
-                            legend: {
+            function loadBalanceChart() {
+                $.getJSON('@Url.Action("BalanceChart")?month=@currentMonth.ToString("yyyy-MM")', function(data) {
+                    $('#balanceChart').dxChart({
+                        title: {
+                            text: 'Income vs. Spendings',
+                            font: {
+                                size: '1.25em'
+                            }
+                        },
+                        dataSource: data,
+                        legend: {
+                            visible: false
+                        },
+                        valueAxis: {
+                            visible: false,
+                            grid: {
                                 visible: false
                             },
-                            valueAxis: {
-                                visible: false,
-                                grid: {
-                                    visible: false
-                                },
-                                label: {
-                                    visible: false
-                                }
+                            label: {
+                                visible: false
+                            }
+                        },
+                        argumentAxis: {
+                            visible: false,
+                            grid: {
+                                visible: false
                             },
-                            argumentAxis: {
-                                visible: false,
-                                grid: {
-                                    visible: false
-                                },
-                                label: {
-                                    visible: true
-                                }
-                            },
-                            tooltip: {
-                                enabled: true,
-                                argumentFormat: 'currency',
-                                customizeText: function () {
-                                    return this.argumentText + ": " + this.valueText + " €";
-                                }
-                            },
-                            series: [
+                            label: {
+                                visible: true
+                            }
+                        },
+                        tooltip: {
+                            enabled: true,
+                            argumentFormat: 'currency',
+                            customizeText: function() {
+                                return this.argumentText + ": " + this.valueText + " €";
+                            }
+                        },
+                        series: [
                             {
                                 name: 'Income',
                                 type: 'spline',
@@ -159,91 +163,90 @@
                                     visible: false
                                 }
                             }
-                            ]
-                        });
+                        ]
                     });
-                }
+                });
+            }
 
-                function loadBudgetChart() {
-                    $.getJSON('@Url.Action("BudgetChart")?month=@currentMonth.ToString("yyyy-MM")', function (data) {
-                        var max = 100;
-                        $.each(data, function (i, val) {
-                            if (val.percentage >= 100) {
-                                max = null;
-                                return;
+            function loadBudgetChart() {
+                $.getJSON('@Url.Action("BudgetChart")?month=@currentMonth.ToString("yyyy-MM")', function(data) {
+                    var max = 100;
+                    $.each(data, function(i, val) {
+                        if (val.percentage >= 100) {
+                            max = null;
+                            return;
+                        }
+                    });
+
+
+                    $('#budgetChart').dxChart({
+                        title: {
+                            text: 'Budgets',
+                            font: {
+                                size: '1.25em'
                             }
-                        });
-
-
-                        $('#budgetChart').dxChart({
-                            title: {
-                                text: 'Budgets',
-                                font: {
-                                    size: '1.25em'
-                                }
-                            },
-                            dataSource: data,
-                            legend: {
+                        },
+                        dataSource: data,
+                        legend: {
+                            visible: false
+                        },
+                        customizePoint: function() {
+                            if (this.value > 100) {
+                                return {
+                                    color: '#a37182'
+                                };
+                            }
+                            return {
+                                color: '#90ba58'
+                            };
+                        },
+                        tooltip: {
+                            enabled: true,
+                            argumentFormat: 'currency',
+                            customizeText: function() {
+                                return this.argumentText + ": " + this.valueText + " %";
+                            }
+                        },
+                        valueAxis: {
+                            visible: false,
+                            grid: {
                                 visible: false
                             },
-                            customizePoint: function () {
-                                if (this.value > 100) {
-                                    return {
-                                        color: '#a37182'
-                                    };
-                                }
-                                return {
-                                    color: '#90ba58'
-                                };
+                            max: max,
+                            label: {
+                                visible: false
                             },
-                            tooltip: {
-                                enabled: true,
-                                argumentFormat: 'currency',
-                                customizeText: function () {
-                                    return this.argumentText + ": " + this.valueText + " %";
-                                }
-                            },
-                            valueAxis: {
-                                visible: false,
-                                grid: {
-                                    visible: false
-                                },
-                                max: max,
-                                label: {
-                                    visible: false
-                                },
-                                constantLines: [
-                                    {
-                                        label: {
-                                            text: 'Limit'
-                                        },
-                                        width: 2,
-                                        value: 100,
-                                        color: '#000000',
-                                        dashStyle: 'dash'
-                                    }
-                                ]
-                            },
-                            series: [
+                            constantLines: [
                                 {
-                                    type: 'bar',
-                                    valueField: 'percentage',
-                                    argumentField: 'category'
+                                    label: {
+                                        text: 'Limit'
+                                    },
+                                    width: 2,
+                                    value: 100,
+                                    color: '#000000',
+                                    dashStyle: 'dash'
                                 }
                             ]
-                        });
+                        },
+                        series: [
+                            {
+                                type: 'bar',
+                                valueField: 'percentage',
+                                argumentField: 'category'
+                            }
+                        ]
                     });
-                }
+                });
+            }
 
-                window.reloadCallback = function () {
-                    loadBudgetChart();
-                    loadBalanceChart();
-                    loadSpendingsChart();
-                };
-            });
-        </script>
-    }
-}
+            window.reloadCallback = function() {
+                loadBudgetChart();
+                loadBalanceChart();
+                loadSpendingsChart();
+            };
+        });
+    </script>
+}}
 else
 {
     @Html.Partial("_NoLinesWarning")

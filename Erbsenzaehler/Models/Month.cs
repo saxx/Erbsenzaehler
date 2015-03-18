@@ -9,10 +9,12 @@ namespace Erbsenzaehler.Models
             Date = new DateTime(date.Year, date.Month, 1);
         }
 
+
         public Month()
         {
             Date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
         }
+
 
         public Month(string yearAndMonth, bool useCurrentAsFallback = true)
         {
@@ -51,12 +53,15 @@ namespace Erbsenzaehler.Models
             }
         }
 
+
         public DateTime Date { get; set; }
+
 
         public override string ToString()
         {
             return Date.ToString("yyyy-MM");
         }
+
 
         public bool IsCurrentMonth => Date.Year == DateTime.Now.Year && Date.Month == DateTime.Now.Month;
 

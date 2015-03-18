@@ -12,6 +12,7 @@ namespace Erbsenzaehler.Reporting
         private readonly Db _db;
         private readonly Client _currentClient;
 
+
         public BudgetCalculator(Db db, Client currentClient)
         {
             _currentClient = currentClient;
@@ -41,7 +42,7 @@ namespace Erbsenzaehler.Reporting
             }
             else if (month.NumberOfDaysLeft > 0)
             {
-                factor = 1.0 / month.NumberOfDays * month.NumberOfDaysLeft;
+                factor = 1.0/month.NumberOfDays*month.NumberOfDaysLeft;
             }
 
 
@@ -51,8 +52,8 @@ namespace Erbsenzaehler.Reporting
                 var budgetResult = new BudgetResult(budget.Category);
                 var budgetCategory = budget.Category.ToLower();
 
-                budgetResult.Amount = allLines.Where(x => x.Category.ToLower() == budgetCategory).Select(x => x.Amount).Sum() * (decimal)factor;
-                budgetResult.Limit = budget.NormalizeLimit(month) * (decimal)factor;
+                budgetResult.Amount = allLines.Where(x => x.Category.ToLower() == budgetCategory).Select(x => x.Amount).Sum()*(decimal) factor;
+                budgetResult.Limit = budget.NormalizeLimit(month)*(decimal) factor;
 
                 result.Add(budgetResult);
             }
@@ -63,7 +64,6 @@ namespace Erbsenzaehler.Reporting
 
         public class BudgetResult
         {
-
             public BudgetResult(string category)
             {
                 Category = category;
@@ -85,7 +85,7 @@ namespace Erbsenzaehler.Reporting
                         return 0;
                     }
 
-                    var i = (int)Math.Round(100 / Limit * (Limit + Amount));
+                    var i = (int) Math.Round(100/Limit*(Limit + Amount));
 
                     if (i < 100)
                     {

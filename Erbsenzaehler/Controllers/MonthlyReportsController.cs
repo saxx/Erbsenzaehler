@@ -17,20 +17,20 @@ namespace Erbsenzaehler.Controllers
             return View(viewModel);
         }
 
-
         #region JSON
+
         public async Task<ActionResult> SpendingsChart(string month)
         {
             var calculator = new SumCalculator(Db, await GetCurrentClient());
 
             var result = from x in await calculator.CalculateForMonth(new Month(month))
-                         where x.Key != Constants.IncomeCategory
-                         orderby x.Value
-                         select new
-                         {
-                             amount = -x.Value,
-                             category = x.Key
-                         };
+                where x.Key != Constants.IncomeCategory
+                orderby x.Value
+                select new
+                {
+                    amount = -x.Value,
+                    category = x.Key
+                };
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -46,7 +46,7 @@ namespace Erbsenzaehler.Controllers
 
             var months = new List<Month>
             {
-                monthParam.IsCurrentMonth ? monthParam.PreviousMonth.PreviousMonth.PreviousMonth.PreviousMonth: monthParam.PreviousMonth.PreviousMonth.PreviousMonth,
+                monthParam.IsCurrentMonth ? monthParam.PreviousMonth.PreviousMonth.PreviousMonth.PreviousMonth : monthParam.PreviousMonth.PreviousMonth.PreviousMonth,
                 monthParam.IsCurrentMonth ? monthParam.PreviousMonth.PreviousMonth.PreviousMonth : monthParam.PreviousMonth.PreviousMonth,
                 monthParam.IsCurrentMonth ? monthParam.PreviousMonth.PreviousMonth : monthParam.PreviousMonth,
                 monthParam.IsCurrentMonth ? monthParam.PreviousMonth : monthParam,
@@ -61,30 +61,32 @@ namespace Erbsenzaehler.Controllers
             }
 
             var result = from x in months
-                         orderby x.Date
-                         select new
-                         {
-                             month = x.Date.ToString("MMM yyyy"),
-                             income = incomes[x],
-                             spendings = -spendings[x]
-                         };
+                orderby x.Date
+                select new
+                {
+                    month = x.Date.ToString("MMM yyyy"),
+                    income = incomes[x],
+                    spendings = -spendings[x]
+                };
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
 
         public async Task<ActionResult> BudgetChart(string month)
         {
             var calculator = new BudgetCalculator(Db, await GetCurrentClient());
 
             var result = from x in await calculator.CalculateForMonth(new Month(month))
-                         orderby x.Category
-                         select new
-                         {
-                             percentage = x.Percentage,
-                             category = x.Category
-                         };
+                orderby x.Category
+                select new
+                {
+                    percentage = x.Percentage,
+                    category = x.Category
+                };
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
         #endregion
     }
 }

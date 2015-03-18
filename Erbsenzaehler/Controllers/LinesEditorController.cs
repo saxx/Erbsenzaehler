@@ -20,6 +20,7 @@ namespace Erbsenzaehler.Controllers
             return PartialView("_LinesEditor");
         }
 
+
         [HttpGet]
         [Route("Json")]
         public async Task<ActionResult> LoadLines(string month)

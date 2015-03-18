@@ -11,6 +11,7 @@ namespace Erbsenzaehler.Reporting
         private readonly Client _client;
         private readonly Db _db;
 
+
         public SumCalculator(Db db, Client client)
         {
             _db = db;
@@ -28,11 +29,11 @@ namespace Erbsenzaehler.Reporting
         public IDictionary<string, decimal> CalculateForMonth(IList<Line> lines, Month month)
         {
             var linesList = (from x in lines.ByMonth(month).ByNotIgnored()
-                             select new
-                             {
-                                 x.Category,
-                                 Amount = x.Amount ?? x.OriginalAmount
-                             }).ToList();
+                select new
+                {
+                    x.Category,
+                    Amount = x.Amount ?? x.OriginalAmount
+                }).ToList();
 
             var result = new Dictionary<string, decimal>();
             foreach (var line in linesList)

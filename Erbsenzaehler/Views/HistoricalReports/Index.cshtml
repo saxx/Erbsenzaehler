@@ -22,62 +22,62 @@
         {
             <tr>
                 <td>
-                    <a href="@Url.Action("Index", "MonthlyReports")?month=@(month.Year + "-" + month.Month.ToString().PadLeft(2,'0') )">@month.Name</a>
+                    <a href="@Url.Action("Index", "MonthlyReports")?month=@(month.Year + "-" + month.Month.ToString().PadLeft(2, '0') )">@month.Name</a>
                 </td>
                 <td class="amount">@month.Balance.ToString("N2")</td>
                 <td class="amount">@month.Income.ToString("N2")</td>
                 <td class="amount">@month.Spent.ToString("N2")</td>
                 @foreach (var category in Model.Overview.CategoryHeaders.OrderByDescending(x => x))
                 {
-                    <td class="amount">@(((decimal)month[category]).ToString("N2"))</td>
+                    <td class="amount">@(((decimal) month[category]).ToString("N2"))</td>
                 }
             </tr>
         }
     </table>
 
 
-    @section scripts
+@section scripts
 {
-        <script>
-            var json = @Html.Raw(JsonConvert.SerializeObject(Model.Overview));
+    <script>
+        var json = @Html.Raw(JsonConvert.SerializeObject(Model.Overview));
 
 
-            $(function() {
-                json.Months = json.Months.reverse();
+        $(function() {
+            json.Months = json.Months.reverse();
 
-                $.each(json.Months, function(i, month) {
-                    month.Spent = -month.Spent;
-                    @foreach (var category in Model.Overview.CategoryHeaders)
+            $.each(json.Months, function(i, month) {
+                month.Spent = -month.Spent;
+                @foreach (var category in Model.Overview.CategoryHeaders)
                 {
                     <text>
                     month['@Html.Raw(category)'] = -month['@Html.Raw(category)'];
                     </text>
                 }
-                });
+            });
 
 
-                $("#chartContainer").dxChart({
-                    title: {
-                        text: 'Historical overview',
-                        font: {
-                            size: '1.25em'
-                        }
-                    },
-                    dataSource: json.Months,
-                    palette: 'Soft Pastel',
-                    tooltip: {
-                        enabled: true,
-                        argumentFormat: 'currency',
-                        customizeText: function() {
-                            return this.argumentText + " - " + this.seriesName + ": " + this.valueText + " €";
-                        }
-                    },
-                    commonSeriesSettings: {
-                        type: 'stackedBar',
-                        argumentField: 'Name'
-                    },
-                    series: [
-                        @foreach (var category in Model.Overview.CategoryHeaders.OrderByDescending(x => x))
+            $("#chartContainer").dxChart({
+                title: {
+                    text: 'Historical overview',
+                    font: {
+                        size: '1.25em'
+                    }
+                },
+                dataSource: json.Months,
+                palette: 'Soft Pastel',
+                tooltip: {
+                    enabled: true,
+                    argumentFormat: 'currency',
+                    customizeText: function() {
+                        return this.argumentText + " - " + this.seriesName + ": " + this.valueText + " €";
+                    }
+                },
+                commonSeriesSettings: {
+                    type: 'stackedBar',
+                    argumentField: 'Name'
+                },
+                series: [
+                    @foreach (var category in Model.Overview.CategoryHeaders.OrderByDescending(x => x))
                     {
                         <text>
                                 {
@@ -86,18 +86,18 @@
                                 },
                                 </text>
                     }
-                        {
-                            type: 'spline',
-                            name: 'Income',
-                            color: 'black',
-                            point: { visible: false },
-                            valueField: 'Income'
-                        }
-                    ]
-                });
+                    {
+                        type: 'spline',
+                        name: 'Income',
+                        color: 'black',
+                        point: { visible: false },
+                        valueField: 'Income'
+                    }
+                ]
             });
-        </script>
-    }}
+        });
+    </script>
+}}
 else
 {
     @Html.Partial("_NoLinesWarning")

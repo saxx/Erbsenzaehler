@@ -10,6 +10,7 @@ namespace Erbsenzaehler.Models
             return q.Where(x => x.ClientId == clientId);
         }
 
+
         public static IQueryable<Budget> ByClient(this IQueryable<Budget> q, Client client)
         {
             return q.Where(x => x.ClientId == client.Id);
@@ -37,19 +38,20 @@ namespace Erbsenzaehler.Models
             Daily
         }
 
+
         public decimal NormalizeLimit(Month month)
         {
             switch (Period)
             {
                 case LimitPeriod.Weekly:
                     // ReSharper disable once PossibleLossOfFraction
-                    return Limit * (DateTime.DaysInMonth(month.Date.Year, month.Date.Month) / 7);
+                    return Limit*(DateTime.DaysInMonth(month.Date.Year, month.Date.Month)/7);
                 case LimitPeriod.Monthly:
                     return Limit;
                 case LimitPeriod.Yearly:
-                    return Limit / 12;
+                    return Limit/12;
                 case LimitPeriod.Daily:
-                    return Limit * DateTime.DaysInMonth(month.Date.Year, month.Date.Month);
+                    return Limit*DateTime.DaysInMonth(month.Date.Year, month.Date.Month);
                 default:
                     throw new ArgumentOutOfRangeException();
             }

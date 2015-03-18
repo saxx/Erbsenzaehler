@@ -7,7 +7,9 @@
             <th>Amount</th>
             <th>Category</th>
             <th></th>
-            <th><button class="btn btn-xs btn-success glyphicon glyphicon-plus pull-right" ng-click="addLine()" data-toggle="tooltip" data-placement="left" title="Add a new account statement"></button></th>
+            <th>
+                <button class="btn btn-xs btn-success glyphicon glyphicon-plus pull-right" ng-click="addLine()" data-toggle="tooltip" data-placement="left" title="Add a new account statement"></button>
+            </th>
         </tr>
 
         <tr ng-repeat="line in viewModel.Lines" class="line" ng-class="{'line-ignore': line.Ignore}">

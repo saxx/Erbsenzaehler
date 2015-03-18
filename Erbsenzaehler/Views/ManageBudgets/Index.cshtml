@@ -70,10 +70,7 @@
         });
         erbsenzaehlerControllers.controller('budgetsController', function($scope, Budget) {
             $scope.periodOptions = [
-                { name: 'month', value: @((int) Budget.LimitPeriod.Monthly) },
-                { name: 'week', value: @((int) Budget.LimitPeriod.Weekly) },
-                { name: 'year', value: @((int) Budget.LimitPeriod.Yearly) },
-                { name: 'day', value: @((int) Budget.LimitPeriod.Daily) }
+                { name: 'month', value: @((int) Budget.LimitPeriod.Monthly) }, { name: 'week', value: @((int) Budget.LimitPeriod.Weekly) }, { name: 'year', value: @((int) Budget.LimitPeriod.Yearly) }, { name: 'day', value: @((int) Budget.LimitPeriod.Daily) }
             ];
 
             $scope.loadBudgets = function(callback) {

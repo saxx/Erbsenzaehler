@@ -25,6 +25,7 @@ namespace Erbsenzaehler.ViewModels.MonthlyReports
             return this;
         }
 
+
         public bool HasLines { get; set; }
         public bool HasBudgets { get; set; }
         public DateTime CurrentDate { get; set; }

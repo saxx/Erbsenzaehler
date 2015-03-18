@@ -14,6 +14,7 @@ namespace Erbsenzaehler.Models
             return q.Where(x => (x.Date ?? x.OriginalDate) >= date && (x.Date ?? x.OriginalDate) <= endDate);
         }
 
+
         public static IEnumerable<Line> ByMonth(this IEnumerable<Line> q, DateTime date)
         {
             var startDate = new DateTime(date.Year, date.Month, 1);
@@ -22,25 +23,30 @@ namespace Erbsenzaehler.Models
             return q.Where(x => (x.Date ?? x.OriginalDate) >= date && (x.Date ?? x.OriginalDate) <= endDate);
         }
 
+
         public static IQueryable<Line> ByMonth(this IQueryable<Line> q, Month month)
         {
             return ByMonth(q, month.Date);
         }
+
 
         public static IEnumerable<Line> ByMonth(this IEnumerable<Line> q, Month month)
         {
             return ByMonth(q, month.Date);
         }
 
+
         public static IQueryable<Line> ByCategoryNotEmpty(this IQueryable<Line> q)
         {
             return q.Where(x => x.Category != null && x.Category != "");
         }
 
+
         public static IEnumerable<Line> ByCategoryNotEmpty(this IEnumerable<Line> q)
         {
             return q.Where(x => !string.IsNullOrEmpty(x.Category));
         }
+
 
         public static IQueryable<Line> ByCategory(this IQueryable<Line> q, string category)
         {
@@ -74,10 +80,12 @@ namespace Erbsenzaehler.Models
             return q.Where(x => !x.Ignore);
         }
 
+
         public static IQueryable<Line> ByClient(this IQueryable<Line> q, int clientId)
         {
             return q.Where(x => x.Account.ClientId == clientId);
         }
+
 
         public static IQueryable<Line> ByClient(this IQueryable<Line> q, Client client)
         {

@@ -11,7 +11,7 @@ $(function () {
 erbsenzaehlerApp.directive('title', function () {
     return {
         restrict: 'A',
-        link: function (scope, element, attrs) {
+        link: function (scope, element) {
             $(element).hover(function () {
                 // on mouseenter
                 $(element).tooltip('show');
@@ -26,9 +26,9 @@ erbsenzaehlerApp.directive('title', function () {
 erbsenzaehlerApp.directive('nobreaks', function () {
     return {
         restrict: 'A',
-        link: function (scope, elm, attrs, ctrl) {
+        link: function (scope, elm) {
             elm.on('keydown', function (event) {
-                if (event.which != 13) {
+                if (event.which !== 13) {
                     return true;
                 } else {
                     event.preventDefault();
@@ -42,9 +42,9 @@ erbsenzaehlerApp.directive('nobreaks', function () {
 erbsenzaehlerApp.directive('nospaces', function () {
     return {
         restrict: 'A',
-        link: function (scope, elm, attrs, ctrl) {
+        link: function (scope, elm) {
             elm.on('keydown', function (event) {
-                if (event.which != 32) {
+                if (event.which !== 32) {
                     return true;
                 } else {
                     event.preventDefault();
@@ -58,7 +58,7 @@ erbsenzaehlerApp.directive('nospaces', function () {
 erbsenzaehlerApp.directive('nochars', function () {
     return {
         restrict: 'A',
-        link: function (scope, elm, attrs, ctrl) {
+        link: function (scope, elm) {
             elm.on('keydown', function (event) {
                 if (event.which < 64 || event.which > 122) {
                     return true;
