@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,10 +27,10 @@ namespace Erbsenzaehler.ViewModels.HistoricalReports
                                      Balance = g.Select(y => (y.Amount ?? y.OriginalAmount)).DefaultIfEmpty(0).Sum()
                                  }).ToListAsync();
 
-            BalancePerMonth = new Dictionary<Date, decimal>();
+            BalancePerMonth = new Dictionary<Month, decimal>();
             foreach (var amount in amounts)
             {
-                var date = new Date(amount.Year, amount.Month);
+                var date = new Month(new DateTime(amount.Year, amount.Month, 1));
                 BalancePerMonth[date] = amount.Balance;
             }
 
@@ -37,6 +38,6 @@ namespace Erbsenzaehler.ViewModels.HistoricalReports
         }
 
 
-        public IDictionary<Date, decimal> BalancePerMonth { get; set; }
+        public IDictionary<Month, decimal> BalancePerMonth { get; set; }
     }
 }

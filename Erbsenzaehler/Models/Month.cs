@@ -4,6 +4,16 @@ namespace Erbsenzaehler.Models
 {
     public class Month
     {
+        public Month(DateTime date)
+        {
+            Date = new DateTime(date.Year, date.Month, 1);
+        }
+
+        public Month()
+        {
+            Date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+        }
+
         public Month(string yearAndMonth, bool useCurrentAsFallback = true)
         {
             try

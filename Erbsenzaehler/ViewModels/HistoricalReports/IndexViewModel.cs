@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Erbsenzaehler.Models;
@@ -10,7 +11,7 @@ namespace Erbsenzaehler.ViewModels.HistoricalReports
     {
         public async Task<IndexViewModel> Calculate(Client client, Db db)
         {
-            var overviewCalculator = new OverviewCalculator(db, client);
+            var overviewCalculator = new OverviewCalculator(db, client, new SumCalculator(db, client));
 
             var allCategories = (await overviewCalculator.GetCategories()).ToList();
             Overview = new OverviewContainer
@@ -23,8 +24,8 @@ namespace Erbsenzaehler.ViewModels.HistoricalReports
             {
                 var monthContainer = new MonthContainer
                 {
-                    Year = monthPair.Key.Year,
-                    Month = monthPair.Key.Month,
+                    Year = monthPair.Key.Date.Year,
+                    Month = monthPair.Key.Date.Month,
                     Name = monthPair.Key.ToString(),
                     Income = monthPair.Value[Constants.IncomeCategory],
                     Spent = monthPair.Value.Where(x => x.Key != Constants.IncomeCategory).Sum(x => x.Value)
@@ -32,7 +33,7 @@ namespace Erbsenzaehler.ViewModels.HistoricalReports
 
                 foreach (var category in allCategories)
                 {
-                    monthContainer[category] = monthPair.Value[category];
+                    monthContainer[category] = monthPair.Value.ContainsKey(category) ? monthPair.Value[category] : 0;
                 }
 
                 if (monthContainer.Income > 0 || monthContainer.Spent < 0)

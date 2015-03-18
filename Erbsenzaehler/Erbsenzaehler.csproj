@@ -269,7 +269,6 @@
     <Compile Include="ViewModels\ManageUsers\IndexViewModel.cs" />
     <Compile Include="ViewModels\HistoricalReports\AmountsViewModel.cs" />
     <Compile Include="ViewModels\HistoricalReports\BalanceViewModel.cs" />
-    <Compile Include="Reporting\Date.cs" />
     <Compile Include="ViewModels\MonthlyReports\IndexViewModel.cs" />
     <Compile Include="ViewModels\Rules\UploadRulesViewModel.cs" />
     <Compile Include="ViewModels\User\AccountViewModels.cs" />

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Erbsenzaehler.Models;
@@ -11,44 +10,31 @@ namespace Erbsenzaehler.ViewModels.HistoricalReports
     {
         public async Task<AmountsViewModel> Fill(Db db, Client client)
         {
-            var overviewCalculator = new OverviewCalculator(db, client);
+            var overviewCalculator = new OverviewCalculator(db, client, new SumCalculator(db, client));
 
             var overview = await overviewCalculator.Calculate();
 
-            var minDate = new Date(DateTime.MaxValue.Year, 12);
-            var maxDate = new Date(DateTime.MinValue.Year, 1);
-
-            AmountPerMonth = new Dictionary<string, IDictionary<Date, decimal>>();
+            AmountPerMonth = new Dictionary<string, IDictionary<Month, decimal>>();
 
             foreach (var monthPair in overview)
             {
-                var date = monthPair.Key;
-                if (date < minDate)
-                {
-                    minDate = date;
-                }
-                if (date > maxDate)
-                {
-                    maxDate = date;
-                }
-
                 foreach (var categoryPair in monthPair.Value)
                 {
                     if (!AmountPerMonth.ContainsKey(categoryPair.Key))
                     {
-                        AmountPerMonth[categoryPair.Key] = new Dictionary<Date, decimal>();
+                        AmountPerMonth[categoryPair.Key] = new Dictionary<Month, decimal>();
                     }
-                    if (!AmountPerMonth[categoryPair.Key].ContainsKey(date))
+                    if (!AmountPerMonth[categoryPair.Key].ContainsKey(monthPair.Key))
                     {
-                        AmountPerMonth[categoryPair.Key][date] = 0;
+                        AmountPerMonth[categoryPair.Key][monthPair.Key] = 0;
                     }
-                    AmountPerMonth[categoryPair.Key][date] += categoryPair.Value;
+                    AmountPerMonth[categoryPair.Key][monthPair.Key] += categoryPair.Value;
                 }
             }
 
             foreach (var category in AmountPerMonth.Keys.ToList())
             {
-                AmountPerMonth[category] = AmountPerMonth[category].OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
+                AmountPerMonth[category] = AmountPerMonth[category].OrderBy(x => x.Key.Date).ToDictionary(x => x.Key, x => x.Value);
             }
             AmountPerMonth = AmountPerMonth.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
 
@@ -56,7 +42,7 @@ namespace Erbsenzaehler.ViewModels.HistoricalReports
         }
 
 
-        public IDictionary<string, IDictionary<Date, decimal>> AmountPerMonth { get; set; }
+        public IDictionary<string, IDictionary<Month, decimal>> AmountPerMonth { get; set; }
         public static string IncomeCategory => Constants.IncomeCategory;
     }
 }
