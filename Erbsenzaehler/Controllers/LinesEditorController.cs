@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Erbsenzaehler.Models;
 using Erbsenzaehler.ViewModels.LinesEditor;
 
 namespace Erbsenzaehler.Controllers
@@ -37,6 +38,36 @@ namespace Erbsenzaehler.Controllers
                 Data = viewModel,
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
+        }
+
+
+        [HttpPost]
+        [Route("Json")]
+        public async Task<ActionResult> CreateLine(string month)
+        {
+            var currentClient = await GetCurrentClient();
+            var m = new Month(month);
+            var account = currentClient.Accounts.First();
+
+            var date = m.Date.AddMonths(1).AddDays(-1);
+            if (m.IsCurrentMonth)
+            {
+                date = DateTime.Now.Date;
+            }
+
+            var line = new Line
+            {
+                Account = account,
+                AccountId = account.Id,
+                OriginalAmount = 0,
+                OriginalDate = date,
+                OriginalText = "Account statement added manually on " + DateTime.Now.ToShortDateString() + ".",
+                LineAddedManually = true,
+            };
+            Db.Lines.Add(line);
+            await Db.SaveChangesAsync();
+
+            return await LoadLines(month);
         }
 
 

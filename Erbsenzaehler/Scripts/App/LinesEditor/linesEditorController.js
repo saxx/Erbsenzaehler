@@ -7,17 +7,21 @@
         $scope.loading = true;
         $scope.viewModel = linesEditorResource.query({ month: selectedDate }, function () {
             $scope.loading = false;
+
+            if (window.reloadCallback) {
+                window.reloadCallback();
+            }
         });
     };
 
-
-
     $scope.addLine = function () {
-        alert("add");
-
-        if (window.reloadCallback) {
-            window.reloadCallback();
-        }
+        linesEditorResource.create(
+            {
+                month: getQuerystring("month")
+            },
+            function () {
+                $scope.loadLines();
+            });
     };
 
     $scope.saveLine = function (line) {
