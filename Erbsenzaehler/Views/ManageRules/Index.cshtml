@@ -108,6 +108,8 @@ else
             $scope.loadRules = function(callback) {
                 $scope.loading = true;
                 $scope.rules = Rule.query(function() {
+                    $scope.loading = false;
+
                     if (callback) {
                         callback();
                     }
