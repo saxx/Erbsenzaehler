@@ -78,7 +78,7 @@ namespace Erbsenzaehler.ViewModels.LinesEditor
                     Date = (x.Date ?? x.OriginalDate).ToShortDateString(),
                     OriginalDate = x.OriginalDate.ToShortDateString(),
                     Id = x.Id,
-                    Text = x.OriginalText,
+                    Text = x.Text ?? x.OriginalText,
                     Ignore = x.Ignore
                 };
         }

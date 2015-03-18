@@ -52,6 +52,8 @@ namespace Erbsenzaehler.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound);
             }
 
+            var anythingHasChanged = false;
+
             // sanitize the category
             if (line.Category != null)
             {
@@ -67,6 +69,7 @@ namespace Erbsenzaehler.Controllers
             {
                 lineInDatebase.Ignore = line.Ignore;
                 lineInDatebase.IgnoreUpdatedManually = true;
+                anythingHasChanged = true;
             }
 
             var newDate = DateTime.Parse(line.Date);
@@ -74,12 +77,14 @@ namespace Erbsenzaehler.Controllers
             {
                 lineInDatebase.Date = newDate;
                 lineInDatebase.DateUpdatedManually = true;
+                anythingHasChanged = true;
             }
 
             if (lineInDatebase.Category != line.Category)
             {
                 lineInDatebase.Category = line.Category;
                 lineInDatebase.CategoryUpdatedManually = true;
+                anythingHasChanged = true;
             }
 
             decimal amountAsDecimal;
@@ -89,10 +94,22 @@ namespace Erbsenzaehler.Controllers
                 {
                     lineInDatebase.Amount = amountAsDecimal;
                     lineInDatebase.AmountUpdatedManually = true;
+                    anythingHasChanged = true;
                 }
             }
 
-            Db.SaveChanges();
+            var newText = (line.Text ?? "").Replace("\n", "").Replace("\r", "").Trim();
+            if (!string.IsNullOrWhiteSpace(newText) && lineInDatebase.Text != newText)
+            {
+                lineInDatebase.Text = newText;
+                lineInDatebase.TextUpdatedManually = true;
+                anythingHasChanged = true;
+            }
+
+            if (anythingHasChanged)
+            {
+                await Db.SaveChangesAsync();
+            }
 
             return await LoadLines(month);
         }
@@ -112,7 +129,7 @@ namespace Erbsenzaehler.Controllers
 
             Db.Lines.Remove(lineInDatebase);
             await Db.SaveChangesAsync();
-            
+
             return await LoadLines(month);
         }
     }

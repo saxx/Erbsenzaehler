@@ -10,7 +10,17 @@
         });
     };
 
-    $scope.save = function (line) {
+
+
+    $scope.addLine = function () {
+        alert("add");
+
+        if (window.reloadCallback) {
+            window.reloadCallback();
+        }
+    };
+
+    $scope.saveLine = function (line) {
         linesEditorResource.update(line, function () {
             if (window.reloadCallback) {
                 window.reloadCallback();
@@ -18,7 +28,7 @@
         });
     };
 
-    $scope.delete = function (line) {
+    $scope.deleteLine = function (line) {
         if (confirm('Are you sure, you want to delete this account statement? This cannot be undone!')) {
             linesEditorResource.delete({ id: line.Id, month: getQuerystring("month") }, function () {
                 var index = $scope.viewModel.Lines.indexOf(line);
