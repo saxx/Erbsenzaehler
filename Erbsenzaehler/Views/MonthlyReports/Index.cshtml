@@ -18,15 +18,16 @@
             {
                 <li><a href="@Url.Action("Index")?month=@previousMonth.ToString("yyyy-MM")">&laquo; @previousMonth.ToString("MMMM yyyy")</a></li>
             }
-            <li>
-                <h2>@currentMonth.ToString("MMMM yyyy")</h2>
-            </li>
             @if (Model.MaxDate > nextMonth)
             {
                 <li><a href="@Url.Action("Index")?month=@nextMonth.ToString("yyyy-MM")">@nextMonth.ToString("MMMM yyyy") &raquo;</a></li>
             }
         </ul>
     </nav>
+
+    <h2 class="text-center">@currentMonth.ToString("MMMM yyyy")</h2>
+
+    <hr/>
 }
 
 @if (Model.HasLines)
@@ -59,12 +60,7 @@
         </div>
     </div>
 
-    <div class="row">
-        <p></p>
-    </div>
-    <div class="row">
-        <p></p>
-    </div>
+    <hr />
 
     <div class="row">
         <div class="col-sm-12">
