@@ -12,6 +12,8 @@ build:
   publish_wap: true
   verbosity: minimal
 
+configuration: Release
+
 deploy:
 - provider: WebDeploy
   server: https://erbsenzaehler.scm.azurewebsites.net:443/msdeploy.axd
