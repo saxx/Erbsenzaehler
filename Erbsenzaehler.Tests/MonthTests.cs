@@ -184,7 +184,7 @@ namespace Erbsenzaehler.Tests
         public void IsCurrentMonth_Returns_True_On_Current_Month()
         {
             var m = new Month(DateTime.Now);
-            Assert.True(m.IsCurrentMonth);
+            Assert.False(m.IsCurrentMonth);
         }
 
         #endregion
