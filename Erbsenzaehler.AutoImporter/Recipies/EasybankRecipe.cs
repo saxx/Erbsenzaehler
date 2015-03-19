@@ -1,29 +1,23 @@
 ﻿using System;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
-using NLog;
+using Erbsenzaehler.AutoImporter.Configuration;
 using OpenQA.Selenium.PhantomJS;
-using OpenQA.Selenium.Support.Extensions;
 
 namespace Erbsenzaehler.AutoImporter.Recipies
 {
-    public class EasybankRecipe
+    public class EasybankRecipe : AbstractRecipe
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string Account { get; set; }
+        private readonly EasybankConfiguration _configuration;
 
 
-        public EasybankRecipe(string username, string password, string account)
+        public EasybankRecipe(EasybankConfiguration configuration)
         {
-            Username = username;
-            Password = password;
-            Account = account;
+            _configuration = configuration;
         }
 
 
-        public void DownloadFile(string filePath)
+        public override void DownloadFile(string temporaryFilePath)
         {
             Log.Info("Downloading account statements from Easybank ...");
 
@@ -41,20 +35,17 @@ namespace Erbsenzaehler.AutoImporter.Recipies
                     {
                         Log.Trace("Opening Easybank homepage ...");
                         driver.Navigate().GoToUrl("https://ebanking.easybank.at");
-                        Log.Trace("Saved screenshot as Easybank-1.png");
-                        driver.TakeScreenshot().SaveAsFile("Easybank-1.png", ImageFormat.Png);
+                        Screenshot(driver, "Easybank-1");
 
                         Log.Trace("Filling login credentials ...");
-                        driver.FindElementById("lof5").SendKeys(Username);
-                        driver.FindElementById("lof9").SendKeys(Password);
+                        driver.FindElementById("lof5").SendKeys(_configuration.Verfuegernummer);
+                        driver.FindElementById("lof9").SendKeys(_configuration.Pin);
                         driver.FindElementByLinkText("Login").Click();
-                        Log.Trace("Saved screenshot as Easybank-2.png");
-                        driver.TakeScreenshot().SaveAsFile("Easybank-2.png", ImageFormat.Png);
+                        Screenshot(driver, "Easybank-2");
 
                         Log.Trace("Loading account overview ...");
-                        driver.FindElementByLinkText(Account).Click();
-                        Log.Trace("Saved screenshot as Easybank-3.png");
-                        driver.TakeScreenshot().SaveAsFile("Easybank-3.png", ImageFormat.Png);
+                        driver.FindElementByLinkText(_configuration.Kontonummer).Click();
+                        Screenshot(driver, "Easybank-3");
 
                         Log.Trace("Injecting & executing JavaScript ...");
                         const string script = "var resultField = $('<pre />').attr('id', 'csv_result');" +
@@ -68,12 +59,11 @@ namespace Erbsenzaehler.AutoImporter.Recipies
                                               "}});";
                         driver.ExecuteScript(script);
 
-                        Log.Trace("Loading file content from page and saving to {0} ...", filePath);
+                        Log.Trace("Loading file content from page and saving to {0} ...", temporaryFilePath);
                         var text = driver.FindElementById("csv_result").Text;
-                        Log.Trace("Saved screenshot as Easybank-4.png");
-                        driver.TakeScreenshot().SaveAsFile("Easybank-4.png", ImageFormat.Png);
+                        Screenshot(driver, "Easybank-4");
 
-                        using (var writer = new StreamWriter(filePath, false, Encoding.UTF8))
+                        using (var writer = new StreamWriter(temporaryFilePath, false, Encoding.UTF8))
                         {
                             writer.Write(text);
                         }
@@ -91,8 +81,5 @@ namespace Erbsenzaehler.AutoImporter.Recipies
                 }
             }
         }
-
-
-        private static Logger Log => LogManager.GetCurrentClassLogger();
     }
 }

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Formatting;
+using Erbsenzaehler.AutoImporter.Configuration;
 using Newtonsoft.Json;
 using NLog;
 
@@ -9,38 +10,32 @@ namespace Erbsenzaehler.AutoImporter.Uploader
 {
     public class ErbsenzaehlerUploader
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string BaseUrl { get; set; } = "http://erbsenzaehler.azurewebsites.net/";
-        public string Account { get; set; }
-        public string Importer { get; set; } = "Easybank";
+        private readonly ErbsenzaehlerConfiguration _config;
 
 
-        public ErbsenzaehlerUploader(string username, string password, string account)
+        public ErbsenzaehlerUploader(ErbsenzaehlerConfiguration config)
         {
-            Username = username;
-            Password = password;
-            Account = account;
+            _config = config;
         }
 
 
         public void Upload(string filePath)
         {
             Log.Info("Uploading file to Erbsenzähler ...");
-            Log.Trace("Erbsenzähler base URL is {0}.", BaseUrl);
+            Log.Trace("Erbsenzähler base URL is {0}.", _config.Url);
 
             var httpClient = new HttpClient
             {
-                BaseAddress = new Uri(BaseUrl)
+                BaseAddress = new Uri(_config.Url)
             };
 
             Log.Trace("Building POST content ...");
             var postContent = new ObjectContent(typeof (object), new
             {
-                Username,
-                Password,
-                Account,
-                Importer,
+                _config.Username,
+                _config.Password,
+                _config.Account,
+                _config.Importer,
                 File = File.ReadAllBytes(filePath)
             }, new JsonMediaTypeFormatter());
 
