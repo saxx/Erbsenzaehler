@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{510773
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erbsenzaehler.AutoImporter", "Erbsenzaehler.AutoImporter\Erbsenzaehler.AutoImporter.csproj", "{DF8923EA-A94E-4544-8B15-95FA9CCA6D19}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erbsenzaehler.Tests", "Erbsenzaehler.Tests\Erbsenzaehler.Tests.csproj", "{189B1F02-A935-47B4-9AD8-5622AC02F9AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{DF8923EA-A94E-4544-8B15-95FA9CCA6D19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF8923EA-A94E-4544-8B15-95FA9CCA6D19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF8923EA-A94E-4544-8B15-95FA9CCA6D19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{189B1F02-A935-47B4-9AD8-5622AC02F9AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{189B1F02-A935-47B4-9AD8-5622AC02F9AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{189B1F02-A935-47B4-9AD8-5622AC02F9AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{189B1F02-A935-47B4-9AD8-5622AC02F9AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
