@@ -21,6 +21,10 @@ assembly_info:
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
 
+artifacts:
+- path: Erbsenzaehler.AutoImporter\Bin\$(configuration)
+  name: Erbsenzaehler.AutoImporter
+
 deploy:
 - provider: WebDeploy
   server: https://erbsenzaehler.scm.azurewebsites.net:443/msdeploy.axd
