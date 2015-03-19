@@ -1,12 +1,11 @@
 ﻿using System;
-using Xunit;
 using Erbsenzaehler.Models;
+using Xunit;
 
 namespace Erbsenzaehler.Tests
 {
     public class MonthTests
     {
-
         #region Constructor
 
         [Fact]
@@ -33,7 +32,6 @@ namespace Erbsenzaehler.Tests
         }
 
 
-
         [Theory]
         [InlineData("2006-06")]
         [InlineData("2006-6")]
@@ -55,23 +53,25 @@ namespace Erbsenzaehler.Tests
             Assert.Equal(new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1), m.Date);
         }
 
+
         [Theory]
         [InlineData("2006")]
         [InlineData("")]
         [InlineData("asdf")]
         public void Invalid_String_Constructor_Throws_ArgumentException(string input)
         {
-            Assert.Throws(typeof(ArgumentException), () => new Month(input, false));
+            Assert.Throws(typeof (ArgumentException), () => new Month(input, false));
         }
+
 
         [Theory]
         [InlineData("2006-13")]
         public void Invalid_String_Constructor_Throws_RangeException(string input)
         {
-            Assert.Throws(typeof(ArgumentOutOfRangeException), () => new Month(input, false));
+            Assert.Throws(typeof (ArgumentOutOfRangeException), () => new Month(input, false));
         }
-        #endregion
 
+        #endregion
 
         #region ToString
 
@@ -88,6 +88,7 @@ namespace Erbsenzaehler.Tests
         #endregion
 
         #region NumberOfDays
+
         [Theory]
         [InlineData("2006-06", 30)]
         [InlineData("2006-05", 31)]
@@ -98,9 +99,11 @@ namespace Erbsenzaehler.Tests
             var m = new Month(input);
             Assert.Equal(expectedResult, m.NumberOfDays);
         }
+
         #endregion
 
         #region NumberOfDaysLeft
+
         [Theory]
         [InlineData("2006-06")]
         [InlineData("2006-05")]
@@ -111,6 +114,7 @@ namespace Erbsenzaehler.Tests
             var m = new Month(input);
             Assert.Equal(0, m.NumberOfDaysLeft);
         }
+
 
         [Theory]
         [InlineData("2066-06", 30)]
@@ -123,17 +127,20 @@ namespace Erbsenzaehler.Tests
             Assert.Equal(expectedResult, m.NumberOfDaysLeft);
         }
 
+
         [Fact]
         public void NumberOfDaysLeft_Returns_Correct_Days_For_Current_Month()
         {
             var m = new Month();
 
             var firstDayOfNextMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(1);
-            Assert.Equal((int)(firstDayOfNextMonth - DateTime.Now).TotalDays, m.NumberOfDaysLeft);
+            Assert.Equal((int) (firstDayOfNextMonth - DateTime.Now).TotalDays, m.NumberOfDaysLeft);
         }
+
         #endregion
-        
+
         #region Previous and Next Month
+
         [Theory]
         [InlineData("2006-06", "2006-05")]
         [InlineData("2004-01", "2003-12")]
@@ -143,6 +150,7 @@ namespace Erbsenzaehler.Tests
             Assert.Equal(expectedResult, m.PreviousMonth.ToString());
         }
 
+
         [Theory]
         [InlineData("2006-06", "2006-07")]
         [InlineData("2004-12", "2005-01")]
@@ -151,6 +159,7 @@ namespace Erbsenzaehler.Tests
             var m = new Month(input);
             Assert.Equal(expectedResult, m.NextMonth.ToString());
         }
+
         #endregion
 
         #region IsCurrentMonth 
@@ -162,6 +171,7 @@ namespace Erbsenzaehler.Tests
             Assert.False(m.IsCurrentMonth);
         }
 
+
         [Fact]
         public void IsCurrentMonth_Returns_False_On_Future_Month()
         {
@@ -169,13 +179,14 @@ namespace Erbsenzaehler.Tests
             Assert.False(m.IsCurrentMonth);
         }
 
+
         [Fact]
         public void IsCurrentMonth_Returns_True_On_Current_Month()
         {
             var m = new Month(DateTime.Now);
             Assert.True(m.IsCurrentMonth);
         }
-        #endregion
 
+        #endregion
     }
 }
