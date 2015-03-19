@@ -1,0 +1,25 @@
+version: 0.1.{build}
+
+os: Visual Studio 2015 CTP 6
+
+install:
+- set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
+
+before_build:
+- nuget restore
+
+build:
+  publish_wap: true
+  verbosity: minimal
+
+deploy:
+- provider: WebDeploy
+  server: https://erbsenzaehler.scm.azurewebsites.net:443/msdeploy.axd
+  website: erbsenzaehler
+  username: $erbsenzaehler
+  password:
+    secure: ywPiOOw/o99qoQAj0OGWztq6DumwP9/7OtBCxFM1zhCkuEX2GTS8VOJl72UY66iye1iIPdnkUAxq2uPnNIauEw==
+  remove_files: true
+  app_offline: true
+  on:
+    branch: master
