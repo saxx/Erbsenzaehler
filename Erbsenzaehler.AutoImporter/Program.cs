@@ -1,93 +1,82 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using CommandLine;
+using System.Linq;
+using Erbsenzaehler.AutoImporter.Configuration;
 using Erbsenzaehler.AutoImporter.Recipies;
 using Erbsenzaehler.AutoImporter.Uploader;
+using Newtonsoft.Json;
 using NLog;
 
 namespace Erbsenzaehler.AutoImporter
 {
     public static class Program
     {
-        private static void Main(string[] args)
+        private static void Main()
         {
-            Log.Info("Erbsenzähler AutoImporter starting ...");
-
-            #region Configuration
-
-            Configuration = new Configuration();
-
-            Log.Trace("Loading configuration from app settings ...");
             try
             {
-                Configuration.LoadFromAppSettings();
-            }
-            catch (Exception ex)
-            {
-                Log.Fatal("Unable to parse app settings:");
-                Log.Fatal(ex.Message);
-                Environment.Exit(-1);
-            }
+                Log.Info("Erbsenzähler AutoImporter starting ...");
 
-            Log.Trace("Loading configuration from environment variables ...");
-            try
-            {
-                Configuration.LoadFromEnvironmentVariables();
-            }
-            catch (Exception ex)
-            {
-                Log.Fatal("Unable to parse environment variables:");
-                Log.Fatal(ex.Message);
-                Environment.Exit(-1);
-            }
+                #region Configuration
 
-            Log.Trace("Loading configuration from command line ...");
-            if (!Parser.Default.ParseArguments(args, Configuration))
-            {
-                Log.Fatal("Unable to parse commandline parameters.");
-                Environment.Exit(-1);
-            }
-
-            #endregion
-
-            var tempFilePath = Path.GetTempFileName();
-            Log.Trace("Temporary file path is {0} ...", tempFilePath);
-
-            if (Configuration.Recipe == "Easybank")
-            {
-                var recipe = new EasybankRecipe(
-                    Configuration.EasybankUsername,
-                    Configuration.EasybankPassword,
-                    Configuration.EasybankAccount);
-
-                recipe.DownloadFile(tempFilePath);
-            }
-
-            if (File.Exists(tempFilePath) && new FileInfo(tempFilePath).Length > 0)
-            {
-                var uploader = new ErbsenzaehlerUploader(
-                    Configuration.ErbsenzaehlerUsername,
-                    Configuration.ErbsenzaehlerPassword,
-                    Configuration.ErbsenzaehlerAccount
-                    );
-
-                if (!string.IsNullOrWhiteSpace(Configuration.ErbsenzaehlerUrl))
+                Log.Trace("Looking for configuration file ...");
+                var configPath = Path.Combine(Environment.CurrentDirectory, "config.json");
+                if (!File.Exists(configPath))
                 {
-                    uploader.BaseUrl = Configuration.ErbsenzaehlerUrl;
+                    Log.Fatal("Unable to locate configuration file at " + configPath + ".");
+                    Environment.Exit(-1);
                 }
 
-                uploader.Upload(tempFilePath);
+                Log.Trace("Loading configuration ...");
+                try
+                {
+                    Configuration = JsonConvert.DeserializeObject<IEnumerable<ConfigurationContainer>>(File.ReadAllText(configPath)).ToList();
+                }
+                catch (Exception ex)
+                {
+                    Log.Fatal("Unable to parse configuration file: ");
+                    Log.Fatal(ex.Message);
+                    Environment.Exit(-2);
+                }
 
-                Log.Trace("Deleting file {0} ...", tempFilePath);
-                File.Delete(tempFilePath);
+                #endregion
+
+                var configCount = 0;
+                foreach (var config in Configuration)
+                {
+                    Log.Info("Running import " + ++configCount + " of " + Configuration.Count() + " ...");
+
+                    var tempFilePath = Path.GetTempFileName();
+                    Log.Trace("Temporary file path is {0} ...", tempFilePath);
+
+                    var recipe = RecipeFactory.GetRecipe(config);
+                    recipe.DownloadFile(tempFilePath);
+
+                    if (File.Exists(tempFilePath) && new FileInfo(tempFilePath).Length > 0)
+                    {
+                        var uploader = new ErbsenzaehlerUploader(config.Erbsenzaehler);
+                        uploader.Upload(tempFilePath);
+                    }
+
+                    if (File.Exists(tempFilePath))
+                    {
+                        Log.Trace("Deleting temporary file {0} ...", tempFilePath);
+                        File.Delete(tempFilePath);
+                    }
+                }
+
+                Log.Info("Quitting ...");
             }
-
-            Log.Info("Quitting ...");
+            catch (Exception ex)
+            {
+                Log.Fatal(ex.ToString);
+            }
         }
 
 
         private static Logger Log => LogManager.GetCurrentClassLogger();
 
-        private static Configuration Configuration { get; set; }
+        private static IList<ConfigurationContainer> Configuration { get; set; }
     }
 }
