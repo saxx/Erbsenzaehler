@@ -253,6 +253,7 @@
     <Compile Include="Models\Budget.cs" />
     <Compile Include="Models\Month.cs" />
     <Compile Include="Models\Rule.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reporting\BudgetCalculator.cs" />
     <Compile Include="Reporting\Constants.cs" />
     <Compile Include="Reporting\OverviewCalculator.cs" />
@@ -773,9 +774,7 @@
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201502171454295_Initial.resx">
       <DependentUpon>201502171454295_Initial.cs</DependentUpon>
