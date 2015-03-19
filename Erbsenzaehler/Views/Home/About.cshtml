@@ -1,4 +1,5 @@
-﻿<h2>About Erbsenzähler</h2>
+﻿@using System.Diagnostics
+<h2>About Erbsenzähler</h2>
 
 <p>
     I'm Hannes Sachsenhofer, an Austrian software engineer, and Erbsenzähler is a pet project of mine that I use
@@ -37,13 +38,13 @@
 <p></p>
 
 <p>
-    Erbsenzähler v@(GetType().Assembly.GetName().Version) is made possible by <a href="@Url.Action("Attribution")">many great open source libraries and work.</a>
+    Erbsenzähler v@( FileVersionInfo.GetVersionInfo(typeof(Erbsenzaehler.Models.Db).Assembly.Location).ProductVersion) is made possible by <a href="@Url.Action("Attribution")">many great open source libraries and work.</a>
 </p>
 
 <p></p>
 
 <p>
-    Yours,<br/>
+    Yours,<br />
     ~ Hannes Sachsenhofer
 </p>
 
