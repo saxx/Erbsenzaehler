@@ -16,7 +16,7 @@ configuration: Release
 
 assembly_info:
   patch: true
-  file: **\AssemblyInfo.*
+  file: "**\AssemblyInfo.*"
   assembly_version: "{version}"
   assembly_file_version: "{version}"
 
