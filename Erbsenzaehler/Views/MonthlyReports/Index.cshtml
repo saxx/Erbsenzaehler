@@ -20,7 +20,7 @@
                     <a href="@Url.Action("Index")?month=@previousMonth.ToString("yyyy-MM")">&laquo; @previousMonth.ToString("MMMM yyyy")</a>
                 </li>
             }
-            @if (Model.MaxDate > nextMonth)
+            @if (Model.MaxDate >= nextMonth)
             {
                 <li>
                     <a href="@Url.Action("Index")?month=@nextMonth.ToString("yyyy-MM")">@nextMonth.ToString("MMMM yyyy") &raquo;</a>
