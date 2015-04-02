@@ -10,17 +10,19 @@ namespace Erbsenzaehler.ViewModels.Today
     {
         public async Task<IndexViewModel> Fill(Db db, Client currentClient, Month month)
         {
-            var startDate = month.Date;
-            var endDate = startDate.AddMonths(1).AddSeconds(-1);
+            CurrentDate = month.Date;
 
-            var linesQuery = db.Lines.Where(x => x.Account.ClientId == currentClient.Id);
+            var linesQuery = db.Lines.ByClient(currentClient);
+            var linesQueryForMonth = linesQuery.ByMonth(month);
 
-            CurrentDate = startDate;
-            HasLines = await linesQuery.AnyAsync(x => (x.Date ?? x.OriginalDate) >= startDate && (x.Date ?? x.OriginalDate) <= endDate);
+            HasLines = await linesQueryForMonth.AnyAsync();
+
             MinDate = await linesQuery.Select(x => x.Date ?? x.OriginalDate).DefaultIfEmpty().MinAsync();
             MaxDate = await linesQuery.Select(x => x.Date ?? x.OriginalDate).DefaultIfEmpty().MaxAsync();
 
             HasBudgets = await db.Budgets.ByClient(currentClient).AnyAsync();
+
+            Balance = await linesQueryForMonth.ByNotIgnored().Select(x => x.Amount ?? x.OriginalAmount).DefaultIfEmpty().SumAsync();
 
             return this;
         }
@@ -31,5 +33,6 @@ namespace Erbsenzaehler.ViewModels.Today
         public DateTime CurrentDate { get; set; }
         public DateTime MinDate { get; set; }
         public DateTime MaxDate { get; set; }
+        public decimal Balance { get; set; }
     }
 }

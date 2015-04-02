@@ -94,6 +94,22 @@
     vertical-align: bottom;
 }
 
+h2 + h2 {
+    margin-top: -10px;
+}
+
+    h2 + h2.colored-sum {
+        font-size: 20px;
+    }
+
+.colored-sum.positive {
+    color: #90ba58;
+}
+
+.colored-sum.negative {
+    color: #a37182;
+}
+
 
 .tooltip-inner {
     max-width: 150px;
