@@ -309,7 +309,7 @@
     <Content Include="Content\Icons\favicon-16x16.png" />
     <Content Include="Content\Icons\favicon-32x32.png" />
     <Content Include="Content\Icons\favicon-96x96.png" />
-    <Content Include="Content\Icons\favicon.ico" />
+    <Content Include="favicon.ico" />
     <Content Include="Content\Icons\largetile.png" />
     <Content Include="Content\Icons\logo-original.png" />
     <Content Include="Content\Icons\logo.png" />
