@@ -22,7 +22,7 @@
         {
             <tr>
                 <td>
-                    <a href="@Url.Action("Index", "MonthlyReports")?month=@(month.Year + "-" + month.Month.ToString().PadLeft(2, '0') )">@month.Name</a>
+                    <a href="@Url.Action("Index", "Today")?month=@(month.Year + "-" + month.Month.ToString().PadLeft(2, '0') )">@month.Name</a>
                 </td>
                 <td class="amount">@month.Balance.ToString("N2")</td>
                 <td class="amount">@month.Income.ToString("N2")</td>

@@ -202,7 +202,7 @@
     <Compile Include="Controllers\ApiController.cs" />
     <Compile Include="Controllers\ManageBudgetsController.cs" />
     <Compile Include="Controllers\ManageUsersController.cs" />
-    <Compile Include="Controllers\MonthlyReportsController.cs" />
+    <Compile Include="Controllers\TodayController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ControllerBase.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -270,7 +270,7 @@
     <Compile Include="ViewModels\ManageUsers\IndexViewModel.cs" />
     <Compile Include="ViewModels\HistoricalReports\AmountsViewModel.cs" />
     <Compile Include="ViewModels\HistoricalReports\BalanceViewModel.cs" />
-    <Compile Include="ViewModels\MonthlyReports\IndexViewModel.cs" />
+    <Compile Include="ViewModels\Today\IndexViewModel.cs" />
     <Compile Include="ViewModels\Rules\UploadRulesViewModel.cs" />
     <Compile Include="ViewModels\User\AccountViewModels.cs" />
     <Compile Include="Models\User.cs" />
@@ -767,7 +767,7 @@
     <Content Include="Views\HistoricalReports\Amounts.cshtml" />
     <Content Include="Views\Home\Attribution.cshtml" />
     <Content Include="Views\ManageBudgets\Index.cshtml" />
-    <Content Include="Views\MonthlyReports\Index.cshtml" />
+    <Content Include="Views\Today\Index.cshtml" />
     <Content Include="Views\Shared\_LinesEditor.cshtml" />
     <Content Include="Views\Shared\_NoLinesWarning.cshtml" />
   </ItemGroup>

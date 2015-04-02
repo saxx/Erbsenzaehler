@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Erbsenzaehler.Models;
 
-namespace Erbsenzaehler.ViewModels.MonthlyReports
+namespace Erbsenzaehler.ViewModels.Today
 {
     public class IndexViewModel
     {

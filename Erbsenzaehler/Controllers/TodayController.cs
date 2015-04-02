@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Erbsenzaehler.Models;
 using Erbsenzaehler.Reporting;
-using Erbsenzaehler.ViewModels.MonthlyReports;
+using Erbsenzaehler.ViewModels.Today;
 
 namespace Erbsenzaehler.Controllers
 {
     [Authorize]
-    public class MonthlyReportsController : ControllerBase
+    public class TodayController : ControllerBase
     {
         public async Task<ActionResult> Index(string month)
         {
