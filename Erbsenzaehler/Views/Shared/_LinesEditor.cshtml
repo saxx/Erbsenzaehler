@@ -1,4 +1,5 @@
-﻿<div ng-app="erbsenzaehlerApp" ng-controller="linesEditorController" id="linesEditorController" data-action="@Url.Action("Json", "LinesEditor")">
+﻿@* ReSharper disable once Mvc.ActionNotResolved *@
+<div ng-app="erbsenzaehlerApp" ng-controller="linesEditorController" id="linesEditorController" data-action="@Url.Action("Json", "LinesEditor")">
     <table class="table table-striped lines-editor" ng-show="!loading">
         <tr>
             <th>Account</th>
@@ -19,7 +20,9 @@
             <td>
                 <div contenteditable spellcheck="false" nobreaks nospaces nochars ng-blur="saveLine(line)" ng-model="line.Date"></div>
                 <div class="text-muted" ng-if="line.ManuallyAdded == false && line.Date != line.OriginalDate">
+                    @* ReSharper disable Html.Obsolete *@
                     <s>{{line.OriginalDate}}</s>
+                    @* ReSharper restore Html.Obsolete *@
                 </div>
             </td>
             <td>
@@ -28,7 +31,9 @@
             <td class="amount">
                 <div contenteditable spellcheck="false" nobreaks nospaces nochars ng-blur="saveLine(line)" ng-model="line.Amount"></div>
                 <div class="text-muted" ng-if="line.ManuallyAdded == false && line.Amount != line.OriginalAmount">
+                    @* ReSharper disable Html.Obsolete *@
                     <s>{{line.OriginalAmount}}</s>
+                    @* ReSharper restore Html.Obsolete *@
                 </div>
             </td>
             <td>
