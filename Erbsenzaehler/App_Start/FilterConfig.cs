@@ -1,5 +1,4 @@
 ﻿using System.Web.Mvc;
-using SharpBrake;
 
 namespace Erbsenzaehler
 {
@@ -7,17 +6,17 @@ namespace Erbsenzaehler
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new SendErrorToAirbrakErrorAttribute());
+            filters.Add(new LogErrorAttribute());
         }
 
 
-        public class SendErrorToAirbrakErrorAttribute : HandleErrorAttribute
+        public class LogErrorAttribute : HandleErrorAttribute
         {
             public override void OnException(ExceptionContext filterContext)
             {
                 if (!filterContext.HttpContext.Request.IsLocal)
                 {
-                    filterContext.Exception.SendToAirbrake();
+                    // log the exception here
                 }
                 base.OnException(filterContext);
             }
