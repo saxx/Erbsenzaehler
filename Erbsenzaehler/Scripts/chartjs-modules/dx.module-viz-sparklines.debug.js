@@ -1,7 +1,7 @@
 /*! 
 * DevExtreme (Sparklines)
-* Version: 14.2.4
-* Build date: Jan 16, 2015
+* Version: 14.2.6
+* Build date: Mar 18, 2015
 *
 * Copyright (c) 2012 - 2015 Developer Express Inc. ALL RIGHTS RESERVED
 * EULA: https://www.devexpress.com/Support/EULAs/DevExtreme.xml
@@ -12,7 +12,7 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
     if (!DevExpress.MOD_VIZ_CORE)
         throw Error('Required module is not referenced: viz-core');
     /*! Module viz-sparklines, file baseSparkline.js */
-    (function($, DX) {
+    (function($, DX, undefined) {
         var TOOLTIP_MARGIN = 100,
             TOOLTIP_ARROW_MARGIN = 10,
             DEFAULT_LINE_SPACING = 6,
@@ -30,11 +30,6 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
         DX.viz.sparklines = {};
         DX.viz.sparklines.DEFAULT_CUSTOMIZE_TOOLTIP = DEFAULT_CUSTOMIZE_TOOLTIP;
         DX.viz.sparklines.BaseSparkline = core.BaseWidget.inherit({
-            render: function() {
-                this._refresh();
-                return this
-            },
-            _rendererType: DX.viz.renderers.Renderer,
             _clean: function() {
                 if (this._tooltipShown) {
                     this._tooltip.dispose();
@@ -43,48 +38,36 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
                     this._tooltipGroup.clear()
                 }
                 this._tooltipContainer.detach();
-                this._cleanWidgetElements()
+                this._cleanWidgetElements();
+                this._cleanTranslators()
             },
-            _optionChanged: function(args) {
-                if (args.name === 'size' && this._allOptions) {
-                    this._clean();
-                    this._canvas = this._calculateCanvas();
-                    this._renderer.resize(this._canvas.width, this._canvas.height);
-                    if (!this._isContainerVisible())
-                        return;
-                    this._allOptions.size = args.value;
-                    this._redrawWidgetElements();
-                    this._prepareTooltipContainer()
-                }
-                else if (args.name === 'dataSource' && this._allOptions)
-                    this._refreshDataSource();
-                else
-                    this.callBase(args)
-            },
-            _init: function() {
-                this.callBase();
-                this._canvas = this._calculateCanvas();
-                this._renderer = new this._rendererType({
-                    width: this._canvas.width,
-                    height: this._canvas.height,
-                    cssClass: this._widgetClass + ' ' + this._widgetClass + '-' + this._widgetType,
-                    pathModified: this.option('pathModified'),
-                    rtl: this.option('rtlEnabled')
-                });
+            _initCore: function() {
                 this._createHtmlElements();
                 this._createTooltipGroups();
-                this._initTooltipEvents();
-                this._drawContainer()
+                this._initTooltipEvents()
             },
-            _dispose: function() {
+            _getRendererParameters: function() {
+                return {
+                        cssClass: this._widgetClass + ' ' + this._widgetClass + '-' + this._widgetType,
+                        pathModified: this.option('pathModified'),
+                        rtl: this.option('rtlEnabled')
+                    }
+            },
+            _getOption: function(name) {
+                return this.option(name)
+            },
+            _getDefaultSize: function() {
+                return this._defaultSize
+            },
+            _isContainerVisible: function() {
+                return true
+            },
+            _disposeCore: function() {
                 this.callBase();
                 this._disposeWidgetElements();
                 this._disposeTooltipEvents();
-                this._renderer.dispose();
                 this._tooltipRenderer.dispose();
-                this._translatorX = null;
-                this._translatorY = null;
-                delete this._renderer;
+                this._ranges = null;
                 delete this._tooltipRenderer;
                 delete this._tooltipTrackerGroup;
                 delete this._tooltipGroup;
@@ -92,30 +75,30 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
             },
             _render: function() {
                 var that = this;
-                that._canvas = that._calculateCanvas();
-                that._renderer.resize(that._canvas.width, that._canvas.height);
-                if (!that._isContainerVisible()) {
-                    that._incidentOccured('W2001', [that.NAME]);
-                    return
-                }
                 that._prepareOptions();
-                that._createWidgetElements();
-                that._drawWidgetElements();
-                that._drawn()
+                that._updateWidgetElements();
+                that._drawWidgetElements()
             },
-            _isHideLoadIndicatorRequired: function() {
-                return false
+            _updateWidgetElements: function() {
+                this._updateRange();
+                this._updateTranslator()
             },
-            _isContainerVisible: function() {
-                var that = this,
-                    canvas = that._canvas,
-                    enoughWidth = canvas.width - canvas.left - canvas.right > 0,
-                    enoughHeight = canvas.height - canvas.top - canvas.bottom > 0;
-                return canvas.height && canvas.width && enoughHeight && enoughWidth
+            _applySize: function() {
+                if (this._allOptions)
+                    this._allOptions.size = {
+                        width: this._canvas.width,
+                        height: this._canvas.height
+                    }
             },
-            _createWidgetElements: function() {
-                this._createRange();
-                this._createTranslator()
+            _cleanTranslators: function() {
+                this._translatorX = null;
+                this._translatorY = null
+            },
+            _setupResizeHandler: $.noop,
+            _resize: function() {
+                this._redrawWidgetElements();
+                this._prepareTooltipContainer();
+                this._drawn()
             },
             _prepareOptions: function(defaultOptions) {
                 var that = this,
@@ -134,34 +117,12 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
                     theme = options.theme;
                 return _extend(true, {}, defaultTheme, theme, options)
             },
-            _calculateCanvas: function() {
-                var that = this,
-                    canvas = {},
-                    sizeOptions = that.option('size') || {},
-                    marginOptions = that.option('margin') || {},
-                    defaultSize = that._defaultSize,
-                    container = that.element(),
-                    width = sizeOptions.width >= 0 ? _Number(sizeOptions.width) : container.width(),
-                    height = sizeOptions.height >= 0 ? _Number(sizeOptions.height) : container.height();
-                if (!width && _Number(sizeOptions.width) !== 0)
-                    width = defaultSize.width;
-                if (!height && _Number(sizeOptions.height) !== 0)
-                    height = defaultSize.height;
-                return {
-                        width: width,
-                        height: height,
-                        top: _Number(marginOptions.top) || defaultSize.top,
-                        bottom: _Number(marginOptions.bottom) || defaultSize.bottom,
-                        left: _Number(marginOptions.left) || defaultSize.left,
-                        right: _Number(marginOptions.right) || defaultSize.right
-                    }
-            },
             _createTooltipGroups: function() {
                 var that = this,
                     renderer,
                     root,
                     widgetClass = that._widgetClass;
-                that._tooltipRenderer = renderer = new that._rendererType({
+                that._tooltipRenderer = renderer = new DX.viz.renderers.Renderer({
                     width: 1,
                     height: 1,
                     cssClass: widgetClass + ' ' + widgetClass + '-tooltip',
@@ -212,20 +173,16 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
             _disposeTooltipEvents: function() {
                 clearTimeout(this._showTooltipTimeout);
                 clearTimeout(this._hideTooltipTimeout);
-                this._showTooltipTimeout = this._showTooltipTimeout = null;
+                this._showTooltipTimeout = this._hideTooltipTimeout = null;
                 $(this._tooltipTracker.element).off();
                 this._disposeCallbacks()
             },
-            _drawContainer: function() {
-                this._renderer.draw(this.element()[0])
-            },
-            _createTranslator: function() {
+            _updateTranslator: function() {
                 this._translatorX = CoreFactory.createTranslator2D(this._ranges.arg, this._canvas, {direction: "horizontal"});
                 this._translatorY = CoreFactory.createTranslator2D(this._ranges.val, this._canvas)
             },
             _prepareTooltipOptions: function() {
                 var that = this,
-                    canvas = that._canvas,
                     tooltipOpt = that._allOptions.tooltip,
                     size = that._getTooltipSize(true),
                     defaultOptions = {
@@ -269,7 +226,14 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
             },
             _createTooltip: function() {
                 var that = this;
-                that._tooltip = CoreFactory.createTooltip(that._prepareTooltipOptions(), that._tooltipGroup, that._tooltipRenderer);
+                that._prepareTooltipOptions();
+                that._tooltip = new DX.viz.core.Tooltip({
+                    renderer: that._tooltipRenderer,
+                    group: that._tooltipGroup,
+                    _justify: that._tooltipOptions.options._justify,
+                    eventTrigger: that._eventTrigger
+                });
+                that._tooltip.update(that._tooltipOptions.options);
                 if (that._isTooltipVisible()) {
                     that._tooltip.show();
                     that._updateTooltipSizeToWide();
@@ -339,7 +303,6 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
             _checkTooltipSize: function() {
                 var that = this,
                     tooltip = that._tooltip,
-                    options = that._tooltipOptions.options,
                     tooltipBBox = tooltip.getBBox(),
                     getWide = that._allOptions.tooltip.allowContainerResizing,
                     leftDelta = -tooltipBBox.x,
@@ -397,13 +360,17 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
                         return
                 }
                 this._updateTooltipSizeToWide();
-                this._tooltip.show()
+                this._tooltip.show({})
             },
             _hideTooltip: function() {
                 this._updateTooltipSizeToNormal();
-                this._tooltip.hide()
+                this._tooltip.hide({})
             },
-            showLoadingIndicator: $.noop
+            _initLoadingIndicator: $.noop,
+            _disposeLoadingIndicator: $.noop,
+            _handleLoadingIndicatorOptionChanged: $.noop,
+            showLoadingIndicator: $.noop,
+            hideLoadingIndicator: $.noop
         });
         var menuEvents = {
                 'contextmenu.sparkline-tooltip': function(event) {
@@ -496,7 +463,7 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
         }
     })(jQuery, DevExpress);
     /*! Module viz-sparklines, file sparkline.js */
-    (function($, DX) {
+    (function($, DX, undefined) {
         var viz = DX.viz,
             charts = viz.charts,
             core = viz.core,
@@ -532,7 +499,6 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
                 winloss: true
             },
             _map = $.map,
-            _extend = $.extend,
             _abs = Math.abs,
             _round = Math.round,
             _isFinite = isFinite,
@@ -549,16 +515,21 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
                 top: DEFAULT_VERTICAL_MARGIN,
                 bottom: DEFAULT_VERTICAL_MARGIN
             },
-            _init: function() {
+            _initCore: function() {
                 this.callBase();
-                this._refreshDataSource()
+                this._refreshDataSource();
+                this._createSeries()
             },
             _dataSourceChangedHandler: function() {
                 if (this._initialized) {
                     this._clean();
-                    this._createWidgetElements();
+                    this._updateWidgetElements();
                     this._drawWidgetElements()
                 }
+            },
+            _updateWidgetElements: function() {
+                this._updateSeries();
+                this.callBase()
             },
             _dataSourceOptions: function() {
                 return {
@@ -567,7 +538,7 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
                     }
             },
             _redrawWidgetElements: function() {
-                this._createTranslator();
+                this._updateTranslator();
                 this._correctPoints();
                 this._series.draw({
                     x: this._translatorX,
@@ -576,8 +547,11 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
                 this._seriesGroup.append(this._renderer.root)
             },
             _disposeWidgetElements: function() {
-                delete this._seriesGroup;
-                delete this._seriesLabelGroup
+                var that = this;
+                delete that._seriesGroup;
+                delete that._seriesLabelGroup;
+                that._series && that._series.dispose();
+                that._series = null
             },
             _cleanWidgetElements: function() {
                 this._seriesGroup.remove();
@@ -585,15 +559,11 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
                 this._seriesGroup.clear();
                 this._seriesLabelGroup.clear()
             },
-            _createWidgetElements: function() {
-                this._createSeries();
-                this.callBase()
-            },
             _drawWidgetElements: function() {
-                var partialContentReady = this._getPartialContentReady();
-                if (this._dataSource && this._dataSource.isLoaded())
-                    this._drawSeries(partialContentReady);
-                partialContentReady()
+                if (this._isDataSourceReady()) {
+                    this._drawSeries();
+                    this._drawn()
+                }
             },
             _prepareOptions: function() {
                 this._allOptions = this.callBase(DEFAULT_OPTIONS);
@@ -606,26 +576,41 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
                 this._seriesLabelGroup = this._renderer.g().attr({"class": "dxsl-series-labels"})
             },
             _createSeries: function() {
+                this._series = core.CoreFactory.createSeries({
+                    renderer: this._renderer,
+                    seriesGroup: this._seriesGroup,
+                    labelsGroup: this._seriesLabelGroup
+                }, {
+                    widgetType: "chart",
+                    type: "line"
+                })
+            },
+            getSeriesOptions: function() {
+                return this._series.getOptions()
+            },
+            _updateSeries: function() {
                 var that = this,
                     groupSeries,
-                    dataValidator;
+                    dataValidator,
+                    seriesOptions;
                 that._prepareDataSource();
-                that._prepareSeriesOptions();
-                that._series = core.CoreFactory.createSeries({
-                    renderer: that._renderer,
-                    seriesGroup: that._seriesGroup,
-                    labelsGroup: that._seriesLabelGroup
-                }, that._seriesOptions);
+                seriesOptions = that._prepareSeriesOptions();
+                that._series.updateOptions(seriesOptions);
                 groupSeries = [[that._series]];
-                groupSeries.argumentOptions = {type: that._seriesOptions.type === "winloss" || that._seriesOptions.type === "bar" ? "discrete" : undefined};
-                dataValidator = charts.factory.createDataValidator(that._simpleDataSource, groupSeries, that._incidentOccured, {
+                groupSeries.argumentOptions = {type: seriesOptions.type === "bar" ? "discrete" : undefined};
+                dataValidator = core.CoreFactory.createDataValidator(that._simpleDataSource, groupSeries, that._incidentOccured, {
                     checkTypeForAllData: false,
                     convertToAxisDataType: true,
                     sortingMethod: true
                 });
                 that._simpleDataSource = dataValidator.validate();
-                that._series._options.customizePoint = that._getCustomizeFunction();
                 that._series.updateData(that._simpleDataSource)
+            },
+            _optionChanged: function(args) {
+                if (args.name === 'dataSource' && this._allOptions)
+                    this._refreshDataSource();
+                else
+                    this.callBase.apply(this, arguments)
             },
             _parseNumericDataSource: function(data, argField, valField) {
                 var ignoreEmptyPoints = this.option("ignoreEmptyPoints");
@@ -679,40 +664,35 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
             _prepareSeriesOptions: function() {
                 var that = this,
                     options = that._allOptions,
-                    defaultPointOptions = {
-                        border: {},
-                        hoverStyle: {border: {}},
-                        selectionStyle: {border: {}}
-                    },
-                    customPointOptions = {
-                        size: options.pointSize,
-                        symbol: options.pointSymbol,
-                        border: {
-                            visible: true,
-                            width: 2
+                    type = options.type === "winloss" ? "bar" : options.type;
+                return {
+                        visible: true,
+                        argumentField: options.argumentField,
+                        valueField: options.valueField,
+                        color: options.lineColor,
+                        width: options.lineWidth,
+                        widgetType: "chart",
+                        type: type,
+                        opacity: type.indexOf("area") !== -1 ? that._allOptions.areaOpacity : undefined,
+                        customizePoint: that._getCustomizeFunction(),
+                        point: {
+                            size: options.pointSize,
+                            symbol: options.pointSymbol,
+                            border: {
+                                visible: true,
+                                width: 2
+                            },
+                            color: options.pointColor,
+                            visible: false,
+                            hoverStyle: {border: {}},
+                            selectionStyle: {border: {}}
                         },
-                        color: options.pointColor
-                    };
-                that._seriesOptions = {
-                    visible: true,
-                    argumentField: options.argumentField,
-                    valueField: options.valueField,
-                    color: options.lineColor,
-                    width: options.lineWidth,
-                    widgetType: "chart"
-                };
-                that._seriesOptions.border = {
-                    color: that._seriesOptions.color,
-                    width: that._seriesOptions.width,
-                    visible: true
-                };
-                that._seriesOptions.type = options.type === "winloss" ? "bar" : options.type;
-                if (options.type === "winloss" || options.type === "bar")
-                    that._seriesOptions.border.visible = false;
-                if (~~options.type.indexOf("area") !== -1)
-                    that._seriesOptions.opacity = that._allOptions.areaOpacity;
-                that._seriesOptions.point = _extend(defaultPointOptions, customPointOptions);
-                that._seriesOptions.point.visible = false
+                        border: {
+                            color: options.lineColor,
+                            width: options.lineWidth,
+                            visible: type !== "bar"
+                        }
+                    }
             },
             _createBarCustomizeFunction: function(pointIndexes) {
                 var that = this,
@@ -813,7 +793,7 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
                         maxIndex: maxIndex
                     }
             },
-            _createRange: function() {
+            _updateRange: function() {
                 var that = this,
                     series = that._series,
                     isBarType = series.type === "bar",
@@ -870,9 +850,9 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
                         })
                 }
             },
-            _drawSeries: function(partialContentReady) {
+            _drawSeries: function() {
                 var that = this;
-                if (that._dataIsValid()) {
+                if (that._simpleDataSource.length !== 0) {
                     that._correctPoints();
                     that._series.draw({
                         x: that._translatorX,
@@ -881,13 +861,6 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
                     that._seriesGroup.append(that._renderer.root);
                     that._prepareTooltipContainer()
                 }
-                partialContentReady()
-            },
-            _dataIsValid: function() {
-                return this._simpleDataSource.length !== 0
-            },
-            _getAnimatedElementsCount: function() {
-                return this._dataIsValid() || this._dataSource && this._dataSource.isLoading() ? 1 : 0
             },
             _isTooltipVisible: function() {
                 return this.callBase() && this._dataSource.length !== 0
@@ -929,9 +902,8 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
         }).include(DX.ui.DataHelperMixin))
     })(jQuery, DevExpress);
     /*! Module viz-sparklines, file bullet.js */
-    (function($, DX) {
-        var charts = DX.viz.charts,
-            TARGET_MIN_Y = 0.02,
+    (function($, DX, undefined) {
+        var TARGET_MIN_Y = 0.02,
             TARGET_MAX_Y = 0.98,
             BAR_VALUE_MIN_Y = 0.1,
             BAR_VALUE_MAX_Y = 0.9,
@@ -945,7 +917,6 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
                 size: {},
                 margin: {}
             },
-            _String = String,
             _Number = Number,
             _round = Math.round,
             _isFinite = isFinite;
@@ -966,7 +937,7 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
                 delete this._barValuePath
             },
             _redrawWidgetElements: function() {
-                this._createTranslator();
+                this._updateTranslator();
                 this._drawBarValue();
                 this._drawTarget();
                 this._drawZeroLevel()
@@ -978,7 +949,7 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
             },
             _drawWidgetElements: function() {
                 this._drawBullet();
-                this._getPartialContentReady()()
+                this._drawn()
             },
             _createHtmlElements: function() {
                 var renderer = this._renderer;
@@ -1025,7 +996,7 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
                     that._allOptions.inverted = true
                 }
             },
-            _createRange: function() {
+            _updateRange: function() {
                 var that = this,
                     options = that._allOptions;
                 that._ranges = {
@@ -1043,9 +1014,6 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
                         dataType: "numeric"
                     }
                 }
-            },
-            _getAnimatedElementsCount: function() {
-                return 0
             },
             _drawBullet: function() {
                 var that = this,
