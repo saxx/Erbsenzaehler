@@ -68,6 +68,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Erbsenzaehler.Common\Erbsenzaehler.Common.csproj">
+      <Project>{9edcd70d-691c-4dd4-98b1-ece7cd293fcf}</Project>
+      <Name>Erbsenzaehler.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Erbsenzaehler\Erbsenzaehler.csproj">
       <Project>{a93272d4-f0ed-4fd3-bff9-b7762d0e458b}</Project>
       <Name>Erbsenzaehler</Name>

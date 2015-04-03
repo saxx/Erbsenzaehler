@@ -15,11 +15,7 @@ namespace Erbsenzaehler.AutoImporter.Recipies
 
             if (recipe != null)
             {
-                if (configuration.Program != null)
-                {
-                    recipe.SaveScreenshots = configuration.Program.SaveScreenshots;
-                }
-
+                recipe.SaveScreenshots = configuration.SaveScreenshots;
                 return recipe;
             }
 

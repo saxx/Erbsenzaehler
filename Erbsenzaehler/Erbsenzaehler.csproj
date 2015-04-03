@@ -45,8 +45,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="CsvHelper">
-      <HintPath>..\packages\CsvHelper.2.10.0\lib\net40-client\CsvHelper.dll</HintPath>
+    <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.2.11.1.1\lib\net40-client\CsvHelper.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -215,55 +216,10 @@
     <Compile Include="Controllers\ManageUserController.cs" />
     <Compile Include="Controllers\HistoricalReportsController.cs" />
     <Compile Include="Controllers\ManageRulesController.cs" />
-    <Compile Include="ExtensionMethods\StringExtensionMethods.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Importer\Converters\InvariantDateConverter.cs" />
-    <Compile Include="Importer\Converters\GermanDateConverter.cs" />
-    <Compile Include="Importer\Converters\InvariantAmountConverter.cs" />
-    <Compile Include="Importer\Converters\GermanAmountConverter.cs" />
-    <Compile Include="Importer\Converters\TextConverter.cs" />
-    <Compile Include="Importer\ElbaCsvImporter.cs" />
-    <Compile Include="Importer\ElbaTsvImporter.cs" />
-    <Compile Include="Migrations\201502171454295_Initial.cs" />
-    <Compile Include="Migrations\201502171454295_Initial.Designer.cs">
-      <DependentUpon>201502171454295_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201502181433402_EditableAmounts.cs" />
-    <Compile Include="Migrations\201502181433402_EditableAmounts.Designer.cs">
-      <DependentUpon>201502181433402_EditableAmounts.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201503030454435_Budgets.cs" />
-    <Compile Include="Migrations\201503030454435_Budgets.Designer.cs">
-      <DependentUpon>201503030454435_Budgets.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201503181225446_EditableTexts.cs" />
-    <Compile Include="Migrations\201503181225446_EditableTexts.Designer.cs">
-      <DependentUpon>201503181225446_EditableTexts.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\Account.cs" />
-    <Compile Include="Models\Client.cs" />
-    <Compile Include="Models\Db.cs" />
-    <Compile Include="Models\Line.cs" />
-    <Compile Include="Importer\ImporterBase.cs" />
-    <Compile Include="Importer\EasybankImporter.cs" />
-    <Compile Include="Importer\ImporterType.cs" />
-    <Compile Include="Importer\ImporterFactory.cs" />
-    <Compile Include="Importer\TsvImporter.cs" />
-    <Compile Include="Models\Budget.cs" />
-    <Compile Include="Models\Month.cs" />
-    <Compile Include="Models\Rule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reporting\BudgetCalculator.cs" />
-    <Compile Include="Reporting\Constants.cs" />
-    <Compile Include="Reporting\OverviewCalculator.cs" />
-    <Compile Include="Reporting\SumCalculator.cs" />
-    <Compile Include="Rules\RulesApplierResult.cs" />
-    <Compile Include="Rules\RulesImporter.cs" />
-    <Compile Include="Rules\RulesImporterResult.cs" />
-    <Compile Include="Rules\RulesApplier.cs" />
     <Compile Include="ViewModels\Api\ImportResultViewModel.cs" />
     <Compile Include="ViewModels\Api\ImportViewModel.cs" />
     <Compile Include="ViewModels\ManageBudgets\IndexViewModel.cs" />
@@ -275,7 +231,6 @@
     <Compile Include="ViewModels\Today\IndexViewModel.cs" />
     <Compile Include="ViewModels\Rules\UploadRulesViewModel.cs" />
     <Compile Include="ViewModels\User\AccountViewModels.cs" />
-    <Compile Include="Models\User.cs" />
     <Compile Include="ViewModels\Import\IndexViewModel.cs" />
     <Compile Include="ViewModels\LinesEditor\JsonViewModel.cs" />
     <Compile Include="ViewModels\ManageAccounts\IndexViewModel.cs" />
@@ -777,20 +732,11 @@
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201502171454295_Initial.resx">
-      <DependentUpon>201502171454295_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201502181433402_EditableAmounts.resx">
-      <DependentUpon>201502181433402_EditableAmounts.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201503030454435_Budgets.resx">
-      <DependentUpon>201503030454435_Budgets.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201503181225446_EditableTexts.resx">
-      <DependentUpon>201503181225446_EditableTexts.cs</DependentUpon>
-    </EmbeddedResource>
+    <ProjectReference Include="..\Erbsenzaehler.Common\Erbsenzaehler.Common.csproj">
+      <Project>{9edcd70d-691c-4dd4-98b1-ece7cd293fcf}</Project>
+      <Name>Erbsenzaehler.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
