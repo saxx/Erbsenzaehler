@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Erbsenzaehler.SummaryMail;
 using Erbsenzaehler.ViewModels.ManageUser;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -66,6 +67,20 @@ namespace Erbsenzaehler.Controllers
             currentUser = await GetCurrentUser();
             return View(model.Fill(currentUser));
         }
+
+
+        public async Task<ActionResult> SummaryMailPreview()
+        {
+            var currentUser = await GetCurrentUser();
+
+            var summaryMailRenderer = new SummaryMailRenderer();
+            var summaryMail = summaryMailRenderer.Render();
+            return View(new SummaryMailPreviewViewModel
+            {
+                Html = summaryMail
+            });
+        }
+
         #endregion
 
         #region ChangePassword
