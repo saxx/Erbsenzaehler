@@ -230,6 +230,7 @@
     <Compile Include="ViewModels\ManageUsers\IndexViewModel.cs" />
     <Compile Include="ViewModels\HistoricalReports\AmountsViewModel.cs" />
     <Compile Include="ViewModels\HistoricalReports\BalanceViewModel.cs" />
+    <Compile Include="ViewModels\ManageUser\IndexViewModel.cs" />
     <Compile Include="ViewModels\Today\IndexViewModel.cs" />
     <Compile Include="ViewModels\Rules\UploadRulesViewModel.cs" />
     <Compile Include="ViewModels\User\AccountViewModels.cs" />
@@ -733,6 +734,7 @@
     <Content Include="Views\Shared\_LinesEditor.cshtml" />
     <Content Include="Views\Shared\_NoLinesWarning.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\ManageUser\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

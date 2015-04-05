@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Data.Entity;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Erbsenzaehler.ViewModels.ManageUser;
@@ -10,6 +11,7 @@ namespace Erbsenzaehler.Controllers
     [Authorize]
     public class ManageUserController : ControllerBase
     {
+        #region Constructor
         private ApplicationSignInManager _signInManager;
 
 
@@ -35,8 +37,38 @@ namespace Erbsenzaehler.Controllers
                 _signInManager = value;
             }
         }
+        #endregion
+
+        #region Index
+        public async Task<ActionResult> Index()
+        {
+            var viewModel = new IndexViewModel().Fill(await GetCurrentUser());
+            return View(viewModel);
+        }
 
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Index(IndexViewModel model)
+        {
+            var currentUser = await GetCurrentUser();
+            if (ModelState.IsValid)
+            {
+                var currentUserClosure = currentUser;
+                var dbUser = await Db.Users.FirstOrDefaultAsync(x => x.Id == currentUserClosure.Id);
+
+                dbUser.Email = model.Email;
+                dbUser.SummaryMailInterval = model.SummaryMailInterval;
+                await Db.SaveChangesAsync();
+            }
+
+            // reload user
+            currentUser = await GetCurrentUser();
+            return View(model.Fill(currentUser));
+        }
+        #endregion
+
+        #region ChangePassword
         public ActionResult ChangePassword()
         {
             return View(new ChangePasswordViewModel());
@@ -77,5 +109,6 @@ namespace Erbsenzaehler.Controllers
                 ModelState.AddModelError("", error);
             }
         }
+        #endregion
     }
 }
