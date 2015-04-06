@@ -122,6 +122,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+    <None Include="Properties\webjob-publish-settings.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Erbsenzaehler.Common\Erbsenzaehler.Common.csproj">
