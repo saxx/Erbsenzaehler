@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Erbsenzaehler.Models;
 using Erbsenzaehler.SummaryMail;
 using Xunit;
@@ -19,9 +21,21 @@ namespace Erbsenzaehler.Tests.SummaryMail
         [InlineData(SummaryMailIntervalOptions.Daily)]
         [InlineData(SummaryMailIntervalOptions.Weekly)]
         [InlineData(SummaryMailIntervalOptions.Monthly)]
-        public void Always_Return_True_When_No_Previous_Mail(SummaryMailIntervalOptions setting)
+        public void Always_Return_True_When_Previous_Date_Is_Null(SummaryMailIntervalOptions setting)
         {
             Assert.True(SummaryMailIntervalService.ShouldReceiveSummaryMail(setting, null));
+        }
+
+
+        [Theory]
+        [InlineData(SummaryMailIntervalOptions.Daily)]
+        [InlineData(SummaryMailIntervalOptions.Weekly)]
+        [InlineData(SummaryMailIntervalOptions.Monthly)]
+        public void Always_Return_True_Previous_Date_Is_Default(SummaryMailIntervalOptions setting)
+        {
+            // ReSharper disable once CollectionNeverUpdated.Local
+            var l = new List<DateTime>();
+            Assert.True(SummaryMailIntervalService.ShouldReceiveSummaryMail(setting, l.FirstOrDefault()));
         }
 
 

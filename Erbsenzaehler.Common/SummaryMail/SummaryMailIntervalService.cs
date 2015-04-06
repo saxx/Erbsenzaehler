@@ -12,7 +12,7 @@ namespace Erbsenzaehler.SummaryMail
                 return false;
             }
 
-            if (!lastMailDate.HasValue)
+            if (!lastMailDate.HasValue || lastMailDate == default(DateTime))
             {
                 return true;
             }
