@@ -1,7 +1,9 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Erbsenzaehler.Reporting;
 using Erbsenzaehler.SummaryMail;
 using Erbsenzaehler.ViewModels.ManageUser;
 using Microsoft.AspNet.Identity;
@@ -73,8 +75,16 @@ namespace Erbsenzaehler.Controllers
         {
             var currentUser = await GetCurrentUser();
 
-            var summaryMailRenderer = new SummaryMailRenderer();
-            var summaryMail = summaryMailRenderer.Render();
+            var currentUrl = new Uri(
+                Request.Url.Scheme + "://" +
+                Request.Url.Host +
+                (Request.Url.IsDefaultPort ? "" : ":" + Request.Url.Port));
+
+            var budgetCalculator = new BudgetCalculator(Db, await GetCurrentClient());
+            var sumCalculator = new SumCalculator(Db, await GetCurrentClient());
+
+            var summaryMailRenderer = new SummaryMailRenderer(Db, currentUrl, budgetCalculator, sumCalculator);
+            var summaryMail = await summaryMailRenderer.Render(currentUser);
             return View(new SummaryMailPreviewViewModel
             {
                 Html = summaryMail

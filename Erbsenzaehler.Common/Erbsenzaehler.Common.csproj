@@ -104,9 +104,9 @@
     <Compile Include="Migrations\201503181225446_EditableTexts.Designer.cs">
       <DependentUpon>201503181225446_EditableTexts.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201504051859581_SummaryMails.cs" />
-    <Compile Include="Migrations\201504051859581_SummaryMails.Designer.cs">
-      <DependentUpon>201504051859581_SummaryMails.cs</DependentUpon>
+    <Compile Include="Migrations\201504061155356_SummaryMails.cs" />
+    <Compile Include="Migrations\201504061155356_SummaryMails.Designer.cs">
+      <DependentUpon>201504061155356_SummaryMails.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
@@ -156,8 +156,8 @@
     <EmbeddedResource Include="Migrations\201503181225446_EditableTexts.resx">
       <DependentUpon>201503181225446_EditableTexts.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201504051859581_SummaryMails.resx">
-      <DependentUpon>201504051859581_SummaryMails.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201504061155356_SummaryMails.resx">
+      <DependentUpon>201504061155356_SummaryMails.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

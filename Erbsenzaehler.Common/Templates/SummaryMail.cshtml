@@ -1,6 +1,129 @@
-﻿@model Erbsenzaehler.SummaryMail.SummaryMailModel
+﻿@using System;
+@model Erbsenzaehler.SummaryMail.SummaryMailModel
 
 
-<p>
-    Das ist <b>MEIN</b> test : @Model.Test...
-</p>
+<div style="font-family: sans-serif; font-size: 12px;">
+
+    <p style="font-size: 20px; font-weight: bold;">
+        Erbsenzähler-Zusammenfassung vom @Model.CurrentDate
+    </p>
+
+    <p>
+        Hier ist Ihre aktuelle Zusammenfassung aus dem Erbsenzähler.
+        Besuchen Sie <a href="@Model.ErbsenzaehlerUrl">@Model.ErbsenzaehlerUrl</a> für Details.
+    </p>
+
+    <p style="font-size: 14px; font-weight: bold; margin-top: 20px; margin-bottom: 0;">
+        Budgets
+    </p>
+
+    @if (Model.CurrentMonthBudget.Any())
+    {
+        <table>
+            <tr>
+                <th style="padding: 3px;">Kategorie</th>
+                <th style="padding: 3px; color: #999;">@Model.LastMonth</th>
+                <th style="padding: 3px;">@Model.CurrentMonth</th>
+            </tr>
+
+            @foreach (var category in Model.CurrentMonthBudget.Select(x => x.Category).ToList())
+                {
+                <tr>
+                    <td style="padding: 3px;">
+                        <span style="background-color: #5bc0de; border-radius: 0.25em; color: #fff; font-size: 75%; font-weight: bold; line-height: 1; padding: 0.2em 0.6em 0.3em; text-align: center; vertical-align: baseline; white-space: nowrap;">
+                            @category
+                        </span>
+                    </td>
+                    <td style="padding: 3px; color: #999; text-align: right;">@Model.LastMonthBudget.First(x => x.Category == category).Percentage %</td>
+                    <td style="padding: 3px; text-align: right;">@Model.CurrentMonthBudget.First(x => x.Category == category).Percentage %</td>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <p style="font-style: italic;">Sie haben keine Budgets definiert.</p>
+    }
+
+    <p style="font-size: 14px; font-weight: bold; margin-top: 20px;margin-bottom: 0;">
+        Einnahmen und Ausgaben
+    </p>
+
+    @if (Model.SpendingCategories.Any())
+    {
+        <table>
+            <tr>
+                <th style="padding: 3px;">Kategorie</th>
+                <th style="padding: 3px; color: #999;">@Model.LastMonth</th>
+                <th style="padding: 3px;">@Model.CurrentMonth</th>
+            </tr>
+
+            @foreach (var category in Model.SpendingCategories)
+                {
+                <tr>
+                    <td style="padding: 3px;">
+                        <span style="background-color: #5bc0de; border-radius: 0.25em; color: #fff; font-size: 75%; font-weight: bold; line-height: 1; padding: 0.2em 0.6em 0.3em; text-align: center; vertical-align: baseline; white-space: nowrap;">
+                            @category
+                        </span>
+                    </td>
+                    <td style="padding: 3px; color: #999; text-align: right;">
+                        @(Model.LastMonthSpendings.ContainsKey(category) ? Model.LastMonthSpendings[category].ToString("N2") : "0") €
+                    </td>
+                    <td style="padding: 3px; text-align: right;">
+                        @(Model.CurrentMonthSpendings.ContainsKey(category) ? Model.CurrentMonthSpendings[category].ToString("N2") : "0") €
+                    </td>
+                </tr>
+            }
+        </table>
+
+    }
+    else
+    {
+        <p style="font-style: italic;">Es sind keine Ein- oder Ausgaben im Erbsenzähler vermerkt.</p>
+    }
+
+    <p style="font-size: 14px; font-weight: bold; margin-top: 20px;margin-bottom: 0;">
+        Neueste Buchungszeilen im Detail
+    </p>
+
+    @if (Model.Lines.Any())
+    {
+        <table style="width: 100%;">
+            <tr>
+                <th style="padding: 3px;">Kategorie</th>
+                <th style="padding: 3px;">Datum</th>
+                <th style="padding: 3px;">Text</th>
+                <th style="padding: 3px;">Betrag</th>
+            </tr>
+
+            @foreach (var line in Model.Lines)
+                {
+                <tr>
+                    <td style="padding: 3px;">
+                        @if (!string.IsNullOrEmpty(line.Category))
+                        {
+                            <span style="background-color: #5bc0de; border-radius: 0.25em; color: #fff; font-size: 75%; font-weight: bold; line-height: 1; padding: 0.2em 0.6em 0.3em; text-align: center; vertical-align: baseline; white-space: nowrap;">
+                                @line.Category
+                            </span>
+                        }
+                    </td>
+                    <td style="padding: 3px;">@line.Date</td>
+                    <td style="padding: 3px;">@line.Text</td>
+                    <td style="padding: 3px; text-align: right;">@line.Amount</td>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <p style="font-style: italic;">Es sind keine aktuellen Buchungszeilen im Erbsenzähler vermerkt.</p>
+    }
+
+    <hr />
+
+    <p style="font-size: 10px;">
+        Sie erhalten diese E-Mail, weil Sie den Erbsenzähler benutzen und die Funktion für die automatische
+        E-Mail-Zusammenfassung aktiviert haben. Sie können dies jederzeit über Ihre Benutzereinstellungen
+        im Erbsenzähler deaktivieren.
+    </p>
+</div>
