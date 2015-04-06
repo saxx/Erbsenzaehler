@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace Erbsenzaehler.SummaryMail
 {
-    class SummaryMailSender
+    public class SummaryMailSender
     {
+        private readonly SummaryMailRenderer _renderer;
+
+
+        public SummaryMailSender(SummaryMailRenderer renderer)
+        {
+            _renderer = renderer;
+        }
     }
 }
