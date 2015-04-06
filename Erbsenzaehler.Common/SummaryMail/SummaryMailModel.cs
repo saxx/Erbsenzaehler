@@ -10,7 +10,6 @@ namespace Erbsenzaehler.SummaryMail
 {
     public class SummaryMailModel
     {
-
         public async Task<SummaryMailModel> Fill(
             Db db,
             User currentUser,
@@ -53,6 +52,7 @@ namespace Erbsenzaehler.SummaryMail
             return this;
         }
 
+
         public IEnumerable<Line> Lines { get; set; }
         public Uri ErbsenzaehlerUrl { get; set; }
         public string CurrentDate { get; set; }
@@ -75,6 +75,7 @@ namespace Erbsenzaehler.SummaryMail
                 Amount = (line.Amount ?? line.OriginalAmount).ToString("N2");
                 Category = line.Category ?? "";
             }
+
 
             public string Date { get; set; }
             public string Text { get; set; }

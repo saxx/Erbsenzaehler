@@ -14,7 +14,7 @@ namespace Erbsenzaehler.SummaryMails.WebJob
         {
             try
             {
-                Log.Trace("Erbsenzähler.SummaryMails.WebJob v" + typeof(Program).Assembly.GetName().Version + " starting up ...");
+                Log.Trace("Erbsenzähler.SummaryMails.WebJob v" + typeof (Program).Assembly.GetName().Version + " starting up ...");
                 if (!string.IsNullOrEmpty(Config.OneTrueErrorAppKey) && !string.IsNullOrEmpty(Config.OneTrueErrorAppSecret))
                 {
                     OneTrue.Configuration.Credentials(Config.OneTrueErrorAppKey, Config.OneTrueErrorAppSecret);

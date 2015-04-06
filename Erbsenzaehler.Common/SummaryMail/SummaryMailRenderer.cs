@@ -11,6 +11,7 @@ namespace Erbsenzaehler.SummaryMail
     public class SummaryMailRenderer
     {
         #region Constructor
+
         private readonly Uri _erbsenzaehlerUri;
         private readonly Db _db;
         private readonly BudgetCalculator _budgetCalculator;
@@ -28,8 +29,8 @@ namespace Erbsenzaehler.SummaryMail
             _db = db;
             _erbsenzaehlerUri = erbsenzaehlerUri;
         }
-        #endregion
 
+        #endregion
 
         public async Task<string> Render(User user)
         {

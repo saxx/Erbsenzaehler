@@ -5,7 +5,6 @@ namespace Erbsenzaehler.ViewModels.ManageUser
 {
     public class IndexViewModel
     {
-
         public IndexViewModel Fill(Models.User user)
         {
             UserName = user.UserName;
@@ -14,6 +13,7 @@ namespace Erbsenzaehler.ViewModels.ManageUser
 
             return this;
         }
+
 
         [Display(Name = "Your username")]
         public string UserName { get; set; }

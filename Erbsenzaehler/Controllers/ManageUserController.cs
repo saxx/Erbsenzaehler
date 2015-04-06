@@ -15,6 +15,7 @@ namespace Erbsenzaehler.Controllers
     public class ManageUserController : ControllerBase
     {
         #region Constructor
+
         private ApplicationSignInManager _signInManager;
 
 
@@ -40,9 +41,11 @@ namespace Erbsenzaehler.Controllers
                 _signInManager = value;
             }
         }
+
         #endregion
 
         #region Index
+
         public async Task<ActionResult> Index()
         {
             var viewModel = new IndexViewModel().Fill(await GetCurrentUser());
@@ -94,6 +97,7 @@ namespace Erbsenzaehler.Controllers
         #endregion
 
         #region ChangePassword
+
         public ActionResult ChangePassword()
         {
             return View(new ChangePasswordViewModel());
@@ -134,6 +138,7 @@ namespace Erbsenzaehler.Controllers
                 ModelState.AddModelError("", error);
             }
         }
+
         #endregion
     }
 }

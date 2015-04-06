@@ -1,5 +1,4 @@
-﻿@using System;
-@model Erbsenzaehler.SummaryMail.SummaryMailModel
+﻿@model Erbsenzaehler.SummaryMail.SummaryMailModel
 
 
 <div style="font-family: sans-serif; font-size: 12px;">
@@ -27,7 +26,7 @@
             </tr>
 
             @foreach (var category in Model.CurrentMonthBudget.Select(x => x.Category).ToList())
-                {
+            {
                 <tr>
                     <td style="padding: 3px;">
                         <span style="background-color: #5bc0de; border-radius: 0.25em; color: #fff; font-size: 75%; font-weight: bold; line-height: 1; padding: 0.2em 0.6em 0.3em; text-align: center; vertical-align: baseline; white-space: nowrap;">
@@ -45,7 +44,7 @@
         <p style="font-style: italic;">Sie haben keine Budgets definiert.</p>
     }
 
-    <p style="font-size: 14px; font-weight: bold; margin-top: 20px;margin-bottom: 0;">
+    <p style="font-size: 14px; font-weight: bold; margin-top: 20px; margin-bottom: 0;">
         Einnahmen und Ausgaben
     </p>
 
@@ -59,7 +58,7 @@
             </tr>
 
             @foreach (var category in Model.SpendingCategories)
-                {
+            {
                 <tr>
                     <td style="padding: 3px;">
                         <span style="background-color: #5bc0de; border-radius: 0.25em; color: #fff; font-size: 75%; font-weight: bold; line-height: 1; padding: 0.2em 0.6em 0.3em; text-align: center; vertical-align: baseline; white-space: nowrap;">
@@ -75,14 +74,13 @@
                 </tr>
             }
         </table>
-
     }
     else
     {
         <p style="font-style: italic;">Es sind keine Ein- oder Ausgaben im Erbsenzähler vermerkt.</p>
     }
 
-    <p style="font-size: 14px; font-weight: bold; margin-top: 20px;margin-bottom: 0;">
+    <p style="font-size: 14px; font-weight: bold; margin-top: 20px; margin-bottom: 0;">
         Neueste Buchungszeilen im Detail
     </p>
 
@@ -97,7 +95,7 @@
             </tr>
 
             @foreach (var line in Model.Lines)
-                {
+            {
                 <tr>
                     <td style="padding: 3px;">
                         @if (!string.IsNullOrEmpty(line.Category))
@@ -119,7 +117,7 @@
         <p style="font-style: italic;">Es sind keine aktuellen Buchungszeilen im Erbsenzähler vermerkt.</p>
     }
 
-    <hr />
+    <hr/>
 
     <p style="font-size: 10px;">
         Sie erhalten diese E-Mail, weil Sie den Erbsenzähler benutzen und die Funktion für die automatische
