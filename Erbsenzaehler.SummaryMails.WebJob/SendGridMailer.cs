@@ -7,12 +7,12 @@ namespace Erbsenzaehler.SummaryMails.WebJob
 {
     public class SendGridMailer : IMailer
     {
-        public void SendHtmlMail(string sender, string recipient, string subject, string htmlBody)
+        public void SendHtmlMail(string recipient, string subject, string htmlBody)
         {
             // build message
             var message = new SendGridMessage
             {
-                From = new MailAddress(sender),
+                From = new MailAddress(Config.SendGridSender),
                 Subject = subject,
                 Html = htmlBody
             };

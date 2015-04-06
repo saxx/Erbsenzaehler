@@ -1,13 +1,10 @@
 ﻿using System;
 using System.IO;
-using System.Reflection;
-using System.Security;
-using System.Security.Permissions;
-using System.Security.Policy;
 using System.Threading.Tasks;
 using Erbsenzaehler.Models;
 using Erbsenzaehler.Reporting;
-using RazorEngine;
+using RazorEngine.Configuration;
+using RazorEngine.Templating;
 
 namespace Erbsenzaehler.SummaryMail
 {
@@ -52,7 +49,12 @@ namespace Erbsenzaehler.SummaryMail
             var template = File.ReadAllText(templatePath);
 
 #pragma warning disable 618
-            var html = Razor.Parse(template, model, null, "SummaryMail");
+            var razorConfig = new TemplateServiceConfiguration
+            {
+                DisableTempFileLocking = true
+            };
+            var razorService = RazorEngineService.Create(razorConfig);
+            var html = razorService.RunCompile(template, "SummaryMail", typeof (SummaryMailModel), model);
 #pragma warning restore 618
 
             return html;
