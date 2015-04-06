@@ -128,6 +128,7 @@
     <Compile Include="Rules\RulesApplierResult.cs" />
     <Compile Include="Rules\RulesImporter.cs" />
     <Compile Include="Rules\RulesImporterResult.cs" />
+    <Compile Include="SummaryMail\IMailer.cs" />
     <Compile Include="SummaryMail\SummaryMailIntervalService.cs" />
     <Compile Include="SummaryMail\SummaryMailModel.cs" />
     <Compile Include="SummaryMail\SummaryMailRenderer.cs" />

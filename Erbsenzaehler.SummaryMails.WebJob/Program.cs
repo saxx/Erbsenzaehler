@@ -69,12 +69,13 @@ namespace Erbsenzaehler.SummaryMails.WebJob
         {
             Log.Trace("Rendering template and sending email to user '" + user.Email + "' ...");
 
-            var budgetCalculator = new BudgetCalculator(db, user.Client);
-            var sumCalculator = new SumCalculator(db, user.Client);
+            var budgetCalculator = new BudgetCalculator(db, client);
+            var sumCalculator = new SumCalculator(db, client);
             var renderer = new SummaryMailRenderer(db, new Uri(Config.ErbsenzaehlerUrl), budgetCalculator, sumCalculator);
-            var sender = new SummaryMailSender(renderer);
+            var mailer = new SendGridMailer();
+            var sender = new SummaryMailSender(renderer, mailer);
 
-            // TODO: Send the e-mail here
+            sender.RenderAndSend(user);
         }
 
 
