@@ -37,8 +37,8 @@ namespace Erbsenzaehler.ViewModels.LinesEditor
 
             if (!uniqueDates.Any())
             {
-                selectedYear = DateTime.Now.Year;
-                selectedMonth = DateTime.Now.Month;
+                selectedYear = DateTime.UtcNow.Year;
+                selectedMonth = DateTime.UtcNow.Month;
             }
             else if (selectedYear == null || selectedMonth == null)
             {

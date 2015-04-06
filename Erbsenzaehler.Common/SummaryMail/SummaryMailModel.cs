@@ -18,17 +18,17 @@ namespace Erbsenzaehler.SummaryMail
             BudgetCalculator budgetCalculator,
             SumCalculator sumCalculator)
         {
-            CurrentMonth = DateTime.Now.ToString("MMMM yyyy");
-            LastMonth = DateTime.Now.AddMonths(-1).ToString("MMMM yyyy");
-            CurrentDate = DateTime.Now.ToShortDateString();
+            CurrentMonth = DateTime.UtcNow.ToString("MMMM yyyy");
+            LastMonth = DateTime.UtcNow.AddMonths(-1).ToString("MMMM yyyy");
+            CurrentDate = DateTime.UtcNow.ToShortDateString();
             ErbsenzaehlerUrl = erbsenzaehlerUri;
 
             // date and time of last summary mail sent to the user
             var lastSummaryMailDate = db.SummaryMailLogs.ByUser(currentUser).Select(x => x.Date).DefaultIfEmpty().Max().Date;
             // if the last summary mail was long ago, just assume it was last month
-            if (lastSummaryMailDate < DateTime.Now.Date.AddMonths(-1))
+            if (lastSummaryMailDate < DateTime.UtcNow.Date.AddMonths(-1))
             {
-                lastSummaryMailDate = DateTime.Now.Date.AddMonths(-1);
+                lastSummaryMailDate = DateTime.UtcNow.Date.AddMonths(-1);
             }
 
             var linesQuery = await db.Lines

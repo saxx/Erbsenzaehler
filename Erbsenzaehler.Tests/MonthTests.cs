@@ -12,15 +12,15 @@ namespace Erbsenzaehler.Tests
         public void Empty_Constructor_Creates_Current_Month()
         {
             var m = new Month();
-            Assert.Equal(new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1), m.Date);
+            Assert.Equal(new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1), m.Date);
         }
 
 
         [Fact]
         public void Date_Constructor_Creates_Current_Month()
         {
-            var m = new Month(DateTime.Now);
-            Assert.Equal(new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1), m.Date);
+            var m = new Month(DateTime.UtcNow);
+            Assert.Equal(new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1), m.Date);
         }
 
 
@@ -50,7 +50,7 @@ namespace Erbsenzaehler.Tests
         public void Invalid_String_Constructor_Creates_Current_Month(string input)
         {
             var m = new Month(input);
-            Assert.Equal(new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1), m.Date);
+            Assert.Equal(new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1), m.Date);
         }
 
 
@@ -133,8 +133,8 @@ namespace Erbsenzaehler.Tests
         {
             var m = new Month();
 
-            var firstDayOfNextMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(1);
-            Assert.Equal((int) (firstDayOfNextMonth - DateTime.Now).TotalDays, m.NumberOfDaysLeft);
+            var firstDayOfNextMonth = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1).AddMonths(1);
+            Assert.Equal((int) (firstDayOfNextMonth - DateTime.UtcNow).TotalDays, m.NumberOfDaysLeft);
         }
 
         #endregion
@@ -183,7 +183,7 @@ namespace Erbsenzaehler.Tests
         [Fact]
         public void IsCurrentMonth_Returns_True_On_Current_Month()
         {
-            var m = new Month(DateTime.Now);
+            var m = new Month(DateTime.UtcNow);
             Assert.True(m.IsCurrentMonth);
         }
 
