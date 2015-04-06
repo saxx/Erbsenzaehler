@@ -12,7 +12,7 @@ namespace Erbsenzaehler.Models
 
         public Month()
         {
-            Date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            Date = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
         }
 
 
@@ -24,7 +24,7 @@ namespace Erbsenzaehler.Models
                 {
                     if (useCurrentAsFallback)
                     {
-                        Date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                        Date = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
                     }
                     else
                     {
@@ -44,7 +44,7 @@ namespace Erbsenzaehler.Models
             {
                 if (useCurrentAsFallback)
                 {
-                    Date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                    Date = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
                 }
                 else
                 {
@@ -63,7 +63,7 @@ namespace Erbsenzaehler.Models
         }
 
 
-        public bool IsCurrentMonth => Date.Year == DateTime.Now.Year && Date.Month == DateTime.Now.Month;
+        public bool IsCurrentMonth => Date.Year == DateTime.UtcNow.Year && Date.Month == DateTime.UtcNow.Month;
 
         public Month PreviousMonth => new Month(Date.AddMonths(-1).ToString("yyyy-MM"), false);
 
@@ -77,9 +77,9 @@ namespace Erbsenzaehler.Models
             {
                 if (IsCurrentMonth)
                 {
-                    return NumberOfDays - DateTime.Now.Day;
+                    return NumberOfDays - DateTime.UtcNow.Day;
                 }
-                if (DateTime.Now < Date)
+                if (DateTime.UtcNow < Date)
                 {
                     return NumberOfDays;
                 }

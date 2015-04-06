@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Configuration;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -27,7 +28,9 @@ namespace Erbsenzaehler
         {
             var ex = Server.GetLastError();
             if (ex is ThreadAbortException)
+            {
                 return;
+            }
 
             if (!Request.IsLocal)
             {
@@ -39,7 +42,7 @@ namespace Erbsenzaehler
         }
 
 
-        private string OneTrueErrorAppKey => System.Configuration.ConfigurationManager.AppSettings["OneTrueError.AppKey"] ?? "";
-        private string OneTrueErrorAppSecret => System.Configuration.ConfigurationManager.AppSettings["OneTrueError.AppSecret"] ?? "";
+        private string OneTrueErrorAppKey => ConfigurationManager.AppSettings["OneTrueError.AppKey"] ?? "";
+        private string OneTrueErrorAppSecret => ConfigurationManager.AppSettings["OneTrueError.AppSecret"] ?? "";
     }
 }

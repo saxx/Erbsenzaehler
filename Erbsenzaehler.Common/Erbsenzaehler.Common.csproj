@@ -54,9 +54,17 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="RazorEngine, Version=3.6.4.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
+      <HintPath>..\packages\RazorEngine.3.6.4\lib\net45\RazorEngine.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.0.0\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -96,6 +104,10 @@
     <Compile Include="Migrations\201503181225446_EditableTexts.Designer.cs">
       <DependentUpon>201503181225446_EditableTexts.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504061155356_SummaryMails.cs" />
+    <Compile Include="Migrations\201504061155356_SummaryMails.Designer.cs">
+      <DependentUpon>201504061155356_SummaryMails.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Budget.cs" />
@@ -104,6 +116,8 @@
     <Compile Include="Models\Line.cs" />
     <Compile Include="Models\Month.cs" />
     <Compile Include="Models\Rule.cs" />
+    <Compile Include="Models\SummaryMailIntervalOptions.cs" />
+    <Compile Include="Models\SummaryMailLog.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reporting\BudgetCalculator.cs" />
@@ -114,10 +128,22 @@
     <Compile Include="Rules\RulesApplierResult.cs" />
     <Compile Include="Rules\RulesImporter.cs" />
     <Compile Include="Rules\RulesImporterResult.cs" />
+    <Compile Include="SummaryMail\IMailer.cs" />
+    <Compile Include="SummaryMail\SummaryMailIntervalService.cs" />
+    <Compile Include="SummaryMail\SummaryMailModel.cs" />
+    <Compile Include="SummaryMail\SummaryMailRenderer.cs" />
+    <Compile Include="SummaryMail\SummaryMailSender.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Templates\SummaryMail.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201502171454295_Initial.resx">
@@ -131,6 +157,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201503181225446_EditableTexts.resx">
       <DependentUpon>201503181225446_EditableTexts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504061155356_SummaryMails.resx">
+      <DependentUpon>201504061155356_SummaryMails.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

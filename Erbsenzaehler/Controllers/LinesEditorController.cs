@@ -53,7 +53,7 @@ namespace Erbsenzaehler.Controllers
             var date = m.Date.AddMonths(1).AddDays(-1);
             if (m.IsCurrentMonth)
             {
-                date = DateTime.Now.Date;
+                date = DateTime.UtcNow.Date;
             }
 
             var line = new Line
@@ -62,7 +62,7 @@ namespace Erbsenzaehler.Controllers
                 AccountId = account.Id,
                 OriginalAmount = 0,
                 OriginalDate = date,
-                OriginalText = "Account statement added manually on " + DateTime.Now.ToShortDateString() + ".",
+                OriginalText = "Account statement added manually on " + DateTime.UtcNow.ToShortDateString() + ".",
                 LineAddedManually = true
             };
             Db.Lines.Add(line);

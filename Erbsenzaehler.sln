@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erbsenzaehler.Tests", "Erbs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erbsenzaehler.Common", "Erbsenzaehler.Common\Erbsenzaehler.Common.csproj", "{9EDCD70D-691C-4DD4-98B1-ECE7CD293FCF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erbsenzaehler.SummaryMails.WebJob", "Erbsenzaehler.SummaryMails.WebJob\Erbsenzaehler.SummaryMails.WebJob.csproj", "{8C1F9B90-D88F-4D3A-8FF9-7398ED352FA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{9EDCD70D-691C-4DD4-98B1-ECE7CD293FCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EDCD70D-691C-4DD4-98B1-ECE7CD293FCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EDCD70D-691C-4DD4-98B1-ECE7CD293FCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C1F9B90-D88F-4D3A-8FF9-7398ED352FA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C1F9B90-D88F-4D3A-8FF9-7398ED352FA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C1F9B90-D88F-4D3A-8FF9-7398ED352FA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C1F9B90-D88F-4D3A-8FF9-7398ED352FA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
