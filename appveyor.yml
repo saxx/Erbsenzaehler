@@ -24,6 +24,8 @@ assembly_info:
 artifacts:
 - path: Erbsenzaehler.AutoImporter\Bin\$(configuration)
   name: Erbsenzaehler.AutoImporter
+- path: Erbsenzaehler.SummaryMails.WebJob\Bin\$(configuration)
+  name: Erbsenzaehler.SummaryMails.WebJob  
 
 deploy:
 - provider: WebDeploy
