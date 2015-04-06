@@ -24,7 +24,7 @@ namespace Erbsenzaehler.SummaryMail
             var subject = "Erbsenzähler: Zusammenfassung vom " + DateTime.UtcNow.ToShortDateString();
             var html = _renderer.Render(user).Result;
 
-            _mailer.SendHtmlMail("zusammenfassung@erbsenzaehler.azurewebsites.net", user.Email, subject, html);
+            _mailer.SendHtmlMail(user.Email, subject, html);
         }
     }
 }
