@@ -52,6 +52,7 @@ namespace Erbsenzaehler.SummaryMail
 #pragma warning disable 618
             var razorConfig = new TemplateServiceConfiguration
             {
+                CachingProvider = new DefaultCachingProvider(t => { }),
                 DisableTempFileLocking = true
             };
             var razorService = RazorEngineService.Create(razorConfig);
