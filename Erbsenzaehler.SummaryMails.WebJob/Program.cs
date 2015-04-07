@@ -16,7 +16,7 @@ namespace Erbsenzaehler.SummaryMails.WebJob
         {
             try
             {
-                Log.Trace("Erbsenzähler.SummaryMails.WebJob v" + typeof (Program).Assembly.GetName().Version + " starting up ...");
+                Log.Trace("Erbsenzaehler.SummaryMails.WebJob v" + typeof(Program).Assembly.GetName().Version + " starting up ...");
 
                 // hard-code german culture here, we want our e-mails formatted for german
                 var germanCulture = new CultureInfo("de-DE");
