@@ -133,6 +133,8 @@
     <Compile Include="SummaryMail\SummaryMailModel.cs" />
     <Compile Include="SummaryMail\SummaryMailRenderer.cs" />
     <Compile Include="SummaryMail\SummaryMailSender.cs" />
+    <Compile Include="Templates\RazorRenderService.cs" />
+    <Compile Include="Templates\RazorTemplateResolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -140,6 +142,9 @@
     </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="Templates\_MailLayout.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Templates\SummaryMail.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.IO;
 using System.Threading.Tasks;
 using Erbsenzaehler.Models;
 using Erbsenzaehler.Reporting;
-using RazorEngine.Configuration;
-using RazorEngine.Templating;
+using Erbsenzaehler.Templates;
 
 namespace Erbsenzaehler.SummaryMail
 {
@@ -35,31 +33,8 @@ namespace Erbsenzaehler.SummaryMail
         public async Task<string> Render(User user)
         {
             var model = await new SummaryMailModel().Fill(_db, user, _erbsenzaehlerUri, _budgetCalculator, _sumCalculator);
-
-            var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates", "SummaryMail.cshtml");
-            if (!File.Exists(templatePath))
-            {
-                templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", "Templates", "SummaryMail.cshtml");
-            }
-
-            if (!File.Exists(templatePath))
-            {
-                throw new Exception("Template 'SummaryMail.cshtml' missing. It should be at '" + templatePath + "'.");
-            }
-
-            var template = File.ReadAllText(templatePath);
-
-#pragma warning disable 618
-            var razorConfig = new TemplateServiceConfiguration
-            {
-                CachingProvider = new DefaultCachingProvider(t => { }),
-                DisableTempFileLocking = true
-            };
-            var razorService = RazorEngineService.Create(razorConfig);
-            var html = razorService.RunCompile(template, "SummaryMail", typeof (SummaryMailModel), model);
-#pragma warning restore 618
-
-            return html;
+            var renderer = new RazorRenderService<SummaryMailModel>();
+            return renderer.Render("SummaryMail.cshtml", model);
         }
     }
 }

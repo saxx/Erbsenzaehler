@@ -1,0 +1,129 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <style>
+        body.mail,
+        .mail table.body,
+        .mail h1,
+        .mail h2,
+        .mail h3,
+        .mail p,
+        .mail td {
+            color: #222222;
+            font-family: "Helvetica","Arial",sans-serif;
+            font-weight: normal;
+            line-height: 1.3;
+            margin: 0;
+            padding: 0;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .mail p {
+            margin: 0 0 10px;
+        }
+
+        .mail h1 {
+            font-size: 20px;
+        }
+
+        .mail h2 {
+            font-size: 18px;
+        }
+
+        .mail h3 {
+            font-size: 16px;
+        }
+
+        .mail h1,
+        .mail h2,
+        .mail h3 {
+            margin-bottom: 10px;
+            margin-top: 20px;
+        }
+
+        .mail .label {
+            border-radius: 0.25em;
+            color: #fff;
+            display: inline;
+            font-size: 75%;
+            font-weight: bold;
+            line-height: 1;
+            padding: 0.2em 0.6em 0.3em;
+            text-align: center;
+            vertical-align: baseline;
+            white-space: nowrap;
+        }
+
+        .mail .label-info {
+            background-color: #5bc0de;
+        }
+
+        .mail .alert {
+            border: 1px solid transparent;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            padding: 15px;
+        }
+
+        .mail .alert-warning {
+            background-color: #fcf8e3;
+            border-color: #faebcc;
+            color: #8a6d3b;
+        }
+
+        .mail table td,
+        .mail table th {
+            padding: 3px 9px 3px 3px;
+        }
+
+        .mail .text-muted {
+            color: #999;
+        }
+
+        .mail .text-right {
+            text-align: right;
+        }
+
+        .mail .navbar {
+            background-color: #f8f8f8;
+            border-color: #e7e7e7;
+            border: 1px solid transparent;
+            margin-bottom: 20px;
+        }
+
+            .mail .navbar img {
+                float: left;
+                margin-left: 10px;
+                margin-right: 30px;
+                padding-top: 6px;
+                padding-bottom: 6px;
+            }
+
+            .mail .navbar p {
+                padding-top: 18px;
+                color: #777;
+            }
+
+        .mail td.number-negative {
+            color: #a37182;
+        }
+
+        .mail td.number-positive {
+            color: #90ba58;
+        }
+    </style>
+</head>
+<body class="mail">
+    @RenderBody()
+
+    <hr />
+    <p>
+        Sie erhalten diese E-Mail, weil Sie den Erbsenzähler benutzen und die Funktion für die automatische
+        E-Mail-Zusammenfassung aktiviert haben. Sie können dies jederzeit über Ihre Benutzereinstellungen
+        im Erbsenzähler deaktivieren.
+    </p>
+</body>
+</html>

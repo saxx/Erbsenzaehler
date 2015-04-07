@@ -30,13 +30,17 @@ namespace Erbsenzaehler.SummaryMail
                 lastSummaryMailDate = DateTime.UtcNow.Date.AddMonths(-1);
             }
 
-            var linesQuery = await db.Lines
-                .ByClient(currentUser.Client)
-                .ByNotIgnored()
+            var client = currentUser.Client;
+            ClientName = client.Name;
+
+            var linesQuery = db.Lines
+                .ByClient(client)
+                .ByNotIgnored();
+
+            var latestLinesQuery = linesQuery
                 .Where(x => (x.Date ?? x.OriginalDate) >= lastSummaryMailDate)
-                .OrderByDescending(x => x.Date ?? x.OriginalDate)
-                .ToListAsync();
-            Lines = linesQuery.Select(x => new Line(x));
+                .OrderByDescending(x => x.Date ?? x.OriginalDate);
+            Lines = (await latestLinesQuery.ToListAsync()).Select(x => new Line(x));
 
             var currentMonth = new Month();
             CurrentMonthBudget = await budgetCalculator.CalculateForMonth(currentMonth);
@@ -49,6 +53,11 @@ namespace Erbsenzaehler.SummaryMail
             categories.AddRange(LastMonthSpendings.Keys);
             SpendingCategories = categories.Distinct().OrderBy(x => x).ToList();
 
+            var currentMonthLinesQuery = linesQuery.ByMonth(currentMonth);
+            var lastMonthLinesQuery = linesQuery.ByMonth(currentMonth.PreviousMonth);
+            CurrentMonthBalance = await currentMonthLinesQuery.Select(x => x.Amount ?? x.OriginalAmount).DefaultIfEmpty().SumAsync();
+            LastMonthBalance = await lastMonthLinesQuery.Select(x => x.Amount ?? x.OriginalAmount).DefaultIfEmpty().SumAsync();
+
             return this;
         }
 
@@ -58,6 +67,7 @@ namespace Erbsenzaehler.SummaryMail
         public string CurrentDate { get; set; }
         public string CurrentMonth { get; set; }
         public string LastMonth { get; set; }
+        public string ClientName { get; set; }
 
         public IEnumerable<BudgetCalculator.BudgetResult> CurrentMonthBudget { get; set; }
         public IEnumerable<BudgetCalculator.BudgetResult> LastMonthBudget { get; set; }
@@ -65,6 +75,9 @@ namespace Erbsenzaehler.SummaryMail
         public IEnumerable<string> SpendingCategories { get; set; }
         public IDictionary<string, decimal> CurrentMonthSpendings { get; set; }
         public IDictionary<string, decimal> LastMonthSpendings { get; set; }
+
+        public decimal CurrentMonthBalance { get; set; }
+        public decimal LastMonthBalance { get; set; }
 
         public class Line
         {
