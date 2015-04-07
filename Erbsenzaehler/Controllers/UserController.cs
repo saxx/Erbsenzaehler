@@ -92,6 +92,7 @@ namespace Erbsenzaehler.Controllers
                 {
                     UserName = model.Email,
                     Email = model.Email,
+                    SummaryMailInterval = SummaryMailIntervalOptions.Weekly,
                     Client = new Client
                     {
                         Name = "Client for " + model.Email,
