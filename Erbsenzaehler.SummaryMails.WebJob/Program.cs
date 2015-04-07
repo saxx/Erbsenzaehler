@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using Erbsenzaehler.Models;
 using Erbsenzaehler.Reporting;
 using Erbsenzaehler.SummaryMail;
@@ -15,6 +17,12 @@ namespace Erbsenzaehler.SummaryMails.WebJob
             try
             {
                 Log.Trace("Erbsenzähler.SummaryMails.WebJob v" + typeof (Program).Assembly.GetName().Version + " starting up ...");
+
+                // hard-code german culture here, we want our e-mails formatted for german
+                var germanCulture = new CultureInfo("de-DE");
+                Thread.CurrentThread.CurrentCulture = germanCulture;
+                Thread.CurrentThread.CurrentUICulture = germanCulture;
+
                 if (!string.IsNullOrEmpty(Config.OneTrueErrorAppKey) && !string.IsNullOrEmpty(Config.OneTrueErrorAppSecret))
                 {
                     OneTrue.Configuration.Credentials(Config.OneTrueErrorAppKey, Config.OneTrueErrorAppSecret);
