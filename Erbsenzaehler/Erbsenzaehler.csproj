@@ -734,9 +734,11 @@
     <Content Include="Views\Today\Index.cshtml" />
     <Content Include="Views\Shared\_LinesEditor.cshtml" />
     <Content Include="Views\Shared\_NoLinesWarning.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\Error500.cshtml" />
     <Content Include="Views\ManageUser\Index.cshtml" />
     <Content Include="Views\ManageUser\SummaryMailPreview.cshtml" />
+    <Content Include="Views\Shared\Error404.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
