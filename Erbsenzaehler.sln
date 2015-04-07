@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.22609.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erbsenzaehler", "Erbsenzaehler\Erbsenzaehler.csproj", "{A93272D4-F0ED-4FD3-BFF9-B7762D0E458B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8C1F9B90-D88F-4D3A-8FF9-7398ED352FA6} = {8C1F9B90-D88F-4D3A-8FF9-7398ED352FA6}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{90D2E846-F1A5-4FA1-B298-2381EF3761DF}"
 	ProjectSection(SolutionItems) = preProject
