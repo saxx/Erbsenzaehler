@@ -22,5 +22,21 @@
             }
             return s;
         }
+
+
+        public static string Truncate(this string s, int maxLen, string addAfterTruncate = null)
+        {
+            if (string.IsNullOrEmpty(s))
+            {
+                return "";
+            }
+
+            if (s.Length > maxLen)
+            {
+                return s.Substring(0, maxLen) + addAfterTruncate;
+            }
+
+            return s;
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿@inherits RazorEngine.Templating.TemplateBase<Erbsenzaehler.SummaryMail.SummaryMailModel>
+﻿@using Erbsenzaehler.ExtensionMethods
+@inherits RazorEngine.Templating.TemplateBase<Erbsenzaehler.SummaryMail.SummaryMailModel>
 
 @{
     Layout = "_MailLayout.cshtml";
@@ -133,7 +134,7 @@ else
                     }
                 </td>
                 <td>@line.Date</td>
-                <td>@line.Text</td>
+                <td>@line.Text.Truncate(30, " ...")</td>
                 <td class="text-right">@line.Amount</td>
             </tr>
         }
