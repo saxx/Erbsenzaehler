@@ -1,7 +1,7 @@
 ﻿@using Erbsenzaehler.Models
 @model Erbsenzaehler.ViewModels.ManageBudgets.IndexViewModel
 
-<h2>Manage budgets</h2>
+<h2>Budgets verwalten</h2>
 
 <datalist id="categoriesDatalist">
     @foreach (var category in Model.Categories)
@@ -11,49 +11,45 @@
 </datalist>
 
 <div ng-app="erbsenzaehlerApp" ng-controller="budgetsController">
-    <p ng-show="loading">
-        Loading your budgets, please give it a second or two ...
-    </p>
-
     <table class="table table-striped budgets-editor" ng-show="!loading && budgets.length > 0">
         <tr>
-            <th>Category</th>
-            <th>Limit?</th>
+            <th>Kategorie</th>
+            <th>Limit</th>
             <th>
-                <button class="btn btn-sm btn-success pull-right" ng-click="addBudget()">Add additional budget</button>
+                <button class="btn btn-sm btn-success pull-right" ng-click="addBudget()">Neues Budget hinzufügen</button>
             </th>
         </tr>
 
         <tr ng-repeat="budget in budgets">
             <td>
-                <input type="text" list="categoriesDatalist" ng-model="budget.category" ng-blur="saveBudget(budget, $event)" class="form-control" placeholder="Category?" required/>
+                <input type="text" list="categoriesDatalist" ng-model="budget.category" ng-blur="saveBudget(budget, $event)" class="form-control" placeholder="Kategorie" required/>
             </td>
             <td>
-                <input type="number" step="10" ng-model="budget.limit" ng-blur="saveBudget(budget, $event)" class="form-control" placeholder="Limit?" required/> € per
+                <input type="number" step="10" ng-model="budget.limit" ng-blur="saveBudget(budget, $event)" class="form-control" placeholder="Limit" required/> € pro
                 <select ng-model="budget.period" class="form-control" ng-change="saveBudget(budget, $event)" ng-options="o.value as o.name for o in periodOptions" ng-init="Monthly"></select>
             </td>
             <td>
                 <div>
-                    <button class="btn btn-sm btn-danger pull-right" ng-click="deleteBudget(budget)">Delete</button>
+                    <button class="btn btn-sm btn-danger pull-right" ng-click="deleteBudget(budget)">Löschen</button>
                 </div>
             </td>
         </tr>
     </table>
 
     <div class="alert alert-warning" ng-show="!loading && budgets.length <= 0">
-        <button class="btn btn-success pull-right" ng-click="addBudget()">Create a first budget</button>
+        <button class="btn btn-success pull-right" ng-click="addBudget()">Budget erstellen</button>
 
         <p>
-            You don't have any budgets configured yet. You can use budgets to create spending limits for certain categories;
-            for example, you could create a budget for the category "Party" with a limit of € 100 a month.
+            Sie haben noch keine Budgets erstellt. Verwenden Sie Budgets, um Ausgabelimits für bestimmte Kategorien zu überwachen. 
+            So künnen Sie beispielsweise für die Kategorie "Party" ein monatliches Ausgabelimit von 100 € anlegen.
         </p>
 
         <p>
-            Erbsenzähler cannot really force you to stop spending, of course, but it can warn you if you are about to exceed such a spending limit.
+            Der Erbsenzähler kann Sie natürlich nicht zwingen, gewisse Ausgaben nicht zu tätigen. Aber er kann Sie warnen, wenn Sie kurz davor stehen, ein Ausgabelimit zu überschreiten.
         </p>
 
         <p>
-            Tipp: Use <a href="@Url.Action("Index", "ManageRules")" class="alert-link">rules</a> to automatically assign categories to certain lines in your account statements.
+            Tipp: Verwenden Sie <a href="@Url.Action("Index", "ManageRules")" class="alert-link">Regeln</a> um automatisch Buchungszeilen mit den passenden Kategorien zu versehen.
         </p>
     </div>
 </div>
@@ -70,7 +66,7 @@
         });
         erbsenzaehlerControllers.controller('budgetsController', function($scope, Budget) {
             $scope.periodOptions = [
-                { name: 'month', value: @((int) Budget.LimitPeriod.Monthly) }, { name: 'week', value: @((int) Budget.LimitPeriod.Weekly) }, { name: 'year', value: @((int) Budget.LimitPeriod.Yearly) }, { name: 'day', value: @((int) Budget.LimitPeriod.Daily) }
+                { name: 'Monat', value: @((int) Budget.LimitPeriod.Monthly) }, { name: 'Woche', value: @((int) Budget.LimitPeriod.Weekly) }, { name: 'Jahr', value: @((int) Budget.LimitPeriod.Yearly) }, { name: 'Tag', value: @((int) Budget.LimitPeriod.Daily) }
             ];
 
             $scope.loadBudgets = function(callback) {

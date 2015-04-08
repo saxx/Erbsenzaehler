@@ -1,9 +1,9 @@
 ﻿@model Erbsenzaehler.ViewModels.ManageAccounts.IndexViewModel
 
-<h2>Manage Accounts</h2>
+<h2>Konten verwalten</h2>
 
 <p>
-    @Html.ActionLink("Create new account", "Create", null, new { @class = "btn btn-default" })
+    @Html.ActionLink("Neues Konto anlegen", "Create", null, new { @class = "btn btn-default" })
 </p>
 <table class="table table-striped">
     @foreach (var item in Model.Accounts)
@@ -13,11 +13,11 @@
                 @item.Name
             </td>
             <td>
-                @item.LinesCount.ToString("N0") @(item.LinesCount == 1 ? "line" : "lines")
+                @item.LinesCount.ToString("N0") @(item.LinesCount == 1 ? "Buchungszeile" : "Buchungszeilen")
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-default" })
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
+                @Html.ActionLink("Bearbeiten", "Edit", new { id = item.Id }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Löschen", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
             </td>
         </tr>
     }

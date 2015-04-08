@@ -28,7 +28,7 @@ namespace Erbsenzaehler.ViewModels.Import
                 },
                 new SelectListItem
                 {
-                    Text = "Generic TSV",
+                    Text = "Allgemeine TSV-Datei",
                     Value = ImporterType.Tsv.ToString()
                 },
                 new SelectListItem

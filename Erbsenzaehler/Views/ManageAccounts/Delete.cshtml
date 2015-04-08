@@ -1,26 +1,27 @@
 ﻿@model Erbsenzaehler.ViewModels.ManageAccounts.DeleteViewModel
 
-<h2>Delete account '@Model.Account.Name'</h2>
+<h2>Konto '@Model.Account.Name' löschen</h2>
 
 @if (Model.IsLastAccount)
 {
     <div class="alert alert-danger">
-        You cannot delete this account, because it is your last one. Create another account first if you absolutely want to delete this one.
+        Sie können dieses Konto nicht löschen, da es Ihr letztes ist.
+        Legen Sie zuerst ein neues Konto an, wenn Sie dieses unbedingt löschen möchten.
     </div>
 
-    @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-default" })
+    @Html.ActionLink("Zurück", "Index", null, new { @class = "btn btn-default" })
 }
 else
 {
     <text>
         <p>
-            Are you sure you want to delete the account '@Model.Account.Name'?
+            Sind Sie sicher, dass Sie dieses Konto löschen möchten?
         </p>
 
         @if (Model.NumberOfLines > 0)
         {
             <div class="alert alert-warning">
-                Deleting this account will also delete <b>@Model.NumberOfLines.ToString("N0") @(Model.NumberOfLines == 1 ? "account statement line" : "account statement lines")</b>.
+                Wenn Sie dieses Konto löschen, löschen Sie auch <b>@Model.NumberOfLines.ToString("N0") @(Model.NumberOfLines == 1 ? "Buchungszeile" : "Buchungszeilen")</b>.
             </div>
         }
 
@@ -29,7 +30,8 @@ else
             {
                 @Html.AntiForgeryToken()
                 <div class="form-actions no-color">
-                    <input type="submit" value="Delete" class="btn btn-danger"/> @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-default" })
+                    <input type="submit" value="Löschen" class="btn btn-danger"/> 
+                    @Html.ActionLink("Zurück", "Index", null, new { @class = "btn btn-default" })
                 </div>
             }
         </div>

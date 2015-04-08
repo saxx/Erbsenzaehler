@@ -8,10 +8,10 @@
 
     <table class="table table-striped">
         <tr>
-            <th>Date</th>
-            <th>Balance</th>
-            <th>Income</th>
-            <th>Spent</th>
+            <th>Datum</th>
+            <th>Saldo</th>
+            <th>Einkommen</th>
+            <th>Ausgaben</th>
             @foreach (var category in Model.Overview.CategoryHeaders.OrderByDescending(x => x))
             {
                 <th>@category</th>
@@ -58,7 +58,7 @@
 
             $("#chartContainer").dxChart({
                 title: {
-                    text: 'Historical overview',
+                    text: 'Einkommen und Ausgaben im Monatsverlauf',
                     font: {
                         size: '1.25em'
                     }
