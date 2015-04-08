@@ -21,6 +21,10 @@
             font-size: 14px;
         }
 
+        body.mail {
+            padding: 10px;
+        }
+
         .mail p {
             margin: 0 0 10px;
         }
@@ -40,8 +44,9 @@
         .mail h1,
         .mail h2,
         .mail h3 {
-            margin-bottom: 10px;
+            margin-bottom: 0;
             margin-top: 20px;
+            font-weight: bold;
         }
 
         .mail .label {
@@ -76,7 +81,9 @@
 
         .mail table td,
         .mail table th {
-            padding: 3px 9px 3px 3px;
+            padding: 1px 6px 1px 0;
+            white-space: nowrap;
+            overflow: hidden;
         }
 
         .mail .text-muted {
@@ -97,14 +104,18 @@
             .mail .navbar img {
                 float: left;
                 margin-left: 10px;
-                margin-right: 30px;
+                margin-right: 10px;
                 padding-top: 6px;
                 padding-bottom: 6px;
             }
 
             .mail .navbar p {
                 padding-top: 18px;
+                padding-bottom: 18px;
+                margin: 0;
                 color: #777;
+                white-space: nowrap;
+                overflow: hidden;
             }
 
         .mail td.number-negative {

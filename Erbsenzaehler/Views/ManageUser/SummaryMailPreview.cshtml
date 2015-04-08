@@ -1,10 +1,6 @@
 ﻿@model Erbsenzaehler.ViewModels.ManageUser.SummaryMailPreviewViewModel
-
-<h2>Summary mail preview</h2>
-
-
-<a href="@Url.Action("Index")" class="btn btn-default">Back</a>
-
-<hr/>
+@{
+    Layout = null;
+}
 
 @Html.Raw(Model.Html)

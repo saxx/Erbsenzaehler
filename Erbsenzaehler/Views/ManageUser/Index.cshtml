@@ -29,7 +29,7 @@
             <div class="col-md-8">
                 @Html.EnumDropDownListFor(x => x.SummaryMailInterval, new { @class = "form-control" })
             </div>
-            <a href="@Url.Action("SummaryMailPreview")" class="btn btn-default col-md-2">Preview</a>
+            <a href="#" id="previewLink" class="btn btn-default col-md-2">Preview</a>
         </div>
 
         <div class="form-group">
@@ -46,4 +46,12 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function() {
+            $('#previewLink').click(function () {
+                window.open('@Url.Action("SummaryMailPreview")', 'SummarMailPreview', 'width=500, height=700, menubar=no, status=no, toolbar=no, scrollbars=yes');
+            });
+        });
+    </script>
 }
