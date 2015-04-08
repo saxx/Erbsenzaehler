@@ -1,6 +1,6 @@
 ﻿@model Erbsenzaehler.ViewModels.ManageUser.IndexViewModel
 
-<h2>Your user settings</h2>
+<h2>Eigene Einstellungen</h2>
 
 @using (Html.BeginForm())
 {
@@ -29,12 +29,12 @@
             <div class="col-md-8">
                 @Html.EnumDropDownListFor(x => x.SummaryMailInterval, new { @class = "form-control" })
             </div>
-            <a href="#" id="previewLink" class="btn btn-default col-md-2">Preview</a>
+            <a href="#" id="previewLink" class="btn btn-default col-md-2">Vorschau</a>
         </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-primary"/>
+                <input type="submit" value="Speichern" class="btn btn-primary"/>
             </div>
         </div>
     </div>
@@ -42,7 +42,7 @@
 
 <hr/>
 
-<a href="@Url.Action("ChangePassword")" class="btn btn-default">Change password</a>
+<a href="@Url.Action("ChangePassword")" class="btn btn-default">Passwort ändern</a>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

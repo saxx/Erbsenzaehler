@@ -1,6 +1,6 @@
 ﻿@model Erbsenzaehler.ViewModels.ManageClient.IndexViewModel
 
-<h2>Manage client</h2>
+<h2>Erbsenzähler-Konto verwalten</h2>
 
 @if (Model.ErrorMessage != null)
 {
@@ -32,7 +32,7 @@ else if (Model.SuccessMessage != null)
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-primary"/>
+                <input type="submit" value="Speichern" class="btn btn-primary"/>
             </div>
         </div>
     </div>
@@ -40,7 +40,7 @@ else if (Model.SuccessMessage != null)
 
 <hr/>
 
-@Html.ActionLink("Delete everything", "Delete", null, new { @class = "btn btn-danger" })
+@Html.ActionLink("Erbsenzähler-Konto löschen", "Delete", null, new { @class = "btn btn-danger" })
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

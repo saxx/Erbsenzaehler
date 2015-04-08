@@ -1,18 +1,19 @@
 ﻿@model Erbsenzaehler.ViewModels.ManageRules.UploadRulesViewModel
-<h2>Import Rules</h2>
+<h2>Regeln importieren</h2>
 
 
 @if (Model.Result != null)
 {
     <div class="alert alert-success">
-        @Model.Result.RulesAddedOrUpdated.ToString("N0") @(Model.Result.RulesAddedOrUpdated == 1 ? "rule has" : "rules have") been imported.
+        @Model.Result.RulesAddedOrUpdated.ToString("N0") @(Model.Result.RulesAddedOrUpdated == 1 ? "Regel wurde" : "Regeln wurden") importiert.
     </div>
 }
 else
 {
     <div class="alert alert-info">
-        You can upload your rules. Use the same file format that you get when you <a href="@Url.Action("Index")" class="alert-link">export</a> your rules.
-        <b>Please note that importing a rules file will overwrite all existing rules!</b>
+        Sie können hier Regeln importieren. Laden Sie eine Datei im selben Format hoch, wie Sie sie beim <a href="@Url.Action("Index")" class="alert-link">Regel-Export</a>
+        herunterladen können.
+        <b>Bitte beachten Sie, dass beim Import alle schon existierenden Regeln überschrieben werden!</b>
     </div>
 }
 
@@ -22,7 +23,7 @@ else
         @Html.AntiForgeryToken()
 
         <div class="form-group">
-            @Html.Label("file", "File: ", new { @class = "control-label col-md-2" })
+            @Html.Label("file", "Datei: ", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <input type="file" name="file" id="file" class="form-control"/>
             </div>
@@ -30,8 +31,8 @@ else
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <button type="submit" class="btn btn-primary">Upload & Import</button>
-                @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-default" })
+                <button type="submit" class="btn btn-primary">Datei hochladen und importieren</button>
+                @Html.ActionLink("Zurück", "Index", null, new { @class = "btn btn-default" })
             </div>
         </div>
     </div>

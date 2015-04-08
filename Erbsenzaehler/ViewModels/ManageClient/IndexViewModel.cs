@@ -14,8 +14,8 @@ namespace Erbsenzaehler.ViewModels.ManageClient
         }
 
 
-        [Required(ErrorMessage = "Your clients name must not be empty.")]
-        [DisplayName("Client name")]
+        [Required(ErrorMessage = "Bitte geben Sie einen Namen für Ihr Erbsenzähler-Konto an.")]
+        [DisplayName("Name für Erbsenzähler-Konto")]
         public string ClientName { get; set; }
 
         public string SuccessMessage { get; set; }

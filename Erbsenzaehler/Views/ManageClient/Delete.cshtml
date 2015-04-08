@@ -1,9 +1,10 @@
 ﻿@model Erbsenzaehler.ViewModels.ManageAccounts.DeleteViewModel
 
-<h2>Delete everything</h2>
+<h2>Gesamtes Erbsenzähler-Konto löschen</h2>
 
 <div class="alert alert-danger">
-    Please be aware that this removes <b>everything</b>, all your data, your users, your settings and your reports. Once your data has been deleted, it is permanent and cannot be undone. Only proceed if you want to stop using Erbsenzähler.
+    Sind Sie sicher, dass Sie <b>alles</b> löschen möchten? Das betrifft Ihre Daten, Ihre Benutzer, Ihre Einstellungen und Reports.
+    Eine Löschung kann nicht mehr rückgängig gemacht werden. Bitte löschen Sie Ihre Daten nur dann, wenn Sie den Erbsenzähler nicht mehr benutzen möchten.
 </div>
 
 <div>
@@ -11,7 +12,8 @@
     {
         @Html.AntiForgeryToken()
         <div class="form-actions no-color">
-            <input type="submit" value="Yes, I'm absolutely sure, delete everything" class="btn btn-danger"/> @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-default" })
+            <input type="submit" value="Ja, ich bin absolut sicher, alles löschen" class="btn btn-danger"/> 
+            @Html.ActionLink("Zurück", "Index", null, new { @class = "btn btn-default" })
         </div>
     }
 </div>

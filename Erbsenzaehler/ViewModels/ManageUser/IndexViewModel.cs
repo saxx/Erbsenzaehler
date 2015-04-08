@@ -15,15 +15,15 @@ namespace Erbsenzaehler.ViewModels.ManageUser
         }
 
 
-        [Display(Name = "Your username")]
+        [Display(Name = "Ihr Benutzername")]
         public string UserName { get; set; }
 
-        [Required(ErrorMessage = "Enter your e-mail address.")]
+        [Required(ErrorMessage = "Bitte geben Sie Ihre E-Mail-Adresse an.")]
         [DataType(DataType.EmailAddress)]
-        [Display(Name = "Your e-mail address")]
+        [Display(Name = "Ihre E-Mail-Adresse")]
         public string Email { get; set; }
 
-        [Display(Name = "Summary mail")]
+        [Display(Name = "Zusammenfassung per E-Mail")]
         public SummaryMailIntervalOptions SummaryMailInterval { get; set; }
     }
 }

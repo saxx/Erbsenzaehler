@@ -30,7 +30,7 @@ namespace Erbsenzaehler.Controllers
                 currentClient.Name = viewModel.ClientName;
                 await Db.SaveChangesAsync();
 
-                viewModel.SuccessMessage = "Your changes have been saved successfully";
+                viewModel.SuccessMessage = "Ihre Änderungen wurden gespeichert.";
             }
 
             return View(viewModel);

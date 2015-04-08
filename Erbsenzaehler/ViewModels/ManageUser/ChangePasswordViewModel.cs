@@ -4,20 +4,20 @@ namespace Erbsenzaehler.ViewModels.ManageUser
 {
     public class ChangePasswordViewModel
     {
-        [Required(ErrorMessage = "Enter your current password.")]
+        [Required(ErrorMessage = "Bitte geben Sie Ihr derzeitiges Passwort an.")]
         [DataType(DataType.Password)]
-        [Display(Name = "Your current password")]
+        [Display(Name = "Ihr derzeitiges Passwort")]
         public string OldPassword { get; set; }
 
-        [Required(ErrorMessage = "Choose a new password.")]
-        [StringLength(100, ErrorMessage = "The password must be at least {2} characters long.", MinimumLength = 6)]
+        [Required(ErrorMessage = "Bitte wählen Sie ein neues Passwort.")]
+        [StringLength(100, ErrorMessage = "Das Passwort muss mindestens {2} Zeichen lang sein.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Choose new password")]
+        [Display(Name = "Neues Passwort wählen")]
         public string NewPassword { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm new password")]
-        [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+        [Display(Name = "Neues Passwort bestätigen")]
+        [Compare("NewPassword", ErrorMessage = "Die beiden neuen Passwörter stimmen nicht überein.")]
         public string ConfirmPassword { get; set; }
 
         public bool WasSuccessful { get; set; }
