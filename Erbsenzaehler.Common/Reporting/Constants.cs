@@ -2,7 +2,7 @@
 {
     public static class Constants
     {
-        public const string EmptyCategory = "Other";
-        public const string IncomeCategory = "Income";
+        public const string EmptyCategory = "Sonstiges";
+        public const string IncomeCategory = "Einkommen";
     }
 }

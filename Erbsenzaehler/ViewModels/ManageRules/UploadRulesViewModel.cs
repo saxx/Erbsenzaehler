@@ -1,6 +1,6 @@
 ﻿using Erbsenzaehler.Rules;
 
-namespace Erbsenzaehler.ViewModels.Rules
+namespace Erbsenzaehler.ViewModels.ManageRules
 {
     public class UploadRulesViewModel
     {

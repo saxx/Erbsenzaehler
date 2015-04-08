@@ -58,16 +58,7 @@
             }
             else
             {
-                <div class="alert alert-warning">
-                    <p>
-                        You don't have any budgets configured yet.
-                        Use budgets to create and track spending limits for certain categories.
-                    </p>
-                    <p>
-                        <a href="@Url.Action("Index", "ManageBudgets")" class="btn btn-default pull-right">Create budgets</a>
-                    </p>
-                    <p class="clearfix"></p>
-                </div>
+                @Html.Partial("_NoBudgetsWarning")
             }
         </div>
         <div class="col-sm-4">
@@ -94,7 +85,7 @@
                 $.getJSON('@Url.Action("SpendingsChart")?month=@currentMonth.ToString("yyyy-MM")', function(data) {
                     $('#spendingsChart').dxPieChart({
                         title: {
-                            text: 'Spendings',
+                            text: 'Ausgaben',
                             font: {
                                 size: '1.25em'
                             }
@@ -123,7 +114,7 @@
                 $.getJSON('@Url.Action("BalanceChart")?month=@currentMonth.ToString("yyyy-MM")', function(data) {
                     $('#balanceChart').dxChart({
                         title: {
-                            text: 'Income vs. Spendings',
+                            text: 'Einkommen vs. Ausgaben',
                             font: {
                                 size: '1.25em'
                             }

@@ -5,42 +5,42 @@ namespace Erbsenzaehler.ViewModels.User
     public class ForgotViewModel
     {
         [Required]
-        [Display(Name = "Email")]
+        [Display(Name = "E-Mail")]
         public string Email { get; set; }
     }
 
     public class LoginViewModel
     {
-        [Required(ErrorMessage = "Enter your e-mail address.")]
-        [Display(Name = "Your e-mail")]
-        [EmailAddress(ErrorMessage = "Enter your e-mail address.")]
+        [Required(ErrorMessage = "Bitte geben Sie Ihre E-Mail-Adresse an.")]
+        [Display(Name = "Ihre E-Mail-Adresse")]
+        [EmailAddress(ErrorMessage = "Bitte geben Sie Ihre E-Mail-Adresse an.")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Enter your password.")]
+        [Required(ErrorMessage = "Bitte geben Sie Ihr Passwort an.")]
         [DataType(DataType.Password)]
-        [Display(Name = "Your password")]
+        [Display(Name = "Ihr Passwort")]
         public string Password { get; set; }
 
-        [Display(Name = "Remember me?")]
+        [Display(Name = "Anmeldung merken?")]
         public bool RememberMe { get; set; }
     }
 
     public class RegisterViewModel
     {
-        [Required(ErrorMessage = "Enter your e-mail address.")]
+        [Required(ErrorMessage = "Bitte geben Sie Ihre E-Mail-Adresse an.")]
         [EmailAddress]
-        [Display(Name = "Your e-mail")]
+        [Display(Name = "Ihre E-Mail-Adresse")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Choose a password.")]
-        [StringLength(100, ErrorMessage = "The password must be at least {2} characters long.", MinimumLength = 6)]
+        [Required(ErrorMessage = "Bitte wählen Sie ein Passwort.")]
+        [StringLength(100, ErrorMessage = "Das Passwort muss mindestes {2} Zeichen lang sein.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Choose password")]
+        [Display(Name = "Passwort wählen")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(Name = "Passwort bestätigen")]
+        [Compare("Password", ErrorMessage = "Die angegebenen Passwörter stimmen nicht überein.")]
         public string ConfirmPassword { get; set; }
     }
 
@@ -48,18 +48,18 @@ namespace Erbsenzaehler.ViewModels.User
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "Email")]
+        [Display(Name = "E-Mail-Adresse")]
         public string Email { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "Das Passwprt muss mindestens {2} Zeiche lang sein.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Passwort wählen")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(Name = "Passwort bestätigen")]
+        [Compare("Password", ErrorMessage = "Die angegebenen Passwörter stimmen nicht überein.")]
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }
@@ -69,7 +69,7 @@ namespace Erbsenzaehler.ViewModels.User
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "Email")]
+        [Display(Name = "E-Mail-Adresse")]
         public string Email { get; set; }
     }
 }

@@ -1,9 +1,9 @@
 ﻿@model Erbsenzaehler.ViewModels.ManageUsers.IndexViewModel
 
-<h2>Manage Users</h2>
+<h2>Benutzer verwalten</h2>
 
 <p>
-    @Html.ActionLink("Create new user", "Create", null, new { @class = "btn btn-default" })
+    @Html.ActionLink("Neuen Benutzer anlegen", "Create", null, new { @class = "btn btn-default" })
 </p>
 <table class="table table-striped">
     @foreach (var item in Model.Users)
@@ -13,7 +13,7 @@
                 @item.Email
             </td>
             <td>
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger pull-right" })
+                @Html.ActionLink("Diesen Benutzer löschen", "Delete", new { id = item.Id }, new { @class = "btn btn-danger pull-right" })
             </td>
         </tr>
     }

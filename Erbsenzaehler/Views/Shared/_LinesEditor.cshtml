@@ -2,14 +2,14 @@
 <div ng-app="erbsenzaehlerApp" ng-controller="linesEditorController" id="linesEditorController" data-action="@Url.Action("Json", "LinesEditor")">
     <table class="table table-striped lines-editor" ng-show="!loading">
         <tr>
-            <th>Account</th>
-            <th>Date</th>
+            <th>Konto</th>
+            <th>Datum</th>
             <th>Text</th>
-            <th>Amount</th>
-            <th>Category</th>
+            <th>Betrag</th>
+            <th>Kategorie</th>
             <th></th>
             <th>
-                <button class="btn btn-xs btn-success glyphicon glyphicon-plus pull-right" ng-click="addLine()" data-toggle="tooltip" data-placement="left" title="Add a new account statement"></button>
+                <button class="btn btn-xs btn-success glyphicon glyphicon-plus pull-right" ng-click="addLine()" data-toggle="tooltip" data-placement="left" title="Neue Buchungszeile hinzufügen"></button>
             </th>
         </tr>
 
@@ -40,10 +40,10 @@
                 <span contenteditable spellcheck="false" nobreaks nospaces ng-blur="saveLine(line)" ng-model="line.Category" ng-class="{'label label-info': line.Category != null && line.Category != '', 'noCategory': line.Category == null || line.Category == ''}"></span>
             </td>
             <td>
-                <button class="btn btn-xs btn-default glyphicon" ng-click="switchIgnore(line)" ng-class="{'glyphicon-eye-open': line.Ignore, 'glyphicon-eye-close': !line.Ignore}" data-toggle="tooltip" data-placement="left" title="Toggle to ignore/include this account statement in all reports and charts"></button>
+                <button class="btn btn-xs btn-default glyphicon" ng-click="switchIgnore(line)" ng-class="{'glyphicon-eye-open': line.Ignore, 'glyphicon-eye-close': !line.Ignore}" data-toggle="tooltip" data-placement="left" title="Diese Buchungszeile in allen Reports und Charts ignorieren"></button>
             </td>
             <td>
-                <button class="btn btn-xs btn-danger glyphicon glyphicon-trash pull-right" ng-click="deleteLine(line)" data-toggle="tooltip" data-placement="left" title="Delete this account statement"></button>
+                <button class="btn btn-xs btn-danger glyphicon glyphicon-trash pull-right" ng-click="deleteLine(line)" data-toggle="tooltip" data-placement="left" title="Diese Buchungszeile löschen"></button>
             </td>
         </tr>
     </table>

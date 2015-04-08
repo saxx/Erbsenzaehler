@@ -78,10 +78,16 @@ namespace Erbsenzaehler.Controllers
         {
             var currentUser = await GetCurrentUser();
 
+            var requestUrl = Request.Url;
+            if (requestUrl == null)
+            {
+                throw new Exception("Request.Url is null. This should not be possible at this point.");
+            }
+
             var currentUrl = new Uri(
-                Request.Url.Scheme + "://" +
-                Request.Url.Host +
-                (Request.Url.IsDefaultPort ? "" : ":" + Request.Url.Port));
+                requestUrl.Scheme + "://" +
+                requestUrl.Host +
+                (requestUrl.IsDefaultPort ? "" : ":" + requestUrl.Port));
 
             var budgetCalculator = new BudgetCalculator(Db, await GetCurrentClient());
             var sumCalculator = new SumCalculator(Db, await GetCurrentClient());

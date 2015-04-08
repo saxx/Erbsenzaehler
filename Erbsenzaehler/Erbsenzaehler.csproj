@@ -233,7 +233,7 @@
     <Compile Include="ViewModels\ManageUser\IndexViewModel.cs" />
     <Compile Include="ViewModels\ManageUser\SummaryMailPreviewViewModel.cs" />
     <Compile Include="ViewModels\Today\IndexViewModel.cs" />
-    <Compile Include="ViewModels\Rules\UploadRulesViewModel.cs" />
+    <Compile Include="ViewModels\ManageRules\UploadRulesViewModel.cs" />
     <Compile Include="ViewModels\User\AccountViewModels.cs" />
     <Compile Include="ViewModels\Import\IndexViewModel.cs" />
     <Compile Include="ViewModels\LinesEditor\JsonViewModel.cs" />
@@ -243,7 +243,7 @@
     <Compile Include="ViewModels\ManageUser\ChangePasswordViewModel.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\HistoricalReports\IndexViewModel.cs" />
-    <Compile Include="ViewModels\Rules\IndexViewModel.cs" />
+    <Compile Include="ViewModels\ManageRules\IndexViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -734,11 +734,12 @@
     <Content Include="Views\Today\Index.cshtml" />
     <Content Include="Views\Shared\_LinesEditor.cshtml" />
     <Content Include="Views\Shared\_NoLinesWarning.cshtml" />
-    <Content Include="Views\Shared\Error500.cshtml" />
+    <Content Include="Views\Home\Error500.cshtml" />
     <Content Include="Views\ManageUser\Index.cshtml" />
     <Content Include="Views\ManageUser\SummaryMailPreview.cshtml" />
-    <Content Include="Views\Shared\Error404.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Home\Error404.cshtml" />
+    <Content Include="Views\Home\Error.cshtml" />
+    <Content Include="Views\Shared\_NoBudgetsWarning.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

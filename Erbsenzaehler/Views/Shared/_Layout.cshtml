@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Erbsenzähler is my very own to to track expenses and income."/>
+    <meta name="description" content="Erbsenzähler: Behalten Sie den Überblick über Ihre Ausgaben. Mit dem Haushaltsbuch, das keine Arbeit macht."/>
     <meta name="author" content="Hannes Sachsenhofer"/>
     <title>Erbsenzähler</title>
 
@@ -76,28 +76,28 @@
                 @if (Request.IsAuthenticated)
                 {
                     <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Overview", "Index", "Today")</li>
+                        <li>@Html.ActionLink("Übersicht", "Index", "Today")</li>
 
                         <li class="dropdown">
-                            <a aria-expanded="false" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Historical reports <span class="caret"></span></a>
+                            <a aria-expanded="false" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Monatsverlauf <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("Overview", "Index", "HistoricalReports")</li>
-                                <li>@Html.ActionLink("Balance", "Balance", "HistoricalReports")</li>
-                                <li>@Html.ActionLink("Income & spendings", "Amounts", "HistoricalReports")</li>
+                                <li>@Html.ActionLink("Übersicht", "Index", "HistoricalReports")</li>
+                                <li>@Html.ActionLink("Saldo", "Balance", "HistoricalReports")</li>
+                                <li>@Html.ActionLink("Ausgaben nach Kategorie", "Amounts", "HistoricalReports")</li>
                             </ul>
                         </li>
 
-                        <li>@Html.ActionLink("Import", "Index", "Import")</li>
+                        <li>@Html.ActionLink("Importieren", "Index", "Import")</li>
 
                         <li class="dropdown">
-                            <a aria-expanded="false" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Manage <span class="caret"></span></a>
+                            <a aria-expanded="false" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Administration <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("Rules", "Index", "ManageRules")</li>
+                                <li>@Html.ActionLink("Eigene Einstellungen", "Index", "ManageUser")</li>
+                                <li>@Html.ActionLink("Regeln", "Index", "ManageRules")</li>
                                 <li>@Html.ActionLink("Budgets", "Index", "ManageBudgets")</li>
-                                <li>@Html.ActionLink("Accounts", "Index", "ManageAccounts")</li>
-                                <li>@Html.ActionLink("Users", "Index", "ManageUsers")</li>
-                                <li>@Html.ActionLink("Your settings & password", "Index", "ManageUser")</li>
-                                <li>@Html.ActionLink("Client", "Index", "ManageClient")</li>
+                                <li>@Html.ActionLink("Konten", "Index", "ManageAccounts")</li>
+                                <li>@Html.ActionLink("Benutzer", "Index", "ManageUsers")</li>
+                                <li>@Html.ActionLink("Globale Einstellungen", "Index", "ManageClient")</li>
                             </ul>
                         </li>
                     </ul>
@@ -105,7 +105,7 @@
                 else
                 {
                     <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("About Erbsenzähler", "About", "Home")</li>
+                        <li>@Html.ActionLink("Mehr zum Erbsenzähler", "About", "Home")</li>
                     </ul>
                 }
                 @Html.Partial("_LoginPartial")

@@ -1,6 +1,6 @@
 ﻿@model Erbsenzaehler.ViewModels.ManageUsers.CreateViewModel
 
-<h2>Create new user</h2>
+<h2>Neuen Benutzer anlegen</h2>
 
 @using (Html.BeginForm("Create", "ManageUsers", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
@@ -30,8 +30,8 @@
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-primary" value="Create user"/>
-            @Html.ActionLink("Back", "Index", null, new { @class = "btn btn-default" })
+            <input type="submit" class="btn btn-primary" value="Benutzer anlegen"/>
+            @Html.ActionLink("Zurück", "Index", null, new { @class = "btn btn-default" })
         </div>
     </div>
 }

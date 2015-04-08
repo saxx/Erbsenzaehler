@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using Erbsenzaehler.Models;
 using Erbsenzaehler.Rules;
-using Erbsenzaehler.ViewModels.Rules;
+using Erbsenzaehler.ViewModels.ManageRules;
 using Newtonsoft.Json;
 
 namespace Erbsenzaehler.Controllers
