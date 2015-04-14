@@ -22,10 +22,14 @@ namespace Erbsenzaehler.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing && UserManager != null)
+            if (disposing)
             {
-                UserManager.Dispose();
-                Db.Dispose();
+				if (UserManager != null) {
+					UserManager.Dispose();
+				}
+				if (Db != null) {
+					Db.Dispose();
+				}
             }
             base.Dispose(disposing);
         }
