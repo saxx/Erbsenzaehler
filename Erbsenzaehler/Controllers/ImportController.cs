@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Erbsenzaehler.Importer;
+using Erbsenzaehler.Models;
 using Erbsenzaehler.Rules;
 using Erbsenzaehler.ViewModels.Import;
 
@@ -25,10 +27,13 @@ namespace Erbsenzaehler.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(HttpPostedFileBase file, int accountId, ImporterType importer)
         {
+            var watch = new Stopwatch();
+            var currentUser = await GetCurrentUser();
             var currentClient = await GetCurrentClient();
             var account = await Db.Accounts.FirstOrDefaultAsync(x => x.Id == accountId && x.ClientId == currentClient.Id);
             var viewModel = (await new IndexViewModel().Fill(Db, currentClient)).PreSelect(accountId, importer);
 
+            watch.Start();
             try
             {
                 if (account != null && file != null)
@@ -37,6 +42,22 @@ namespace Erbsenzaehler.Controllers
                     {
                         var concreteImporter = new ImporterFactory().GetImporter(reader, importer);
                         viewModel.ImportResult = await concreteImporter.LoadFileAndImport(Db, currentClient, account, new RulesApplier());
+
+                        watch.Stop();
+
+                        // save to import log
+                        Db.ImportLog.Add(new ImportLog
+                        {
+                            AccountId = account.Id,
+                            UserId = currentUser.Id,
+                            Date = DateTime.UtcNow,
+                            LinesDuplicatesCount = viewModel.ImportResult.DuplicateLinesCount,
+                            LinesFoundCount = viewModel.ImportResult.DuplicateLinesCount,
+                            LinesImportedCount = viewModel.ImportResult.NewLinesCount,
+                            Type = ImportLogType.Manual,
+                            Milliseconds = (int)watch.ElapsedMilliseconds,
+                            Log = null
+                        });
                     }
                 }
             }
