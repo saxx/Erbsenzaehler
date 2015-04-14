@@ -43,11 +43,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -108,15 +108,21 @@
     <Compile Include="Migrations\201504061155356_SummaryMails.Designer.cs">
       <DependentUpon>201504061155356_SummaryMails.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504141850205_ImportLogs.cs" />
+    <Compile Include="Migrations\201504141850205_ImportLogs.Designer.cs">
+      <DependentUpon>201504141850205_ImportLogs.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Budget.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\Db.cs" />
+    <Compile Include="Models\ImportLogType.cs" />
     <Compile Include="Models\Line.cs" />
     <Compile Include="Models\Month.cs" />
     <Compile Include="Models\Rule.cs" />
     <Compile Include="Models\SummaryMailIntervalOptions.cs" />
+    <Compile Include="Models\ImportLog.cs" />
     <Compile Include="Models\SummaryMailLog.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -165,6 +171,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504061155356_SummaryMails.resx">
       <DependentUpon>201504061155356_SummaryMails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504141850205_ImportLogs.resx">
+      <DependentUpon>201504141850205_ImportLogs.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

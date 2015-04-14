@@ -12,5 +12,7 @@ namespace Erbsenzaehler.Models
         public string Name { get; set; }
 
         public virtual ICollection<Line> Lines { get; set; }
+
+        public virtual ICollection<ImportLog> ImportLogs { get; set; }
     }
 }

@@ -24,5 +24,6 @@ namespace Erbsenzaehler.Models
         public DbSet<Rule> Rules { get; set; }
         public DbSet<Budget> Budgets { get; set; }
         public DbSet<SummaryMailLog> SummaryMailLogs { get; set; }
+        public DbSet<ImportLog> ImportLog { get; set; }
     }
 }
