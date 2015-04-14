@@ -1,0 +1,77 @@
+﻿@model Erbsenzaehler.ViewModels.Import.ManualImportViewModel
+<h2>Buchungszeilen importieren</h2>
+
+
+@if (Model.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        <p>
+            Es gab einen Fehler - bitte prüfen Sie, ob das Format Ihrer Datei unterstützt wird.
+        </p>
+        <p>Die Fehlermeldung war: @Model.ErrorMessage</p>
+    </div>
+}
+else if (Model.ImportResult != null)
+{
+    <div class="alert alert-success">
+        @Model.ImportResult.NewLinesCount.ToString("N0") @(Model.ImportResult.NewLinesCount == 1 ? "Buchungszeile wurde" : "Buchungszeilen wurden") importiert,
+        @Model.ImportResult.DuplicateLinesCount.ToString("N0") @(Model.ImportResult.DuplicateLinesCount == 1 ? "Buchungszeile war ein Duplikat" : "Buchungszeilen waren Duplikate").
+    </div>
+}
+else
+{
+    <div class="alert alert-info">
+        <p>
+            Hier können Sie die Buchungszeilen aus Ihren Bankkonten in den Erbsenzähler importieren.
+            Üblicherweise können Sie Ihre Kontoauszüge von der E-Banking-Website Ihrer Bank herunterladen.
+        </p>
+        <p>
+            Der Erbsenzähler unterstützt verschiedene Dateiformate.
+            Bitte <a href="@Url.Action("About", "Home")" class="alert-link">lassen Sie mich wissen</a> wenn Sie ein noch nicht unterstütztes Format importieren möchten.
+        </p>
+    </div>
+}
+
+@using (Html.BeginForm("Index", "Import", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="form-horizontal">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            @* ReSharper disable once Html.IdNotResolved *@
+            <label for="accountId" class="control-label col-sm-2">
+                Konto
+                <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="Mit Konten können Sie Buchungszeilen einem bestimmten Bankkonto zuordnen, 
+                      beispielsweise ein Konto für Ihr Girokonto und ein Konto für Ihre VISA-Karte."></span>
+            </label>
+            <div class="col-sm-4">
+                @Html.DropDownList("accountId", Model.AvailableAccounts, new { @class = "form-control" })
+            </div>
+
+            @* ReSharper disable once Html.IdNotResolved *@
+            <label for="importer" class="control-label col-sm-2">
+                Format
+                <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="Geben Sie das Format Ihrer Datei an, damit der Erbsenzähler die Daten richtig interpretieren kann."></span>
+            </label>
+            <div class="col-sm-4">
+                @Html.DropDownList("importer", Model.AvailableImporters, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("file", "Kontoauszug", new { @class = "control-label col-sm-2" })
+            <div class="col-sm-10">
+                <input type="file" name="file" id="file" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-primary">Kontoauszug hochladen, Buchungszeilen importieren und Regeln anwenden</button>
+            </div>
+        </div>
+    </div>
+}
+
+
+

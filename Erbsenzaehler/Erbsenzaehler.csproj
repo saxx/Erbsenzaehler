@@ -235,7 +235,7 @@
     <Compile Include="ViewModels\Today\IndexViewModel.cs" />
     <Compile Include="ViewModels\ManageRules\UploadRulesViewModel.cs" />
     <Compile Include="ViewModels\User\AccountViewModels.cs" />
-    <Compile Include="ViewModels\Import\IndexViewModel.cs" />
+    <Compile Include="ViewModels\Import\ManualImportViewModel.cs" />
     <Compile Include="ViewModels\LinesEditor\JsonViewModel.cs" />
     <Compile Include="ViewModels\ManageAccounts\IndexViewModel.cs" />
     <Compile Include="ViewModels\ManageAccounts\DeleteViewModel.cs" />
@@ -712,7 +712,7 @@
     <Content Include="Views\User\Register.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Import\Index.cshtml" />
+    <Content Include="Views\Import\ManualImport.cshtml" />
     <Content Include="Views\HistoricalReports\Index.cshtml" />
     <Content Include="Views\ManageRules\Index.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
@@ -740,6 +740,7 @@
     <Content Include="Views\Home\Error404.cshtml" />
     <Content Include="Views\Home\Error.cshtml" />
     <Content Include="Views\Shared\_NoBudgetsWarning.cshtml" />
+    <Content Include="Views\Import\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

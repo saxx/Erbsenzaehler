@@ -16,22 +16,28 @@ namespace Erbsenzaehler.Controllers
     [Authorize]
     public class ImportController : ControllerBase
     {
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+
+        public async Task<ActionResult> ManualImport()
         {
             var currentClient = await GetCurrentClient();
-            return View(await new IndexViewModel().Fill(Db, currentClient));
+            return View(await new ManualImportViewModel().Fill(Db, currentClient));
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index(HttpPostedFileBase file, int accountId, ImporterType importer)
+        public async Task<ActionResult> ManualImport(HttpPostedFileBase file, int accountId, ImporterType importer)
         {
             var watch = new Stopwatch();
             var currentUser = await GetCurrentUser();
             var currentClient = await GetCurrentClient();
             var account = await Db.Accounts.FirstOrDefaultAsync(x => x.Id == accountId && x.ClientId == currentClient.Id);
-            var viewModel = (await new IndexViewModel().Fill(Db, currentClient)).PreSelect(accountId, importer);
+            var viewModel = (await new ManualImportViewModel().Fill(Db, currentClient)).PreSelect(accountId, importer);
 
             watch.Start();
             try

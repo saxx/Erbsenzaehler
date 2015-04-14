@@ -9,9 +9,9 @@ using Erbsenzaehler.Models;
 
 namespace Erbsenzaehler.ViewModels.Import
 {
-    public class IndexViewModel
+    public class ManualImportViewModel
     {
-        public async Task<IndexViewModel> Fill(Db db, Client client)
+        public async Task<ManualImportViewModel> Fill(Db db, Client client)
         {
             AvailableAccounts = (await db.Accounts.Where(x => x.ClientId == client.Id).OrderBy(x => x.Name).ToListAsync()).Select(x => new SelectListItem
             {
@@ -46,7 +46,7 @@ namespace Erbsenzaehler.ViewModels.Import
         }
 
 
-        public IndexViewModel PreSelect(int accountId, ImporterType importer)
+        public ManualImportViewModel PreSelect(int accountId, ImporterType importer)
         {
             var selectedAccount = AvailableAccounts.FirstOrDefault(x => x.Value == accountId.ToString(CultureInfo.InvariantCulture));
             if (selectedAccount != null)
