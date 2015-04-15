@@ -22,6 +22,24 @@ namespace Erbsenzaehler.Controllers
         }
 
 
+        #region AutoImporterSettings
+        public async Task<ActionResult> AutoImporterSettings()
+        {
+            var viewModel = new AutoImporterSettingsViewModel().Fill(await GetCurrentClient());
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AutoImporterSettings(AutoImporterSettingsViewModel viewModel)
+        {
+            await viewModel.Save(Db, await GetCurrentClient());
+            return View(viewModel);
+        }
+        #endregion
+
+
+        #region Manual Import
         public async Task<ActionResult> ManualImport()
         {
             var currentClient = await GetCurrentClient();
@@ -74,5 +92,6 @@ namespace Erbsenzaehler.Controllers
 
             return View(viewModel);
         }
+        #endregion
     }
 }

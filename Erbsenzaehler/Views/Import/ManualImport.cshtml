@@ -1,5 +1,5 @@
 ﻿@model Erbsenzaehler.ViewModels.Import.ManualImportViewModel
-<h2>Buchungszeilen importieren</h2>
+<h2>Buchungszeilen manuell importieren</h2>
 
 
 @if (Model.ErrorMessage != null)
@@ -32,7 +32,7 @@ else
     </div>
 }
 
-@using (Html.BeginForm("Index", "Import", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("ManualImport", "Import", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <div class="form-horizontal">
         @Html.AntiForgeryToken()
