@@ -62,7 +62,7 @@ namespace Erbsenzaehler.Controllers
                         using (var reader = new StreamReader(stream, Encoding.UTF8))
                         {
                             var concreteImporter = new ImporterFactory().GetImporter(reader, importer);
-                            var importResult = await concreteImporter.LoadFileAndImport(Db, currentClient, account, new RulesApplier());
+                            var importResult = await concreteImporter.LoadFileAndImport(Db, currentClient.Id, account.Id, new RulesApplier());
 
                             result.IgnoredCount = importResult.DuplicateLinesCount;
                             result.ImportedCount = importResult.NewLinesCount;

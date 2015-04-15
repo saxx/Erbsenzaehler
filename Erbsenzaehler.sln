@@ -5,6 +5,7 @@ VisualStudioVersion = 14.0.22609.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erbsenzaehler", "Erbsenzaehler\Erbsenzaehler.csproj", "{A93272D4-F0ED-4FD3-BFF9-B7762D0E458B}"
 	ProjectSection(ProjectDependencies) = postProject
+		{F1C75080-A3D7-4A5D-A00D-8BBEFDC904BC} = {F1C75080-A3D7-4A5D-A00D-8BBEFDC904BC}
 		{8C1F9B90-D88F-4D3A-8FF9-7398ED352FA6} = {8C1F9B90-D88F-4D3A-8FF9-7398ED352FA6}
 	EndProjectSection
 EndProject

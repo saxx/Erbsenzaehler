@@ -14,7 +14,7 @@ namespace Erbsenzaehler.Importer
         }
 
 
-        public async Task<ImportResult> LoadFileAndImport(Db db, Client client, Account account, RulesApplier rulesApplier)
+        public async Task<ImportResult> LoadFileAndImport(Db db, int clientId, int accountId, RulesApplier rulesApplier)
         {
             var result = new ImportResult();
             var lines = GetRecords<Line>();
@@ -22,7 +22,7 @@ namespace Erbsenzaehler.Importer
             var anyChangesToDatabase = false;
             foreach (var line in lines)
             {
-                var lineExists = db.Lines.Any(x => x.AccountId == account.Id &&
+                var lineExists = db.Lines.Any(x => x.AccountId == accountId &&
                                                    x.OriginalDate == line.OriginalDate &&
                                                    x.OriginalText == line.OriginalText &&
                                                    // ReSharper disable once CompareOfFloatsByEqualityOperator
@@ -30,9 +30,9 @@ namespace Erbsenzaehler.Importer
 
                 if (!lineExists)
                 {
-                    line.AccountId = account.Id;
+                    line.AccountId = accountId;
 
-                    await rulesApplier.Apply(db, client, line);
+                    await rulesApplier.Apply(db, clientId, line);
 
                     db.Lines.Add(line);
                     result.NewLinesCount++;

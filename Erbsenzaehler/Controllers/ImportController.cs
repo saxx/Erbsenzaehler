@@ -65,7 +65,7 @@ namespace Erbsenzaehler.Controllers
                     using (var reader = new StreamReader(file.InputStream, Encoding.Default))
                     {
                         var concreteImporter = new ImporterFactory().GetImporter(reader, importer);
-                        viewModel.ImportResult = await concreteImporter.LoadFileAndImport(Db, currentClient, account, new RulesApplier());
+                        viewModel.ImportResult = await concreteImporter.LoadFileAndImport(Db, currentClient.Id, account.Id, new RulesApplier());
 
                         watch.Stop();
 

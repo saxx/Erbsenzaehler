@@ -33,7 +33,7 @@ namespace Erbsenzaehler.Controllers
 
             var allLinesOfClient = Db.Lines.Where(x => x.Account.ClientId == currentClient.Id);
 
-            viewModel.ApplierResult = await applier.Apply(Db, currentClient, allLinesOfClient, true);
+            viewModel.ApplierResult = await applier.Apply(Db, currentClient.Id, allLinesOfClient, true);
             if (viewModel.ApplierResult.LinesUpdated > 0)
             {
                 await Db.SaveChangesAsync();

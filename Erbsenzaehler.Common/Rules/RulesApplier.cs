@@ -10,7 +10,7 @@ namespace Erbsenzaehler.Rules
 {
     public class RulesApplier
     {
-        public async Task<RulesApplierResult> Apply(Db db, Client client, IEnumerable<Line> lines, bool resetFirst)
+        public async Task<RulesApplierResult> Apply(Db db, int clientId, IEnumerable<Line> lines, bool resetFirst)
         {
             var result = new RulesApplierResult();
             foreach (var line in lines)
@@ -38,7 +38,7 @@ namespace Erbsenzaehler.Rules
                     }
                 }
 
-                if (await Apply(db, client, line))
+                if (await Apply(db, clientId, line))
                 {
                     result.LinesUpdated++;
                 }
@@ -47,10 +47,10 @@ namespace Erbsenzaehler.Rules
         }
 
 
-        public async Task<bool> Apply(Db db, Client client, Line line)
+        public async Task<bool> Apply(Db db, int clientId, Line line)
         {
             var result = false;
-            var rules = await LoadRules(db, client);
+            var rules = await LoadRules(db, clientId);
             foreach (var rule in rules)
             {
                 if (IsMatch(rule, line.Text ?? line.OriginalText))
@@ -125,9 +125,9 @@ namespace Erbsenzaehler.Rules
             IEnumerable<Rule> _rulesCache;
 
 
-        private async Task<IEnumerable<Rule>> LoadRules(Db db, Client client)
+        private async Task<IEnumerable<Rule>> LoadRules(Db db, int clientId)
         {
-            return _rulesCache ?? (_rulesCache = await db.Rules.Where(x => x.ClientId == client.Id).ToListAsync());
+            return _rulesCache ?? (_rulesCache = await db.Rules.Where(x => x.ClientId == clientId).ToListAsync());
         }
     }
 }
