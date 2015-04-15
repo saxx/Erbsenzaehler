@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erbsenzaehler.Common", "Erb
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erbsenzaehler.SummaryMails.WebJob", "Erbsenzaehler.SummaryMails.WebJob\Erbsenzaehler.SummaryMails.WebJob.csproj", "{8C1F9B90-D88F-4D3A-8FF9-7398ED352FA6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erbsenzaehler.AutoImporter.WebJob", "Erbsenzaehler.AutoImporter.WebJob\Erbsenzaehler.AutoImporter.WebJob.csproj", "{F1C75080-A3D7-4A5D-A00D-8BBEFDC904BC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,10 @@ Global
 		{8C1F9B90-D88F-4D3A-8FF9-7398ED352FA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C1F9B90-D88F-4D3A-8FF9-7398ED352FA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C1F9B90-D88F-4D3A-8FF9-7398ED352FA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1C75080-A3D7-4A5D-A00D-8BBEFDC904BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1C75080-A3D7-4A5D-A00D-8BBEFDC904BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1C75080-A3D7-4A5D-A00D-8BBEFDC904BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1C75080-A3D7-4A5D-A00D-8BBEFDC904BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
