@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Erbsenzaehler.AutoImporter.Client.Recipies;
+using Erbsenzaehler.AutoImporter.Recipies;
 using Erbsenzaehler.AutoImporter.Configuration;
 using Erbsenzaehler.Importer;
 using Erbsenzaehler.Models;

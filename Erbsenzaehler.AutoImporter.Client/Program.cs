@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Erbsenzaehler.AutoImporter.Client.Recipies;
+using Erbsenzaehler.AutoImporter.Recipies;
 using Erbsenzaehler.AutoImporter.Client.Uploader;
 using Erbsenzaehler.AutoImporter.Configuration;
 using Newtonsoft.Json;

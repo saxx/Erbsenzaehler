@@ -58,21 +58,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="WebDriver, Version=2.45.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selenium.WebDriver.2.45.0\lib\net40\WebDriver.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="WebDriver.Support, Version=2.45.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selenium.Support.2.45.0\lib\net40\WebDriver.Support.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Recipies\EasybankRecipe.cs" />
-    <Compile Include="Recipies\AbstractRecipe.cs" />
-    <Compile Include="Recipies\RecipeFactory.cs" />
     <Compile Include="Uploader\ErbsenzaehlerUploader.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -86,13 +75,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\packages\PhantomJS.2.0.0\tools\phantomjs\phantomjs.exe">
-      <Link>phantomjs.exe</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="phantomjs-license.txt" />
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="..\Erbsenzaehler.AutoImporter.Common\Erbsenzaehler.AutoImporter.Common.csproj">
+      <Project>{dc6deec1-c460-493a-b26d-95439c032bd2}</Project>
+      <Name>Erbsenzaehler.AutoImporter.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Erbsenzaehler.Common\Erbsenzaehler.Common.csproj">
       <Project>{9edcd70d-691c-4dd4-98b1-ece7cd293fcf}</Project>
       <Name>Erbsenzaehler.Common</Name>
