@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Erbsenzaehler.AutoImporter.Client.Recipies;
+using Erbsenzaehler.AutoImporter.Client.Uploader;
 using Erbsenzaehler.AutoImporter.Configuration;
-using Erbsenzaehler.AutoImporter.Recipies;
-using Erbsenzaehler.AutoImporter.Uploader;
 using Newtonsoft.Json;
 using NLog;
 
-namespace Erbsenzaehler.AutoImporter
+namespace Erbsenzaehler.AutoImporter.Client
 {
     public static class Program
     {

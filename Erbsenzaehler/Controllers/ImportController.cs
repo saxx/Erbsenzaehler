@@ -21,13 +21,14 @@ namespace Erbsenzaehler.Controllers
             return View();
         }
 
-
         #region AutoImporterSettings
+
         public async Task<ActionResult> AutoImporterSettings()
         {
             var viewModel = new AutoImporterSettingsViewModel().Fill(await GetCurrentClient());
             return View(viewModel);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -36,10 +37,11 @@ namespace Erbsenzaehler.Controllers
             await viewModel.Save(Db, await GetCurrentClient());
             return View(viewModel);
         }
+
         #endregion
 
-
         #region Manual Import
+
         public async Task<ActionResult> ManualImport()
         {
             var currentClient = await GetCurrentClient();
@@ -79,7 +81,7 @@ namespace Erbsenzaehler.Controllers
                             LinesFoundCount = viewModel.ImportResult.DuplicateLinesCount,
                             LinesImportedCount = viewModel.ImportResult.NewLinesCount,
                             Type = ImportLogType.Manual,
-                            Milliseconds = (int)watch.ElapsedMilliseconds,
+                            Milliseconds = (int) watch.ElapsedMilliseconds,
                             Log = null
                         });
                     }
@@ -92,6 +94,7 @@ namespace Erbsenzaehler.Controllers
 
             return View(viewModel);
         }
+
         #endregion
     }
 }

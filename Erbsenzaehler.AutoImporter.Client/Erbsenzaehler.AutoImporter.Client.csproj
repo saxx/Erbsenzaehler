@@ -7,8 +7,8 @@
     <ProjectGuid>{DF8923EA-A94E-4544-8B15-95FA9CCA6D19}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Erbsenzaehler.AutoImporter</RootNamespace>
-    <AssemblyName>Erbsenzaehler.AutoImporter</AssemblyName>
+    <RootNamespace>Erbsenzaehler.AutoImporter.Client</RootNamespace>
+    <AssemblyName>Erbsenzaehler.AutoImporter.Client</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

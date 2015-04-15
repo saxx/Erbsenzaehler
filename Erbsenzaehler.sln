@@ -20,7 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{510773
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erbsenzaehler.AutoImporter", "Erbsenzaehler.AutoImporter\Erbsenzaehler.AutoImporter.csproj", "{DF8923EA-A94E-4544-8B15-95FA9CCA6D19}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erbsenzaehler.AutoImporter.Client", "Erbsenzaehler.AutoImporter.Client\Erbsenzaehler.AutoImporter.Client.csproj", "{DF8923EA-A94E-4544-8B15-95FA9CCA6D19}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Erbsenzaehler.Tests", "Erbsenzaehler.Tests\Erbsenzaehler.Tests.csproj", "{189B1F02-A935-47B4-9AD8-5622AC02F9AB}"
 EndProject

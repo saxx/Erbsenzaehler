@@ -1,7 +1,7 @@
 ﻿using System;
 using Erbsenzaehler.AutoImporter.Configuration;
 
-namespace Erbsenzaehler.AutoImporter.Recipies
+namespace Erbsenzaehler.AutoImporter.Client.Recipies
 {
     public static class RecipeFactory
     {

@@ -99,10 +99,7 @@ else
                 { name: 'Ignorieren', value: true }, { name: 'Nicht ignorieren', value: false }
             ];
             $scope.dateOptions = [
-                { name: 'Ersten des Monats', value: @((int) Rule.ChangeDateToOption.FirstOfCurrentMonth) }, 
-                { name: 'Letzten des Monats', value: @((int) Rule.ChangeDateToOption.LastOfCurrentMonth) }, 
-                { name: 'Nahsten Monatsersten', value: @((int) Rule.ChangeDateToOption.NearestFirstOfMonth) }, 
-                { name: 'Nahsten Monatsletzten', value: @((int) Rule.ChangeDateToOption.NearestLastOfMonth) }
+                { name: 'Ersten des Monats', value: @((int) Rule.ChangeDateToOption.FirstOfCurrentMonth) }, { name: 'Letzten des Monats', value: @((int) Rule.ChangeDateToOption.LastOfCurrentMonth) }, { name: 'Nahsten Monatsersten', value: @((int) Rule.ChangeDateToOption.NearestFirstOfMonth) }, { name: 'Nahsten Monatsletzten', value: @((int) Rule.ChangeDateToOption.NearestLastOfMonth) }
             ];
 
             $scope.loadRules = function(callback) {

@@ -130,7 +130,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Erbsenzaehler.AutoImporter\Erbsenzaehler.AutoImporter.csproj">
+    <ProjectReference Include="..\Erbsenzaehler.AutoImporter.Client\Erbsenzaehler.AutoImporter.Client.csproj">
       <Project>{df8923ea-a94e-4544-8b15-95fa9cca6d19}</Project>
       <Name>Erbsenzaehler.AutoImporter</Name>
     </ProjectReference>

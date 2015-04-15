@@ -24,12 +24,14 @@ namespace Erbsenzaehler.Controllers
         {
             if (disposing)
             {
-				if (UserManager != null) {
-					UserManager.Dispose();
-				}
-				if (Db != null) {
-					Db.Dispose();
-				}
+                if (UserManager != null)
+                {
+                    UserManager.Dispose();
+                }
+                if (Db != null)
+                {
+                    Db.Dispose();
+                }
             }
             base.Dispose(disposing);
         }

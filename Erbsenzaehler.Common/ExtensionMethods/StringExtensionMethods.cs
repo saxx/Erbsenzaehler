@@ -39,6 +39,7 @@
             return s;
         }
 
+
         public static string NullIfEmpty(this string s)
         {
             if (string.IsNullOrEmpty(s))

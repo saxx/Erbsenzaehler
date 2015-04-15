@@ -6,28 +6,28 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
+using Erbsenzaehler.AutoImporter.Client.Recipies;
 using Erbsenzaehler.AutoImporter.Configuration;
-using Erbsenzaehler.AutoImporter.Recipies;
 using Erbsenzaehler.Importer;
 using Erbsenzaehler.Models;
 using Erbsenzaehler.Rules;
 using Newtonsoft.Json;
 using NLog;
 using OneTrueError.Reporting;
-using System.Threading.Tasks;
 
 namespace Erbsenzaehler.AutoImporter.WebJob
 {
     public class Program
     {
+        public const int IntervalInMinutes = 60*12;
 
-        public const int IntervalInMinutes = 60 * 12;
 
         public static void Main()
         {
             try
             {
-                Log.Info("Erbsenzaehler.AutoImporter.WebJob v" + typeof(Program).Assembly.GetName().Version + " starting up ...");
+                Log.Info("Erbsenzaehler.AutoImporter.WebJob v" + typeof (Program).Assembly.GetName().Version + " starting up ...");
 
                 // hard-code german culture here, we want our e-mails formatted for german
                 var germanCulture = new CultureInfo("de-DE");
@@ -102,6 +102,7 @@ namespace Erbsenzaehler.AutoImporter.WebJob
             }
         }
 
+
         private static IEnumerable<ConfigurationContainer> ParseSettings(string settings)
         {
             return JsonConvert.DeserializeObject<IEnumerable<ConfigurationContainer>>(settings);
@@ -124,7 +125,7 @@ namespace Erbsenzaehler.AutoImporter.WebJob
                 Log.Info("Parsing file and saving to database ...");
                 Log.Trace("File size: " + new FileInfo(tempFilePath).Length + " bytes.");
 
-                var importerType = (ImporterType)Enum.Parse(typeof(ImporterType), config.Erbsenzaehler.Importer);
+                var importerType = (ImporterType) Enum.Parse(typeof (ImporterType), config.Erbsenzaehler.Importer);
                 using (var reader = new StreamReader(tempFilePath, Encoding.UTF8))
                 {
                     var concreteImporter = new ImporterFactory().GetImporter(reader, importerType);
@@ -144,6 +145,7 @@ namespace Erbsenzaehler.AutoImporter.WebJob
             }
         }
 
+
         private static void SaveLog(Db db, int accountId, ImporterBase.ImportResult importResult, Stopwatch watch)
         {
             Log.Trace("Saving to import log ...");
@@ -156,7 +158,7 @@ namespace Erbsenzaehler.AutoImporter.WebJob
                 LinesFoundCount = importResult.NewLinesCount + importResult.DuplicateLinesCount,
                 LinesImportedCount = importResult.NewLinesCount,
                 Log = null,
-                Milliseconds = (int)watch.ElapsedMilliseconds
+                Milliseconds = (int) watch.ElapsedMilliseconds
             });
             db.SaveChanges();
         }

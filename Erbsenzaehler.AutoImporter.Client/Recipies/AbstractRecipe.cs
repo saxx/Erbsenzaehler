@@ -3,7 +3,7 @@ using NLog;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.Extensions;
 
-namespace Erbsenzaehler.AutoImporter.Recipies
+namespace Erbsenzaehler.AutoImporter.Client.Recipies
 {
     public abstract class AbstractRecipe
     {

@@ -1,5 +1,4 @@
-﻿
-namespace Erbsenzaehler.Models
+﻿namespace Erbsenzaehler.Models
 {
     public enum ImportLogType
     {

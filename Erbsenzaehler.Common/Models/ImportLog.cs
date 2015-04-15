@@ -10,10 +10,12 @@ namespace Erbsenzaehler.Models
             return query.Where(x => x.Account.ClientId == client.Id);
         }
 
+
         public static IQueryable<ImportLog> ByAccount(this IQueryable<ImportLog> query, Account account)
         {
             return query.Where(x => x.AccountId == account.Id);
         }
+
 
         public static IQueryable<ImportLog> ByUser(this IQueryable<ImportLog> query, User user)
         {

@@ -4,7 +4,7 @@ using System.Text;
 using Erbsenzaehler.AutoImporter.Configuration;
 using OpenQA.Selenium.PhantomJS;
 
-namespace Erbsenzaehler.AutoImporter.Recipies
+namespace Erbsenzaehler.AutoImporter.Client.Recipies
 {
     public class EasybankRecipe : AbstractRecipe
     {

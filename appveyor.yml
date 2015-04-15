@@ -22,8 +22,8 @@ assembly_info:
   assembly_informational_version: '{version}'
 
 artifacts:
-- path: Erbsenzaehler.AutoImporter\Bin\$(configuration)
-  name: Erbsenzaehler.AutoImporter
+- path: Erbsenzaehler.AutoImporter.Client\Bin\$(configuration)
+  name: Erbsenzaehler.AutoImporter.Client
 - path: Erbsenzaehler.SummaryMails.WebJob\Bin\$(configuration)
   name: Erbsenzaehler.SummaryMails.WebJob  
 - path: Erbsenzaehler.AutoImporter.WebJob\Bin\$(configuration)

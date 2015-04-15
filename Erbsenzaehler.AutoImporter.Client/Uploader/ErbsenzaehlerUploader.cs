@@ -6,7 +6,7 @@ using Erbsenzaehler.AutoImporter.Configuration;
 using Newtonsoft.Json;
 using NLog;
 
-namespace Erbsenzaehler.AutoImporter.Uploader
+namespace Erbsenzaehler.AutoImporter.Client.Uploader
 {
     public class ErbsenzaehlerUploader
     {

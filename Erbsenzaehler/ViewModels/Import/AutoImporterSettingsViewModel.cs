@@ -43,6 +43,5 @@ namespace Erbsenzaehler.ViewModels.Import
         public bool SavedSuccessfully { get; set; }
 
         public string Settings { get; set; }
-
     }
 }

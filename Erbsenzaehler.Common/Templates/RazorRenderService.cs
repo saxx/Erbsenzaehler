@@ -2,6 +2,7 @@
 using RazorEngine.Templating;
 
 #pragma warning disable 618
+
 namespace Erbsenzaehler.Templates
 {
     public class RazorRenderService<T>
@@ -15,7 +16,7 @@ namespace Erbsenzaehler.Templates
                 Resolver = new RazorTemplateResolver()
             };
             var razorService = RazorEngineService.Create(razorConfig);
-            return razorService.RunCompile(templateName, typeof(T), model);
+            return razorService.RunCompile(templateName, typeof (T), model);
         }
     }
 }

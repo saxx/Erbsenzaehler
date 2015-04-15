@@ -3,6 +3,7 @@ using System.IO;
 using RazorEngine.Templating;
 
 #pragma warning disable 618
+
 namespace Erbsenzaehler.Templates
 {
     public class RazorTemplateResolver : ITemplateResolver
@@ -16,6 +17,7 @@ namespace Erbsenzaehler.Templates
 
             return File.ReadAllText(GetTemplatePath(templateName));
         }
+
 
         private string GetTemplatePath(string templateName)
         {
@@ -39,4 +41,5 @@ namespace Erbsenzaehler.Templates
         }
     }
 }
+
 #pragma warning restore 618

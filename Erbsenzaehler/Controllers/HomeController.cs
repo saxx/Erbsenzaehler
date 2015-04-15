@@ -43,17 +43,20 @@ namespace Erbsenzaehler.Controllers
             return View();
         }
 
+
         [Route("Error")]
         public ActionResult Error()
         {
             return View();
         }
 
+
         [Route("Error404")]
         public ActionResult Error404()
         {
             return View();
         }
+
 
         [Route("Error500")]
         public ActionResult Error500()
