@@ -6,13 +6,16 @@ install:
 - set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
 
 before_build:
-- nuget restore
+- nuget restore -verbosity detailed
 
 build:
   publish_wap: true
   verbosity: minimal
 
 configuration: Release
+
+cache:
+- packages -> **\packages.config
 
 assembly_info:
   patch: true
