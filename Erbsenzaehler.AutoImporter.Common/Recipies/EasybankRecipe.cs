@@ -23,7 +23,7 @@ namespace Erbsenzaehler.AutoImporter.Recipies
 
             using (var driverService = PhantomJSDriverService.CreateDefaultService())
             {
-                driverService.HideCommandPromptWindow = true;
+                //driverService.HideCommandPromptWindow = true;
 
                 using (var driver = new PhantomJSDriver(driverService))
                 {
