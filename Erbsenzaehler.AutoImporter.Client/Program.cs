@@ -6,7 +6,6 @@ using Erbsenzaehler.AutoImporter.Recipies;
 using Erbsenzaehler.AutoImporter.Client.Uploader;
 using Erbsenzaehler.AutoImporter.Configuration;
 using Newtonsoft.Json;
-using NLog;
 
 namespace Erbsenzaehler.AutoImporter.Client
 {
@@ -16,27 +15,27 @@ namespace Erbsenzaehler.AutoImporter.Client
         {
             try
             {
-                Log.Info("Erbsenzähler AutoImporter starting ...");
+                Console.WriteLine("Erbsenzähler AutoImporter starting ...");
 
                 #region Configuration
 
-                Log.Trace("Looking for configuration file ...");
+                Console.WriteLine("Looking for configuration file ...");
                 var configPath = Path.Combine(Environment.CurrentDirectory, "config.json");
                 if (!File.Exists(configPath))
                 {
-                    Log.Fatal("Unable to locate configuration file at " + configPath + ".");
+                    Console.WriteLine("Unable to locate configuration file at " + configPath + ".");
                     Environment.Exit(-1);
                 }
 
-                Log.Trace("Loading configuration ...");
+                Console.WriteLine("Loading configuration ...");
                 try
                 {
                     Configuration = JsonConvert.DeserializeObject<IEnumerable<ConfigurationContainer>>(File.ReadAllText(configPath)).ToList();
                 }
                 catch (Exception ex)
                 {
-                    Log.Fatal("Unable to parse configuration file: ");
-                    Log.Fatal(ex.Message);
+                    Console.WriteLine("Unable to parse configuration file: ");
+                    Console.WriteLine(ex.Message);
                     Environment.Exit(-2);
                 }
 
@@ -45,10 +44,10 @@ namespace Erbsenzaehler.AutoImporter.Client
                 var configCount = 0;
                 foreach (var config in Configuration)
                 {
-                    Log.Info("Running import " + ++configCount + " of " + Configuration.Count() + " ...");
+                    Console.WriteLine("Running import " + ++configCount + " of " + Configuration.Count() + " ...");
 
                     var tempFilePath = Path.GetTempFileName();
-                    Log.Trace("Temporary file path is {0} ...", tempFilePath);
+                    Console.WriteLine("Temporary file path is {0} ...", tempFilePath);
 
                     var recipe = RecipeFactory.GetRecipe(config);
                     recipe.DownloadFile(tempFilePath);
@@ -61,21 +60,19 @@ namespace Erbsenzaehler.AutoImporter.Client
 
                     if (File.Exists(tempFilePath))
                     {
-                        Log.Trace("Deleting temporary file {0} ...", tempFilePath);
+                        Console.WriteLine("Deleting temporary file {0} ...", tempFilePath);
                         File.Delete(tempFilePath);
                     }
                 }
 
-                Log.Info("Quitting ...");
+                Console.WriteLine("Quitting ...");
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex.ToString);
+                Console.WriteLine(ex.ToString());
             }
         }
 
-
-        private static Logger Log => LogManager.GetCurrentClassLogger();
 
         private static IList<ConfigurationContainer> Configuration { get; set; }
     }

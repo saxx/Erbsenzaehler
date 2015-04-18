@@ -297,7 +297,7 @@ angular.mock.$ExceptionHandlerProvider = function() {
  * @description
  * Mock implementation of {@link ng.$log} that gathers all logged messages in arrays
  * (one array per logging level). These arrays are exposed as `logs` property of each of the
- * level-specific log function, e.g. for level `error` the array is exposed as `$log.error.logs`.
+ * level-specific log function, e.g. for level `error` the array is exposed as `$Console.WriteLine.logs`.
  *
  */
 angular.mock.$LogProvider = function() {
@@ -320,8 +320,8 @@ angular.mock.$LogProvider = function() {
     var $log = {
       log: function() { $log.log.logs.push(concat([], arguments, 0)); },
       warn: function() { $log.warn.logs.push(concat([], arguments, 0)); },
-      info: function() { $log.info.logs.push(concat([], arguments, 0)); },
-      error: function() { $log.error.logs.push(concat([], arguments, 0)); },
+      info: function() { $Console.WriteLine.logs.push(concat([], arguments, 0)); },
+      error: function() { $Console.WriteLine.logs.push(concat([], arguments, 0)); },
       debug: function() {
         if (debug) {
           $log.debug.logs.push(concat([], arguments, 0));
@@ -360,11 +360,11 @@ angular.mock.$LogProvider = function() {
        *
        * @example
        * ```js
-       * $log.info('Some Info');
-       * var first = $log.info.logs.unshift();
+       * $Console.WriteLine('Some Info');
+       * var first = $Console.WriteLine.logs.unshift();
        * ```
        */
-      $log.info.logs = [];
+      $Console.WriteLine.logs = [];
       /**
        * @ngdoc property
        * @name $log#warn.logs
@@ -388,11 +388,11 @@ angular.mock.$LogProvider = function() {
        *
        * @example
        * ```js
-       * $log.error('Some Error');
-       * var first = $log.error.logs.unshift();
+       * $Console.WriteLine('Some Error');
+       * var first = $Console.WriteLine.logs.unshift();
        * ```
        */
-      $log.error.logs = [];
+      $Console.WriteLine.logs = [];
         /**
        * @ngdoc property
        * @name $log#debug.logs
@@ -1834,7 +1834,7 @@ angular.mock.$RootElementProvider = function() {
  * // Controller definition ...
  *
  * myMod.controller('MyDirectiveController', ['log', function($log) {
- *   $log.info(this.name);
+ *   $Console.WriteLine(this.name);
  * })];
  *
  *
@@ -1844,7 +1844,7 @@ angular.mock.$RootElementProvider = function() {
  *   it('should write the bound name to the log', inject(function($controller, $log) {
  *     var ctrl = $controller('MyDirective', { /* no locals &#42;/ }, { name: 'Clark Kent' });
  *     expect(ctrl.name).toEqual('Clark Kent');
- *     expect($log.info.logs).toEqual(['Clark Kent']);
+ *     expect($Console.WriteLine.logs).toEqual(['Clark Kent']);
  *   });
  * });
  *

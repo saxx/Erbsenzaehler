@@ -13,7 +13,6 @@ using Erbsenzaehler.Importer;
 using Erbsenzaehler.Models;
 using Erbsenzaehler.Rules;
 using Newtonsoft.Json;
-using NLog;
 using OneTrueError.Reporting;
 
 namespace Erbsenzaehler.AutoImporter.WebJob
@@ -27,7 +26,7 @@ namespace Erbsenzaehler.AutoImporter.WebJob
         {
             try
             {
-                Log.Info("Erbsenzaehler.AutoImporter.WebJob v" + typeof (Program).Assembly.GetName().Version + " starting up ...");
+                Console.WriteLine("Erbsenzaehler.AutoImporter.WebJob v" + typeof (Program).Assembly.GetName().Version + " starting up ...");
 
                 // hard-code german culture here, we want our e-mails formatted for german
                 var germanCulture = new CultureInfo("de-DE");
@@ -57,18 +56,18 @@ namespace Erbsenzaehler.AutoImporter.WebJob
                         })
                         .ToList();
 
-                    Log.Trace(clients.Count() + " client(s) found with auto import configuration.");
+                    Console.WriteLine(clients.Count() + " client(s) found with auto import configuration.");
                     foreach (var client in clients)
                     {
                         try
                         {
-                            Log.Info("Parsing configuration for client '#" + client.ClientId + " " + client.ClientName + "' ...");
+                            Console.WriteLine("Parsing configuration for client '#" + client.ClientId + " " + client.ClientName + "' ...");
                             var configurations = ParseSettings(client.Settings).ToList();
 
                             var configCount = 0;
                             foreach (var config in configurations)
                             {
-                                Log.Info("Running import " + ++configCount + " of " + configurations.Count() + " ...");
+                                Console.WriteLine("Running import " + ++configCount + " of " + configurations.Count() + " ...");
                                 var account = client.Accounts.FirstOrDefault(x => x.AccountName.Equals(config.Erbsenzaehler.Account, StringComparison.InvariantCultureIgnoreCase));
                                 if (account == null)
                                 {
@@ -81,23 +80,23 @@ namespace Erbsenzaehler.AutoImporter.WebJob
                                 }
                                 else
                                 {
-                                    Log.Info("Import for account '" + account.AccountName + "' already happened at " + account.LastImport + " UTC.");
+                                    Console.WriteLine("Import for account '" + account.AccountName + "' already happened at " + account.LastImport + " UTC.");
                                 }
                             }
                         }
                         catch (Exception ex)
                         {
-                            Log.Error(ex);
+                            Console.WriteLine(ex);
                             LogException(ex);
                         }
                     }
                 }
 
-                Log.Trace("Everything done. Goodbye.");
+                Console.WriteLine("Everything done. Goodbye.");
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex);
+                Console.WriteLine(ex);
                 LogException(ex);
             }
         }
@@ -115,15 +114,15 @@ namespace Erbsenzaehler.AutoImporter.WebJob
             watch.Start();
 
             var tempFilePath = Path.GetTempFileName();
-            Log.Trace("Temporary file path is {0} ...", tempFilePath);
+            Console.WriteLine("Temporary file path is {0} ...", tempFilePath);
 
             var recipe = RecipeFactory.GetRecipe(config);
             recipe.DownloadFile(tempFilePath);
 
             if (File.Exists(tempFilePath) && new FileInfo(tempFilePath).Length > 0)
             {
-                Log.Info("Parsing file and saving to database ...");
-                Log.Trace("File size: " + new FileInfo(tempFilePath).Length + " bytes.");
+                Console.WriteLine("Parsing file and saving to database ...");
+                Console.WriteLine("File size: " + new FileInfo(tempFilePath).Length + " bytes.");
 
                 var importerType = (ImporterType) Enum.Parse(typeof (ImporterType), config.Erbsenzaehler.Importer);
                 using (var reader = new StreamReader(tempFilePath, Encoding.UTF8))
@@ -131,7 +130,7 @@ namespace Erbsenzaehler.AutoImporter.WebJob
                     var concreteImporter = new ImporterFactory().GetImporter(reader, importerType);
                     var importResult = await concreteImporter.LoadFileAndImport(db, clientId, accountId, new RulesApplier());
 
-                    Log.Info(importResult.NewLinesCount + " line(s) created, " + importResult.DuplicateLinesCount + " duplicate line(s).");
+                    Console.WriteLine(importResult.NewLinesCount + " line(s) created, " + importResult.DuplicateLinesCount + " duplicate line(s).");
 
                     watch.Stop();
                     SaveLog(db, accountId, importResult, watch);
@@ -140,7 +139,7 @@ namespace Erbsenzaehler.AutoImporter.WebJob
 
             if (File.Exists(tempFilePath))
             {
-                Log.Trace("Deleting temporary file {0} ...", tempFilePath);
+                Console.WriteLine("Deleting temporary file {0} ...", tempFilePath);
                 File.Delete(tempFilePath);
             }
         }
@@ -148,7 +147,7 @@ namespace Erbsenzaehler.AutoImporter.WebJob
 
         private static void SaveLog(Db db, int accountId, ImporterBase.ImportResult importResult, Stopwatch watch)
         {
-            Log.Trace("Saving to import log ...");
+            Console.WriteLine("Saving to import log ...");
             db.ImportLog.Add(new ImportLog
             {
                 Date = DateTime.UtcNow,
@@ -171,8 +170,5 @@ namespace Erbsenzaehler.AutoImporter.WebJob
                 OneTrue.Report(ex);
             }
         }
-
-
-        private static Logger Log => LogManager.GetCurrentClassLogger();
     }
 }

@@ -19,7 +19,7 @@ namespace Erbsenzaehler.AutoImporter.Recipies
 
         public override void DownloadFile(string temporaryFilePath)
         {
-            Log.Info("Downloading account statements from Easybank ...");
+            Console.WriteLine("Downloading account statements from Easybank ...");
 
             using (var driverService = PhantomJSDriverService.CreateDefaultService())
             {
@@ -33,21 +33,21 @@ namespace Erbsenzaehler.AutoImporter.Recipies
 
                     try
                     {
-                        Log.Trace("Opening Easybank homepage ...");
+                        Console.WriteLine("Opening Easybank homepage ...");
                         driver.Navigate().GoToUrl("https://ebanking.easybank.at");
                         Screenshot(driver, "Easybank-1");
 
-                        Log.Trace("Filling login credentials ...");
+                        Console.WriteLine("Filling login credentials ...");
                         driver.FindElementById("lof5").SendKeys(_configuration.Verfuegernummer);
                         driver.FindElementById("lof9").SendKeys(_configuration.Pin);
                         driver.FindElementByLinkText("Login").Click();
                         Screenshot(driver, "Easybank-2");
 
-                        Log.Trace("Loading account overview ...");
+                        Console.WriteLine("Loading account overview ...");
                         driver.FindElementByLinkText(_configuration.Kontonummer).Click();
                         Screenshot(driver, "Easybank-3");
 
-                        Log.Trace("Injecting & executing JavaScript ...");
+                        Console.WriteLine("Injecting & executing JavaScript ...");
                         const string script = "var resultField = $('<pre />').attr('id', 'csv_result');" +
                                               "var form = document.transactionSearchForm; form.csv.value = 'true';" +
                                               "$.ajax({ url: $(form).attr('action')," +
@@ -59,7 +59,7 @@ namespace Erbsenzaehler.AutoImporter.Recipies
                                               "}});";
                         driver.ExecuteScript(script);
 
-                        Log.Trace("Loading file content from page and saving to {0} ...", temporaryFilePath);
+                        Console.WriteLine("Loading file content from page and saving to {0} ...", temporaryFilePath);
                         var text = driver.FindElementById("csv_result").Text;
                         Screenshot(driver, "Easybank-4");
 
@@ -68,11 +68,11 @@ namespace Erbsenzaehler.AutoImporter.Recipies
                             writer.Write(text);
                         }
 
-                        Log.Info("Download completed.");
+                        Console.WriteLine("Download completed.");
                     }
                     catch (Exception ex)
                     {
-                        Log.Error("Unable to download from Easybank: " + ex);
+                        Console.WriteLine("Unable to download from Easybank: " + ex);
                     }
                     finally
                     {

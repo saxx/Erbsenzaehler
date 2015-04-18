@@ -4929,7 +4929,7 @@ function Browser(window, document, $log, $sniffer) {
           try {
             outstandingRequestCallbacks.pop()();
           } catch (e) {
-            $log.error(e);
+            $Console.WriteLine(e);
           }
         }
       }
@@ -8557,7 +8557,7 @@ function $DocumentProvider() {
  *
  * @description
  * Any uncaught exception in angular expressions is delegated to this service.
- * The default implementation simply delegates to `$log.error` which logs it into
+ * The default implementation simply delegates to `$Console.WriteLine` which logs it into
  * the browser console.
  *
  * In unit tests, if `angular-mocks.js` is loaded, this service is overridden by
@@ -8593,7 +8593,7 @@ function $DocumentProvider() {
 function $ExceptionHandlerProvider() {
   this.$get = ['$log', function($log) {
     return function(exception, cause) {
-      $log.error.apply($log, arguments);
+      $Console.WriteLine.apply($log, arguments);
     };
   }];
 }
@@ -11532,8 +11532,8 @@ function $LocationProvider() {
          <input type="text" ng-model="message"/>
          <button ng-click="$log.log(message)">log</button>
          <button ng-click="$log.warn(message)">warn</button>
-         <button ng-click="$log.info(message)">info</button>
-         <button ng-click="$log.error(message)">error</button>
+         <button ng-click="$Console.WriteLine(message)">info</button>
+         <button ng-click="$Console.WriteLine(message)">error</button>
          <button ng-click="$log.debug(message)">debug</button>
        </div>
      </file>

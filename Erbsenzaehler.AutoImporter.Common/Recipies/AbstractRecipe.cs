@@ -1,5 +1,5 @@
-﻿using System.Drawing.Imaging;
-using NLog;
+﻿using System;
+using System.Drawing.Imaging;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.Extensions;
 
@@ -15,12 +15,9 @@ namespace Erbsenzaehler.AutoImporter.Recipies
         {
             if (SaveScreenshots)
             {
-                Log.Trace("Saving screenshot as " + filename + ".png ...");
+                Console.WriteLine("Saving screenshot as " + filename + ".png ...");
                 driver.TakeScreenshot().SaveAsFile(filename + ".png", ImageFormat.Png);
             }
         }
-
-
-        protected static Logger Log => LogManager.GetCurrentClassLogger();
     }
 }
