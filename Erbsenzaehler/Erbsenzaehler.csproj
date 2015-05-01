@@ -822,11 +822,11 @@
     </ItemGroup>
   </Target>
   <Target Name="Include_AutoImporter_WebJob">
-    <ItemGroup>
+    <!--<ItemGroup>
       <_AutoImporterWebJobFiles Include="$(SolutionDir)Erbsenzaehler.AutoImporter.WebJob\bin\$(ConfigurationName)\**\*" />
       <FilesForPackagingFromProject Include="%(_AutoImporterWebJobFiles.Identity)">
         <DestinationRelativePath>App_Data\jobs\triggered\AutoImporter\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
       </FilesForPackagingFromProject>
-    </ItemGroup>
+    </ItemGroup>-->
   </Target>
 </Project>
