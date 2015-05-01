@@ -43,7 +43,7 @@
 
         $scope.switchIgnore = function (line) {
             line.Ignore = !line.Ignore;
-            $scope.save(line);
+            $scope.saveLine(line);
         };
 
         $scope.loadLines();
