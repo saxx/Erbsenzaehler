@@ -13,29 +13,31 @@ namespace Erbsenzaehler.AutoImporter.Client
     {
         private static void Main()
         {
+            var logger = new Logger();
+
             try
             {
-                Console.WriteLine("Erbsenzähler AutoImporter starting ...");
+                logger.Info("Erbsenzähler AutoImporter starting ...");
 
                 #region Configuration
 
-                Console.WriteLine("Looking for configuration file ...");
+                logger.Trace("Looking for configuration file ...");
                 var configPath = Path.Combine(Environment.CurrentDirectory, "config.json");
                 if (!File.Exists(configPath))
                 {
-                    Console.WriteLine("Unable to locate configuration file at " + configPath + ".");
+                    logger.Fatal("Unable to locate configuration file at " + configPath + ".");
                     Environment.Exit(-1);
                 }
 
-                Console.WriteLine("Loading configuration ...");
+                logger.Trace("Loading configuration ...");
                 try
                 {
                     Configuration = JsonConvert.DeserializeObject<IEnumerable<ConfigurationContainer>>(File.ReadAllText(configPath)).ToList();
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Unable to parse configuration file: ");
-                    Console.WriteLine(ex.Message);
+                    logger.Fatal("Unable to parse configuration file: ");
+                    logger.Fatal(ex.Message);
                     Environment.Exit(-2);
                 }
 
@@ -44,32 +46,32 @@ namespace Erbsenzaehler.AutoImporter.Client
                 var configCount = 0;
                 foreach (var config in Configuration)
                 {
-                    Console.WriteLine("Running import " + ++configCount + " of " + Configuration.Count() + " ...");
+                    logger.Info("Running import " + ++configCount + " of " + Configuration.Count() + " ...");
 
                     var tempFilePath = Path.GetTempFileName();
-                    Console.WriteLine("Temporary file path is {0} ...", tempFilePath);
+                    logger.Trace("Temporary file path is {0} ...", tempFilePath);
 
                     var recipe = RecipeFactory.GetRecipe(config);
-                    recipe.DownloadFile(tempFilePath);
+                    recipe.DownloadFile(tempFilePath, logger);
 
                     if (File.Exists(tempFilePath) && new FileInfo(tempFilePath).Length > 0)
                     {
                         var uploader = new ErbsenzaehlerUploader(config.Erbsenzaehler);
-                        uploader.Upload(tempFilePath);
+                        uploader.Upload(tempFilePath, logger);
                     }
 
                     if (File.Exists(tempFilePath))
                     {
-                        Console.WriteLine("Deleting temporary file {0} ...", tempFilePath);
+                        logger.Trace("Deleting temporary file {0} ...", tempFilePath);
                         File.Delete(tempFilePath);
                     }
                 }
 
-                Console.WriteLine("Quitting ...");
+                logger.Info("Quitting ...");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                logger.Fatal(ex.ToString());
             }
         }
 

@@ -18,17 +18,17 @@ namespace Erbsenzaehler.AutoImporter.Client.Uploader
         }
 
 
-        public void Upload(string filePath)
+        public void Upload(string filePath, ILogger logger)
         {
-            Console.WriteLine("Uploading file to Erbsenzähler ...");
-            Console.WriteLine("Erbsenzähler base URL is {0}.", _config.Url);
+            logger?.Info("Uploading file to Erbsenzähler ...");
+            logger?.Trace("Erbsenzähler base URL is {0}.", _config.Url);
 
             var httpClient = new HttpClient
             {
                 BaseAddress = new Uri(_config.Url)
             };
 
-            Console.WriteLine("Building POST content ...");
+            logger?.Trace("Building POST content ...");
             var postContent = new ObjectContent(typeof (object), new
             {
                 _config.Username,
@@ -38,7 +38,7 @@ namespace Erbsenzaehler.AutoImporter.Client.Uploader
                 File = File.ReadAllBytes(filePath)
             }, new JsonMediaTypeFormatter());
 
-            Console.WriteLine("Uploading ...");
+            logger?.Trace("Uploading ...");
             var postResult = httpClient.PostAsync("Api/Import", postContent).Result;
             try
             {
@@ -46,12 +46,12 @@ namespace Erbsenzaehler.AutoImporter.Client.Uploader
             }
             catch
             {
-                Console.WriteLine("Unable to upload to Erbsenzähler: " + postResult.StatusCode + " " + postResult.ReasonPhrase);
+                logger?.Error("Unable to upload to Erbsenzähler: " + postResult.StatusCode + " " + postResult.ReasonPhrase);
                 return;
             }
 
             var importResult = JsonConvert.DeserializeObject<dynamic>(postResult.Content.ReadAsStringAsync().Result);
-            Console.WriteLine("Upload completed. {0} lines imported, {1} lines ignored.", importResult.ImportedCount, importResult.IgnoredCount);
+            logger?.Info("Upload completed. {0} lines imported, {1} lines ignored.", importResult.ImportedCount, importResult.IgnoredCount);
         }
     }
 }

@@ -24,9 +24,11 @@ namespace Erbsenzaehler.AutoImporter.WebJob
 
         public static void Main()
         {
+            var logger = new Logger();
+
             try
             {
-                Console.WriteLine("Erbsenzaehler.AutoImporter.WebJob v" + typeof (Program).Assembly.GetName().Version + " starting up ...");
+                logger.Info("Erbsenzaehler.AutoImporter.WebJob v" + typeof (Program).Assembly.GetName().Version + " starting up ...");
 
                 // hard-code german culture here, we want our e-mails formatted for german
                 var germanCulture = new CultureInfo("de-DE");
@@ -56,18 +58,18 @@ namespace Erbsenzaehler.AutoImporter.WebJob
                         })
                         .ToList();
 
-                    Console.WriteLine(clients.Count() + " client(s) found with auto import configuration.");
+                    logger.Trace(clients.Count() + " client(s) found with auto import configuration.");
                     foreach (var client in clients)
                     {
                         try
                         {
-                            Console.WriteLine("Parsing configuration for client '#" + client.ClientId + " " + client.ClientName + "' ...");
+                            logger.Trace("Parsing configuration for client #" + client.ClientId + " " + client.ClientName + " ...");
                             var configurations = ParseSettings(client.Settings).ToList();
 
                             var configCount = 0;
                             foreach (var config in configurations)
                             {
-                                Console.WriteLine("Running import " + ++configCount + " of " + configurations.Count() + " ...");
+                                logger.Info("Running import " + ++configCount + " of " + configurations.Count() + " of client #" + client.ClientId + " " + client.ClientName + " ...");
                                 var account = client.Accounts.FirstOrDefault(x => x.AccountName.Equals(config.Erbsenzaehler.Account, StringComparison.InvariantCultureIgnoreCase));
                                 if (account == null)
                                 {
@@ -76,27 +78,27 @@ namespace Erbsenzaehler.AutoImporter.WebJob
 
                                 if (account.LastImport <= DateTime.UtcNow.AddMinutes(-IntervalInMinutes))
                                 {
-                                    RunImport(db, config, client.ClientId, account.AccountId).Wait();
+                                    RunImport(db, config, client.ClientId, account.AccountId, logger).Wait();
                                 }
                                 else
                                 {
-                                    Console.WriteLine("Import for account '" + account.AccountName + "' already happened at " + account.LastImport + " UTC.");
+                                    logger.Trace("Import for account '" + account.AccountName + "' already happened at " + account.LastImport + " UTC.");
                                 }
                             }
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine(ex);
+                            logger.Error(ex.ToString());
                             LogException(ex);
                         }
                     }
                 }
 
-                Console.WriteLine("Everything done. Goodbye.");
+                logger.Info("Everything done. Goodbye.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                logger.Fatal(ex.ToString());
                 LogException(ex);
             }
         }
@@ -108,21 +110,21 @@ namespace Erbsenzaehler.AutoImporter.WebJob
         }
 
 
-        private static async Task RunImport(Db db, ConfigurationContainer config, int clientId, int accountId)
+        private static async Task RunImport(Db db, ConfigurationContainer config, int clientId, int accountId, ILogger logger)
         {
             var watch = new Stopwatch();
             watch.Start();
 
             var tempFilePath = Path.GetTempFileName();
-            Console.WriteLine("Temporary file path is {0} ...", tempFilePath);
+            logger?.Trace("Temporary file path is {0} ...", tempFilePath);
 
             var recipe = RecipeFactory.GetRecipe(config);
-            recipe.DownloadFile(tempFilePath);
+            recipe.DownloadFile(tempFilePath, logger);
 
             if (File.Exists(tempFilePath) && new FileInfo(tempFilePath).Length > 0)
             {
-                Console.WriteLine("Parsing file and saving to database ...");
-                Console.WriteLine("File size: " + new FileInfo(tempFilePath).Length + " bytes.");
+                logger?.Trace("Parsing file and saving to database ...");
+                logger?.Trace("File size: " + new FileInfo(tempFilePath).Length + " bytes.");
 
                 var importerType = (ImporterType) Enum.Parse(typeof (ImporterType), config.Erbsenzaehler.Importer);
                 using (var reader = new StreamReader(tempFilePath, Encoding.UTF8))
@@ -130,24 +132,24 @@ namespace Erbsenzaehler.AutoImporter.WebJob
                     var concreteImporter = new ImporterFactory().GetImporter(reader, importerType);
                     var importResult = await concreteImporter.LoadFileAndImport(db, clientId, accountId, new RulesApplier());
 
-                    Console.WriteLine(importResult.NewLinesCount + " line(s) created, " + importResult.DuplicateLinesCount + " duplicate line(s).");
+                    logger?.Info(importResult.NewLinesCount + " line(s) created, " + importResult.DuplicateLinesCount + " duplicate line(s).");
 
                     watch.Stop();
-                    SaveLog(db, accountId, importResult, watch);
+                    SaveLog(db, accountId, importResult, watch, logger);
                 }
             }
 
             if (File.Exists(tempFilePath))
             {
-                Console.WriteLine("Deleting temporary file {0} ...", tempFilePath);
+                logger?.Trace("Deleting temporary file {0} ...", tempFilePath);
                 File.Delete(tempFilePath);
             }
         }
 
 
-        private static void SaveLog(Db db, int accountId, ImporterBase.ImportResult importResult, Stopwatch watch)
+        private static void SaveLog(Db db, int accountId, ImporterBase.ImportResult importResult, Stopwatch watch, ILogger logger)
         {
-            Console.WriteLine("Saving to import log ...");
+            logger?.Trace("Saving to import log ...");
             db.ImportLog.Add(new ImportLog
             {
                 Date = DateTime.UtcNow,
