@@ -1,5 +1,4 @@
-﻿@using Erbsenzaehler.ViewModels.HistoricalReports
-@using Newtonsoft.Json
+﻿@using Newtonsoft.Json
 @model  Erbsenzaehler.ViewModels.HistoricalReports.AmountsViewModel
 @if (Model.AmountPerMonth.Any())
 {
@@ -30,7 +29,7 @@
             $.each(json[category], function(propertyName, propertyValue) {
                 amounts.push({
                     name: propertyName,
-                    value: (category === "@AmountsViewModel.IncomeCategory") ? propertyValue : -propertyValue
+                    value: (category === "@Erbsenzaehler.ViewModels.HistoricalReports.AmountsViewModel.IncomeCategory") ? propertyValue : -propertyValue
                 });
             });
 

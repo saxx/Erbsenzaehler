@@ -28,12 +28,12 @@ namespace Erbsenzaehler.Models
                     }
                     else
                     {
-                        throw new ArgumentException("No year and month specified.", "yearAndMonth");
+                        throw new ArgumentException("No year and month specified.", nameof(yearAndMonth));
                     }
                 }
                 else if (yearAndMonth.IndexOf("-", StringComparison.InvariantCulture) != 4)
                 {
-                    throw new ArgumentException("'" + yearAndMonth + "' is not a valid year and month.", "yearAndMonth");
+                    throw new ArgumentException("'" + yearAndMonth + "' is not a valid year and month.", nameof(yearAndMonth));
                 }
                 else
                 {

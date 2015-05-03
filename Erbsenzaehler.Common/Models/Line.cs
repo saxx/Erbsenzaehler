@@ -52,7 +52,7 @@ namespace Erbsenzaehler.Models
         {
             if (string.IsNullOrEmpty(category))
             {
-                throw new ArgumentOutOfRangeException("category");
+                throw new ArgumentOutOfRangeException(nameof(category));
             }
             category = category.ToLower();
             return q.ByCategoryNotEmpty().Where(x => x.Category.ToLower() == category);
@@ -63,7 +63,7 @@ namespace Erbsenzaehler.Models
         {
             if (string.IsNullOrEmpty(category))
             {
-                throw new ArgumentOutOfRangeException("category");
+                throw new ArgumentOutOfRangeException(nameof(category));
             }
             return q.ByCategoryNotEmpty().Where(x => x.Category.Equals(category, StringComparison.CurrentCultureIgnoreCase));
         }

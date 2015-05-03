@@ -12,7 +12,7 @@ namespace Erbsenzaehler.Templates
         {
             if (templateName == null)
             {
-                throw new ArgumentNullException("templateName");
+                throw new ArgumentNullException(nameof(templateName));
             }
 
             return File.ReadAllText(GetTemplatePath(templateName));
@@ -23,7 +23,7 @@ namespace Erbsenzaehler.Templates
         {
             if (templateName == null)
             {
-                throw new ArgumentNullException("templateName");
+                throw new ArgumentNullException(nameof(templateName));
             }
 
             var templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Templates", templateName);
