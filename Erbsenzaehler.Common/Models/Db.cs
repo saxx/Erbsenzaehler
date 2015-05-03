@@ -18,6 +18,7 @@ namespace Erbsenzaehler.Models
             return new Db(Config.DatabaseConnectionString);
         }
 
+
         public DbSet<Client> Clients { get; set; }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Line> Lines { get; set; }

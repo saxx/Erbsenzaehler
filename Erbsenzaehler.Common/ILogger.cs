@@ -1,5 +1,4 @@
-﻿
-namespace Erbsenzaehler
+﻿namespace Erbsenzaehler
 {
     public interface ILogger
     {

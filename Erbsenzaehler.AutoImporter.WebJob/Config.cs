@@ -1,5 +1,4 @@
-﻿
-namespace Erbsenzaehler.AutoImporter.WebJob
+﻿namespace Erbsenzaehler.AutoImporter.WebJob
 {
     public static class Config
     {
