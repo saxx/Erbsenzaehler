@@ -1,11 +1,10 @@
-﻿using System.Configuration;
-
+﻿
 namespace Erbsenzaehler.AutoImporter.WebJob
 {
     public static class Config
     {
-        public static string ErbsenzaehlerUrl => ConfigurationManager.AppSettings["Erbsenzaehler.Url"] ?? "http://erbsenzaehler.azurewebsites.net";
-        public static string OneTrueErrorAppKey => ConfigurationManager.AppSettings["OneTrueError.AppKey"] ?? "";
-        public static string OneTrueErrorAppSecret => ConfigurationManager.AppSettings["OneTrueError.AppSecret"] ?? "";
+        public static string ErbsenzaehlerUrl => Erbsenzaehler.Config.Setting("Url", "http://erbsenzaehler.azurewebsites.net");
+        public static string OneTrueErrorAppKey => Erbsenzaehler.Config.Setting("OneTrueError.AppKey", "");
+        public static string OneTrueErrorAppSecret => Erbsenzaehler.Config.Setting("OneTrueError.AppSecret", "");
     }
 }

@@ -15,7 +15,7 @@ namespace Erbsenzaehler.Controllers
 
         protected ControllerBase()
         {
-            Db = new Db();
+            Db = new Db(Config.DatabaseConnectionString);
             UserManager = new UserManager<User>(new UserStore<User>(Db));
         }
 
@@ -24,14 +24,8 @@ namespace Erbsenzaehler.Controllers
         {
             if (disposing)
             {
-                if (UserManager != null)
-                {
-                    UserManager.Dispose();
-                }
-                if (Db != null)
-                {
-                    Db.Dispose();
-                }
+                UserManager?.Dispose();
+                Db?.Dispose();
             }
             base.Dispose(disposing);
         }

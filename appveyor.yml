@@ -1,4 +1,4 @@
-version: 0.4.{build}
+version: {build}
 
 os: Visual Studio 2015 CTP 6
 
@@ -6,16 +6,13 @@ install:
 - set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
 
 before_build:
-- nuget restore -verbosity detailed
+- nuget restore
 
 build:
   publish_wap: true
   verbosity: minimal
 
 configuration: Release
-
-cache:
-- packages -> **\packages.config
 
 assembly_info:
   patch: true
@@ -34,12 +31,13 @@ artifacts:
 
 deploy:
 - provider: WebDeploy
-  server: https://erbsenzaehler.scm.azurewebsites.net:443/msdeploy.axd
-  website: erbsenzaehler
-  username: $erbsenzaehler
+  server: http://ec2-52-5-106-205.compute-1.amazonaws.com/MSDEPLOYAGENTSERVICE
+  website: Erbsenzaehler
+  username: Administrator
   password:
-    secure: ywPiOOw/o99qoQAj0OGWztq6DumwP9/7OtBCxFM1zhCkuEX2GTS8VOJl72UY66iye1iIPdnkUAxq2uPnNIauEw==
+    secure: Y33/61RboYpAM5eRL6jJsw==
+  ntlm: true
   remove_files: true
-  app_offline: true
+  app_offline: false
   on:
     branch: master

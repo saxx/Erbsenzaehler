@@ -38,7 +38,7 @@ namespace Erbsenzaehler.AutoImporter.WebJob
                     OneTrue.Configuration.Credentials(Config.OneTrueErrorAppKey, Config.OneTrueErrorAppSecret);
                 }
 
-                using (var db = new Db())
+                using (var db = new Db(Erbsenzaehler.Config.DatabaseConnectionString))
                 {
                     var clients = db.Clients
                         .Where(x => x.AutoImporterSettings != null && x.AutoImporterSettings != "")

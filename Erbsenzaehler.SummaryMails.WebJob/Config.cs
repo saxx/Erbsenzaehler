@@ -1,14 +1,12 @@
-﻿using System.Configuration;
-
-namespace Erbsenzaehler.SummaryMails.WebJob
+﻿namespace Erbsenzaehler.SummaryMails.WebJob
 {
     public static class Config
     {
-        public static string ErbsenzaehlerUrl => ConfigurationManager.AppSettings["Erbsenzaehler.Url"] ?? "http://erbsenzaehler.azurewebsites.net";
-        public static string OneTrueErrorAppKey => ConfigurationManager.AppSettings["OneTrueError.AppKey"] ?? "";
-        public static string OneTrueErrorAppSecret => ConfigurationManager.AppSettings["OneTrueError.AppSecret"] ?? "";
-        public static string SendGridUserName => ConfigurationManager.AppSettings["SendGrid.UserName"] ?? "";
-        public static string SendGridPassword => ConfigurationManager.AppSettings["SendGrid.Password"] ?? "";
-        public static string SendGridSender => ConfigurationManager.AppSettings["SendGrid.Sender"] ?? "Erbsenzähler <erbsenzaehler@erbsenzaehler.azurewebsites.net>";
+        public static string ErbsenzaehlerUrl => Erbsenzaehler.Config.Setting("Url", "http://erbsenzaehler.azurewebsites.net");
+        public static string OneTrueErrorAppKey => Erbsenzaehler.Config.Setting("OneTrueError.AppKey", "");
+        public static string OneTrueErrorAppSecret => Erbsenzaehler.Config.Setting("OneTrueError.AppSecret", "");
+        public static string SendGridUserName => Erbsenzaehler.Config.Setting("SendGrid.UserName", "");
+        public static string SendGridPassword => Erbsenzaehler.Config.Setting("SendGrid.Password", "");
+        public static string SendGridSender => Erbsenzaehler.Config.Setting("SendGrid.Sender", "Erbsenzähler <erbsenzaehler@erbsenzaehler.azurewebsites.net>");
     }
 }

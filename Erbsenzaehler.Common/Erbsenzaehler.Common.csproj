@@ -60,6 +60,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Razor.3.0.0\lib\net45\System.Web.Razor.dll</HintPath>
@@ -75,7 +76,9 @@
     <Compile Include="AutoImporter\Configuration\ConfigurationContainer.cs" />
     <Compile Include="AutoImporter\Configuration\EasybankConfiguration.cs" />
     <Compile Include="AutoImporter\Configuration\ErbsenzaehlerConfiguration.cs" />
+    <Compile Include="Config.cs" />
     <Compile Include="ExtensionMethods\StringExtensionMethods.cs" />
+    <Compile Include="ILogger.cs" />
     <Compile Include="Importer\Converters\GermanAmountConverter.cs" />
     <Compile Include="Importer\Converters\GermanDateConverter.cs" />
     <Compile Include="Importer\Converters\InvariantAmountConverter.cs" />
