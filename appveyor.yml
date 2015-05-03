@@ -31,7 +31,7 @@ artifacts:
 
 deploy:
 - provider: WebDeploy
-  server: http://ec2-52-5-106-205.compute-1.amazonaws.com/MSDEPLOYAGENTSERVICE
+  server: http://erbsenzaehler.sachsenhofer.com/MSDEPLOYAGENTSERVICE
   website: Erbsenzaehler
   username: Administrator
   password:
