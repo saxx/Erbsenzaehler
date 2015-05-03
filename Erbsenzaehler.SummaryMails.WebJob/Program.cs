@@ -13,9 +13,11 @@ namespace Erbsenzaehler.SummaryMails.WebJob
     {
         public static void Main()
         {
+            var logger = new Logger();
+
             try
             {
-                Console.WriteLine("Erbsenzaehler.SummaryMails.WebJob v" + typeof (Program).Assembly.GetName().Version + " starting up ...");
+                logger.Info("Erbsenzaehler.SummaryMails.WebJob v" + typeof (Program).Assembly.GetName().Version + " starting up ...");
 
                 // hard-code german culture here, we want our e-mails formatted for german
                 var germanCulture = new CultureInfo("de-DE");
@@ -39,42 +41,42 @@ namespace Erbsenzaehler.SummaryMails.WebJob
                         })
                         .ToList();
 
-                    Console.WriteLine(usersQuery.Count() + " user(s) found with summary mails enabled.");
+                    logger.Trace(usersQuery.Count() + " user(s) found with summary mails enabled.");
                     foreach (var user in usersQuery)
                     {
                         try
                         {
                             if (SummaryMailIntervalService.ShouldReceiveSummaryMail(user.User.SummaryMailInterval, user.LastDate))
                             {
-                                SendMail(db, user.User, user.Client);
-                                SaveLog(db, user.User);
+                                SendMail(db, user.User, user.Client, logger);
+                                SaveLog(db, user.User, logger);
                             }
                             else
                             {
-                                Console.WriteLine("User '" + user.User.Email + "' already got summary mail.");
+                                logger.Info("User '" + user.User.Email + "' already got summary mail.");
                             }
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine(ex);
+                            logger.Error(ex.ToString());
                             LogException(ex);
                         }
                     }
                 }
 
-                Console.WriteLine("Everything done. Goodbye.");
+                logger.Info("Everything done. Goodbye.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                logger.Trace(ex.ToString());
                 LogException(ex);
             }
         }
 
 
-        private static void SendMail(Db db, User user, Client client)
+        private static void SendMail(Db db, User user, Client client, ILogger logger)
         {
-            Console.WriteLine("Rendering template and sending email to user '" + user.Email + "' ...");
+            logger?.Info("Rendering template and sending email to user '" + user.Email + "' ...");
 
             var budgetCalculator = new BudgetCalculator(db, client);
             var sumCalculator = new SumCalculator(db, client);
@@ -86,9 +88,9 @@ namespace Erbsenzaehler.SummaryMails.WebJob
         }
 
 
-        private static void SaveLog(Db db, User user)
+        private static void SaveLog(Db db, User user, ILogger logger)
         {
-            Console.WriteLine("Saving to summary mail log ...");
+            logger?.Trace("Saving to summary mail log ...");
             db.SummaryMailLogs.Add(new SummaryMailLog
             {
                 Date = DateTime.UtcNow,
