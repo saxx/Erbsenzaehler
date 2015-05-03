@@ -1,9 +1,9 @@
 /*! 
 * DevExtreme (Vector Map)
-* Version: 14.2.6
-* Build date: Mar 18, 2015
+* Version: 14.2.7
+* Build date: Apr 17, 2015
 *
-* Copyright (c) 2012 - 2015 Developer Express Inc. ALL RIGHTS RESERVED
+* Copyright (c) 2011 - 2014 Developer Express Inc. ALL RIGHTS RESERVED
 * EULA: https://www.devexpress.com/Support/EULAs/DevExtreme.xml
 */
 
@@ -149,8 +149,7 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
                     this._themeManager.setTheme(this.option("theme"), this.option("rtlEnabled"))
                 },
                 _initBackground: function(dataKey) {
-                    this._background = this._renderer.rect(0, 0, 0, 0).attr({"class": "dxm-background"});
-                    $(this._background.element).data(dataKey, {type: "background"})
+                    this._background = this._renderer.rect(0, 0, 0, 0).attr({"class": "dxm-background"}).data(dataKey, {type: "background"})
                 },
                 _initAreasManager: function(dataKey, notifyDirty, notifyReady) {
                     var that = this;
@@ -758,6 +757,7 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
             QUARTER_PI = PI / 4,
             PI_TO_360 = PI / 360,
             TWO_TO_LN2 = 2 / _math.LN2,
+            MIN_BOUNDS_RANGE = 1 / 3600 / 180 / 10,
             DEFAULT_MIN_ZOOM = 1,
             DEFAULT_MAX_ZOOM = 1 << 8,
             MERCATOR_MIN_LON = -180,
@@ -888,7 +888,8 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
                 that._maxBound = _bounds.max;
                 p1 = mercator.project(_bounds.min);
                 p2 = mercator.project(_bounds.max);
-                delta = _min(truncate(_abs(p2[0] - p1[0]), 0.1, 2, 2), truncate(_abs(p2[1] - p1[1]), 0.1, 2, 2));
+                delta = [_abs(p2[0] - p1[0]), _abs(p2[1] - p1[1])];
+                delta = _min(delta[0] > MIN_BOUNDS_RANGE ? delta[0] : 2, delta[1] > MIN_BOUNDS_RANGE ? delta[1] : 2);
                 methods = delta < 2 ? createProjectUnprojectMethods(p1, p2, delta) : mercator;
                 that._project = methods.project;
                 that._unproject = methods.unproject;
@@ -1204,43 +1205,42 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
                         offset1 = options.arrowButtonOffset - size,
                         offset2 = _round(_pow(options.bigCircleSize * options.bigCircleSize / 4 - size * size, 0.5)),
                         size2 = offset2 - offset1;
-                    $(renderer.rect(-size, -size, size * 2, size * 2).append(group).element).data(dataKey, {
+                    renderer.rect(-size, -size, size * 2, size * 2).data(dataKey, {
                         index: COMMAND_RESET,
                         type: EVENT_TARGET_TYPE
-                    });
-                    $(renderer.rect(-size, -offset2, size * 2, size2).append(group).element).data(dataKey, {
+                    }).append(group);
+                    renderer.rect(-size, -offset2, size * 2, size2).data(dataKey, {
                         index: COMMAND_MOVE_UP,
                         type: EVENT_TARGET_TYPE
-                    });
-                    $(renderer.rect(offset1, -size, size2, size * 2).append(group).element).data(dataKey, {
+                    }).append(group);
+                    renderer.rect(offset1, -size, size2, size * 2).data(dataKey, {
                         index: COMMAND_MOVE_RIGHT,
                         type: EVENT_TARGET_TYPE
-                    });
-                    $(renderer.rect(-size, offset1, size * 2, size2).append(group).element).data(dataKey, {
+                    }).append(group);
+                    renderer.rect(-size, offset1, size * 2, size2).data(dataKey, {
                         index: COMMAND_MOVE_DOWN,
                         type: EVENT_TARGET_TYPE
-                    });
-                    $(renderer.rect(-offset2, -size, size2, size * 2).append(group).element).data(dataKey, {
+                    }).append(group);
+                    renderer.rect(-offset2, -size, size2, size * 2).data(dataKey, {
                         index: COMMAND_MOVE_LEFT,
                         type: EVENT_TARGET_TYPE
-                    });
-                    $(renderer.circle(0, options.incButtonOffset, options.smallCircleSize / 2).append(group).element).data(dataKey, {
+                    }).append(group);
+                    renderer.circle(0, options.incButtonOffset, options.smallCircleSize / 2).data(dataKey, {
                         index: COMMAND_ZOOM_IN,
                         type: EVENT_TARGET_TYPE
-                    });
-                    $(renderer.circle(0, options.decButtonOffset, options.smallCircleSize / 2).append(group).element).data(dataKey, {
+                    }).append(group);
+                    renderer.circle(0, options.decButtonOffset, options.smallCircleSize / 2).data(dataKey, {
                         index: COMMAND_ZOOM_OUT,
                         type: EVENT_TARGET_TYPE
-                    });
-                    $(renderer.rect(-2, options.sliderLineStartOffset - 2, 4, options.sliderLineEndOffset - options.sliderLineStartOffset + 4).append(group).element).data(dataKey, {
+                    }).append(group);
+                    renderer.rect(-2, options.sliderLineStartOffset - 2, 4, options.sliderLineEndOffset - options.sliderLineStartOffset + 4).data(dataKey, {
                         index: COMMAND_ZOOM_DRAG_LINE,
                         type: EVENT_TARGET_TYPE
-                    });
-                    this._zoomDragCover = renderer.rect(-options.sliderLength / 2, options.sliderLineEndOffset - options.sliderWidth / 2, options.sliderLength, options.sliderWidth).append(group);
-                    $(this._zoomDragCover.element).data(dataKey, {
+                    }).append(group);
+                    this._zoomDragCover = renderer.rect(-options.sliderLength / 2, options.sliderLineEndOffset - options.sliderWidth / 2, options.sliderLength, options.sliderWidth).data(dataKey, {
                         index: COMMAND_ZOOM_DRAG,
                         type: EVENT_TARGET_TYPE
-                    })
+                    }).append(group)
                 },
                 _subscribeToProjection: function(projection) {
                     var that = this;
@@ -1515,7 +1515,8 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
             EVENT_FOCUS_MOVE = "focus-move",
             EVENT_FOCUS_OFF = "focus-off",
             CLICK_TIME_THRESHOLD = 500,
-            CLICK_COORD_THRESHOLD = 5,
+            CLICK_COORD_THRESHOLD_MOUSE = 5,
+            CLICK_COORD_THRESHOLD_TOUCH = 20,
             DRAG_COORD_THRESHOLD_MOUSE = 5,
             DRAG_COORD_THRESHOLD_TOUCH = 10,
             FOCUS_ON_DELAY_MOUSE = 300,
@@ -1549,17 +1550,20 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
                 this._clickState = {
                     x: coords.x,
                     y: coords.y,
+                    threshold: isTouchEvent(event) ? CLICK_COORD_THRESHOLD_TOUCH : CLICK_COORD_THRESHOLD_MOUSE,
                     time: _now()
                 }
             },
             _endClick: function(event, data) {
                 var state = this._clickState,
+                    threshold,
                     coords;
                 if (!state)
                     return;
                 if (_now() - state.time <= CLICK_TIME_THRESHOLD) {
+                    threshold = state.threshold;
                     coords = getEventCoords(event);
-                    if (_abs(coords.x - state.x) <= CLICK_COORD_THRESHOLD && _abs(coords.y - state.y) <= CLICK_COORD_THRESHOLD)
+                    if (_abs(coords.x - state.x) <= threshold && _abs(coords.y - state.y) <= threshold)
                         this._callbacks[EVENT_CLICK]({
                             data: data,
                             x: coords.x,
@@ -1827,7 +1831,7 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
                         "-ms-touch-action": "",
                         "-webkit-user-select": ""
                     });
-                    $(this._root.element).off(_addNamespace("MSHoldVisual", _NAME)).off(_addNamespace("contextmenu", _NAME))
+                    this._root.off(_addNamespace("MSHoldVisual", _NAME)).off(_addNamespace("contextmenu", _NAME))
                 }
                 $(document).off(this._handlers)
             },
@@ -1838,7 +1842,7 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
                         "-ms-touch-action": "none",
                         "-webkit-user-select": "none"
                     });
-                    $(this._root.element).on(_addNamespace("MSHoldVisual", _NAME), function(event) {
+                    this._root.on(_addNamespace("MSHoldVisual", _NAME), function(event) {
                         event.preventDefault()
                     }).on(_addNamespace("contextmenu", _NAME), function(event) {
                         isTouchEvent(event) && event.preventDefault()
@@ -2558,10 +2562,10 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
         var _Number = Number,
             _String = String,
             _isFinite = isFinite,
-            utils = DX.utils,
-            _isString = utils.isString,
-            _isArray = utils.isArray,
-            _isFunction = utils.isFunction,
+            _isString = DX.utils.isString,
+            _isArray = DX.utils.isArray,
+            _isFunction = DX.utils.isFunction,
+            _patchFontOptions = DX.viz.core.utils.patchFontOptions,
             _extend = $.extend,
             _each = $.each,
             _map = $.map,
@@ -2608,7 +2612,10 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
                     that._context = {
                         renderer: that._params.renderer,
                         projection: that._params.projection,
-                        dataKey: that._params.dataKey
+                        dataKey: that._params.dataKey,
+                        getItemSettings: function(proxy, settings) {
+                            return that._getItemSettings(proxy, settings)
+                        }
                     };
                     that._initRoot();
                     createEventTriggers(that._context, that._params.eventTrigger, that._eventNames)
@@ -2649,7 +2656,7 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
                     that._rendered = true;
                     that._params.notifyDirty();
                     that._appendRoot();
-                    that._createItems(that._params.notifyReady);
+                    that._createItems(that._params.notifyReady, true);
                     return that
                 },
                 _processOptions: function(options) {
@@ -2657,7 +2664,7 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
                         settings = that._commonSettings = that._getCommonSettings(options),
                         context = that._context,
                         selectionMode = _String(settings.selectionMode).toLowerCase();
-                    that._customizeCallback = _isFunction(settings.customize) ? settings.customize : null;
+                    that._customizeCallback = _isFunction(settings.customize) ? settings.customize : _noop;
                     context.isHoverEnabled = "hoverEnabled" in settings ? !!settings.hoverEnabled : true;
                     selectionMode = selectionMode === SELECTION_MODE_NONE || selectionMode === SELECTION_MODE_SINGLE || selectionMode === SELECTION_MODE_MULTIPLE ? selectionMode : SELECTION_MODE_SINGLE;
                     context.isSelectionEnabled = selectionMode !== SELECTION_MODE_NONE;
@@ -2674,7 +2681,7 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
                     clearTimeout(that._labelsTimeout);
                     that._rendered && that._handles && _each(that._handles, function(_, handle) {
                         if (handle.item) {
-                            handle.item.clean().dispose();
+                            handle.item.dispose();
                             handle.item = null
                         }
                     })
@@ -2683,42 +2690,39 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
                     this._root.clear()
                 },
                 _destroyHandles: function() {
-                    var that = this;
-                    that._handles && _each(that._handles, function(_, handle) {
+                    this._handles && _each(this._handles, function(_, handle) {
                         handle.dispose()
                     });
-                    that._handles = null
+                    this._handles = null
                 },
                 _itemType: null,
                 _initProxy: null,
                 _getItemSettings: null,
                 _createItem: null,
                 _arrangeItems: null,
-                _prepareItems: null,
+                _updateGrouping: null,
                 _createHandles: function(source) {
                     var that = this;
-                    if (_isArray(source)) {
+                    if (_isArray(source))
                         that._handles = _map(source, function(dataItem, i) {
                             dataItem = dataItem || {};
                             var handle = new MapItemHandle(that._context, that._getItemCoordinates(dataItem), that._getItemAttributes(dataItem), i, that._itemType),
                                 proxy = handle.proxy;
                             that._initProxy(proxy, dataItem);
-                            handle.settings = that._customizeCallback && that._customizeCallback.call(proxy, proxy) || {};
+                            handle.settings = that._customizeCallback.call(proxy, proxy) || {};
                             if (handle.settings.isSelected)
                                 proxy.selected(true);
                             return handle
-                        });
-                        that._prepareItems()
-                    }
+                        })
                 },
-                _createItems: function(notifyReady) {
+                _createItems: function(notifyReady, skipUpdateGrouping) {
                     var that = this,
                         selectedItems = [],
                         immediateReady = true;
+                    that._handles && !skipUpdateGrouping && that._updateGrouping();
                     if (that._rendered && that._handles) {
                         _each(that._handles, function(_, handle) {
-                            var settings = that._getItemSettings(handle.proxy, handle.settings);
-                            handle.item = that._createItem(settings).init(that._context, handle.proxy).render(settings).project().locate();
+                            handle.item = that._createItem(handle.proxy).init(that._context, handle.proxy).project().update(handle.settings).locate();
                             if (handle.proxy.selected())
                                 selectedItems.push(handle.item)
                         });
@@ -2730,7 +2734,6 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
                             immediateReady = false;
                             clearTimeout(that._labelsTimeout);
                             that._labelsTimeout = setTimeout(function() {
-                                that._labelsTimeout = null;
                                 _each(that._handles, function(_, handle) {
                                     handle.item.createLabel()
                                 });
@@ -2840,13 +2843,15 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
             });
         DX.viz.map._internal.mapItemBehavior = {
             init: function(ctx, proxy) {
-                this._ctx = ctx;
-                this._data = {
+                var that = this;
+                that._ctx = ctx;
+                that._data = {
                     index: proxy.index,
                     type: proxy.type
                 };
-                this._proxy = proxy;
-                return this
+                that._proxy = proxy;
+                that._root = that._createRoot().append(that._ctx.root);
+                return that
             },
             dispose: function() {
                 disposeItem(this);
@@ -2860,25 +2865,57 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
             locate: function() {
                 var that = this;
                 that._locate(that._transform(that._ctx.projection, that._coords));
+                that._label && that._label.value && that._locateLabel();
                 return that
             },
-            clean: function() {
-                this._root = null;
-                return this
-            },
-            render: function(settings) {
+            update: function(settings) {
                 var that = this;
-                that._root = that._createRoot().append(that._ctx.root);
-                that._settings = settings;
-                that._render(settings);
+                that._settings = that._ctx.getItemSettings(that._proxy, settings);
+                that._update(that._settings);
+                that._label && that._updateLabel();
                 return that
+            },
+            createLabel: function() {
+                var that = this,
+                    root = that._createLabelRoot();
+                that._label = {
+                    root: root,
+                    text: that._ctx.renderer.text().append(root),
+                    tracker: that._ctx.renderer.rect().attr({
+                        stroke: "none",
+                        "stroke-width": 0,
+                        fill: "#000000",
+                        opacity: 0.0001
+                    }).data(that._ctx.dataKey, that._data).append(root)
+                };
+                that._updateLabel();
+                return that
+            },
+            _updateLabel: function() {
+                var that = this,
+                    settings = that._settings.label;
+                that._label.value = that._getLabelText();
+                if (that._label.value) {
+                    that._label.text.attr({
+                        text: that._label.value,
+                        x: 0,
+                        y: 0
+                    }).css(_patchFontOptions(settings.font)).attr({
+                        align: "center",
+                        stroke: settings.stroke,
+                        "stroke-width": settings["stroke-width"],
+                        "stroke-opacity": settings["stroke-opacity"]
+                    });
+                    that._adjustLabel();
+                    that._locateLabel()
+                }
             }
         };
         function MapItemHandle(context, coordinates, attributes, index, type) {
-            var that = this;
-            that._ctx = context;
+            var handle = this;
+            handle._ctx = context;
             attributes = _extend({}, attributes);
-            that.proxy = {
+            handle.proxy = {
                 index: index,
                 type: type,
                 coordinates: function() {
@@ -2894,11 +2931,11 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
                 },
                 selected: function(state, _noEvent) {
                     if (arguments.length > 0) {
-                        that.setSelected(!!state, _noEvent);
+                        handle.setSelected(!!state, _noEvent);
                         return this
                     }
                     else
-                        return that._selected
+                        return handle._selected
                 }
             }
         }
@@ -3002,9 +3039,7 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
         var _String = String,
             _abs = Math.abs,
             _sqrt = Math.sqrt,
-            _isArray = DX.utils.isArray,
             _noop = $.noop,
-            _patchFontOptions = DX.viz.core.utils.patchFontOptions,
             TOLERANCE = 1;
         var AreasManager = DX.viz.map.dxVectorMap.prototype._factory.MapItemsManager.inherit({
                 _rootClass: "dxm-areas",
@@ -3058,7 +3093,7 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
                 _createItem: function() {
                     return new Area
                 },
-                _prepareItems: function() {
+                _updateGrouping: function() {
                     var commonSettings = this._commonSettings,
                         attributeName = commonSettings.colorGroupingField;
                     if (commonSettings.colorGroups)
@@ -3096,11 +3131,10 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
                 return projection.projectArea(coords)
             },
             _createRoot: function() {
-                return this._ctx.renderer.path([], "area")
+                return this._ctx.renderer.path([], "area").data(this._ctx.dataKey, this._data)
             },
-            _render: function(settings) {
-                var that = this;
-                that._styles = {
+            _update: function(settings) {
+                this._styles = {
                     normal: {
                         "class": "dxm-area",
                         stroke: settings.borderColor,
@@ -3120,15 +3154,14 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
                         fill: settings.selectedColor
                     }
                 };
-                $(that._root.attr(that._styles.normal).element).data(that._ctx.dataKey, that._data);
-                return that
+                this._root.attr(this._styles.normal);
+                return this
             },
             _transform: function(projection, coords) {
                 return projection.getAreaCoordinates(coords)
             },
             _locate: function(coords) {
-                this._root.attr({points: coords});
-                this._label && this._locateLabel()
+                this._root.attr({points: coords})
             },
             onHover: _noop,
             setDefaultState: function() {
@@ -3140,51 +3173,36 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
             setSelectedState: function() {
                 this._root.attr(this._styles.selected).toForeground()
             },
-            createLabel: function() {
+            _createLabelRoot: function() {
+                return this._ctx.renderer.g().attr({"class": "dxm-area-label"}).append(this._ctx.labelRoot)
+            },
+            _getLabelText: function() {
+                return _String(this._proxy.text || this._proxy.attribute(this._settings.label.dataField) || "")
+            },
+            _adjustLabel: function() {
                 var that = this,
-                    textContent = _String(that._proxy.text || that._proxy.attribute(that._settings.label.dataField) || ""),
-                    centroid,
-                    labelSettings,
-                    text,
-                    bbox,
-                    offset;
-                if (!textContent)
-                    return that;
-                centroid = calculateAreaCentroid(that._coords);
+                    centroid = calculateAreaCentroid(that._coords),
+                    bbox = that._label.text.getBBox(),
+                    offset = -bbox.y - bbox.height / 2;
                 that._centroid = centroid.coords;
                 that._areaSize = _sqrt(centroid.area);
-                that._label = that._ctx.renderer.g().attr({"class": "dxm-area-label"}).append(that._ctx.labelRoot);
-                labelSettings = that._settings.label;
-                text = that._ctx.renderer.text(textContent, 0, 0).css(_patchFontOptions(labelSettings.font)).attr({
-                    align: "center",
-                    stroke: labelSettings.stroke,
-                    "stroke-width": labelSettings["stroke-width"],
-                    "stroke-opacity": labelSettings["stroke-opacity"]
-                }).append(that._label);
-                bbox = that._label.getBBox();
-                offset = -bbox.y - bbox.height / 2;
-                text.attr({y: offset});
-                that._labelSize = {
-                    w: bbox.width,
-                    h: bbox.height
-                };
-                $(that._ctx.renderer.rect(bbox.x, bbox.y + offset, bbox.width, bbox.height).attr({
-                    "stroke-width": 0,
-                    stroke: "none",
-                    fill: "#000000",
-                    opacity: 0.0001
-                }).append(that._label).element).data(that._ctx.dataKey, that._data);
-                that._locateLabel();
-                return that
+                that._labelSize = [bbox.width, bbox.height];
+                that._label.text.attr({y: offset});
+                that._label.tracker.attr({
+                    x: bbox.x,
+                    y: bbox.y + offset,
+                    width: bbox.width,
+                    height: bbox.height
+                })
             },
             _locateLabel: function() {
                 var that = this,
                     coords = that._ctx.projection.getPointCoordinates(that._centroid),
                     size = that._ctx.projection.getSquareSize([that._areaSize, that._areaSize]);
-                that._label.attr({
+                that._label.root.attr({
                     translateX: coords.x,
                     translateY: coords.y,
-                    visibility: that._labelSize.w / size[0] < TOLERANCE && that._labelSize.h / size[1] < TOLERANCE ? null : "hidden"
+                    visibility: that._labelSize[0] / size[0] < TOLERANCE && that._labelSize[1] / size[1] < TOLERANCE ? null : "hidden"
                 })
             }
         });
@@ -3248,16 +3266,9 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
             _extend = $.extend,
             _each = $.each,
             _isArray = DX.utils.isArray,
-            _patchFontOptions = DX.viz.core.utils.patchFontOptions,
             CLASS_DEFAULT = "dxm-marker",
             CLASS_HOVERED = "dxm-marker dxm-marker-hovered",
             CLASS_SELECTED = "dxm-marker dxm-marker-selected",
-            TRACKER_SETTINGS = {
-                stroke: "none",
-                "stroke-width": 0,
-                fill: "#000000",
-                opacity: 0.0001
-            },
             DOT = "dot",
             BUBBLE = "bubble",
             PIE = "pie",
@@ -3343,13 +3354,12 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
                     var type = proxy._TYPE || this._commonType,
                         settings = this._params.themeManager.getMarkerSettings(this._commonSettings, _extend({}, proxy.style, options), type);
                     proxy.text = proxy.text || settings.text;
-                    settings._type = type;
                     return settings
                 },
-                _createItem: function(settings) {
-                    return new MARKER_TYPES[settings._type]
+                _createItem: function(proxy) {
+                    return new MARKER_TYPES[proxy._TYPE || this._commonType]
                 },
-                _prepareItems: function() {
+                _updateGrouping: function() {
                     var that = this,
                         markerType = that._commonType,
                         dataField,
@@ -3409,9 +3419,9 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
                 _createRoot: function() {
                     return this._ctx.renderer.g()
                 },
-                _render: function(settings) {
+                _update: function(settings) {
                     var that = this;
-                    that._root.attr({"class": CLASS_DEFAULT});
+                    that._root.attr({"class": CLASS_DEFAULT}).clear();
                     that._create(settings, that._ctx.renderer, that._root);
                     return that
                 },
@@ -3439,34 +3449,35 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
                     this._root.attr({"class": CLASS_SELECTED}).toForeground();
                     this._applySelected()
                 },
-                createLabel: function() {
-                    var that = this;
-                    if (!that._proxy.text)
-                        return;
-                    var rootbox = that._root.getBBox(),
-                        labelSettings = that._settings.label,
-                        text = that._ctx.renderer.text(that._proxy.text, 0, 0).css(_patchFontOptions(labelSettings.font)).attr({
-                            align: "center",
-                            stroke: labelSettings.stroke,
-                            "stroke-width": labelSettings["stroke-width"],
-                            "stroke-opacity": labelSettings["stroke-opacity"]
-                        }).append(that._root),
-                        textBox = text.getBBox(),
-                        x = _round(-textBox.x + rootbox.width / 2) + 2,
-                        y = _round(-textBox.y - textBox.height / 2) - 1;
-                    text.attr({
+                _createLabelRoot: function() {
+                    return this._root
+                },
+                _getLabelText: function() {
+                    return _String(this._proxy.text || "")
+                },
+                _adjustLabel: function() {
+                    var bbox = this._label.text.getBBox(),
+                        x = _round(-bbox.x + this._size / 2) + 2,
+                        y = _round(-bbox.y - bbox.height / 2) - 1;
+                    this._label.text.attr({
                         x: x,
                         y: y
                     });
-                    $(that._ctx.renderer.rect(x + textBox.x - 1, y + textBox.y - 1, textBox.width + 2, textBox.height + 2).attr(TRACKER_SETTINGS).append(that._root).element).data(that._ctx.dataKey, that._data)
-                }
+                    this._label.tracker.attr({
+                        x: x + bbox.x - 1,
+                        y: y + bbox.y - 1,
+                        width: bbox.width + 2,
+                        height: bbox.height + 2
+                    })
+                },
+                _locateLabel: $.noop
             });
         function DotMarker(){}
         _extend(DotMarker.prototype, baseMarkerBehavior, {
             type: DOT,
             _create: function(style, renderer, root) {
                 var that = this,
-                    size = style.size > 0 ? _Number(style.size) : 0,
+                    size = that._size = style.size > 0 ? _Number(style.size) : 0,
                     hoveredSize = size,
                     selectedSize = size + (style.selectedStep > 0 ? _Number(style.selectedStep) : 0),
                     hoveredBackSize = hoveredSize + (style.backStep > 0 ? _Number(style.backStep) : 0),
@@ -3524,10 +3535,8 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
                     fill: style.backColor,
                     opacity: style.backOpacity
                 };
-                that._back = renderer.circle().sharp().attr(that._backDefault).append(root);
-                that._dot = renderer.circle().sharp().attr(that._dotDefault).append(root);
-                $(that._back.element).data(that._ctx.dataKey, that._data);
-                $(that._dot.element).data(that._ctx.dataKey, that._data)
+                that._back = renderer.circle().sharp().attr(that._backDefault).data(that._ctx.dataKey, that._data).append(root);
+                that._dot = renderer.circle().sharp().attr(that._dotDefault).data(that._ctx.dataKey, that._data).append(root)
             },
             _destroy: function() {
                 this._back = this._dot = null
@@ -3571,8 +3580,7 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
                     fill: style.selectedColor,
                     opacity: style.selectedOpacity
                 };
-                that._bubble = renderer.circle(0, 0, (style.size || style.maxSize) / 2).sharp().attr(that._default).append(root);
-                $(that._bubble.element).data(that._ctx.dataKey, that._data)
+                that._bubble = renderer.circle(0, 0, (style.size || style.maxSize) / 2).sharp().attr(that._default).data(that._ctx.dataKey, that._data).append(root)
             },
             _applyDefault: function() {
                 this._bubble.attr(this._default)
@@ -3587,6 +3595,7 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
                 var that = this,
                     r = (that._minSize + ratio * (that._maxSize - that._minSize)) / 2;
                 that._default.r = that._hovered.r = that._selected.r = r;
+                that._size = 2 * r;
                 that._bubble.attr({r: r});
                 return that
             }
@@ -3607,6 +3616,7 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
                     startAngle,
                     endAngle,
                     colors;
+                that._size = 2 * r;
                 that._pieDefault = {opacity: style.opacity};
                 that._pieHovered = {opacity: style.hoveredOpacity};
                 that._pieSelected = {opacity: style.selectedOpacity};
@@ -3639,15 +3649,14 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
                 for (value = 0, i = 0, ii = values.length; i < ii; ++i) {
                     value += values[i];
                     endAngle = translator.translate(value);
-                    $(renderer.arc(0, 0, 0, r, startAngle, endAngle).attr({
+                    renderer.arc(0, 0, 0, r, startAngle, endAngle).attr({
                         "stroke-linejoin": "round",
                         fill: colors[i]
-                    }).append(that._pie).element).data(that._ctx.dataKey, that._data);
+                    }).data(that._ctx.dataKey, that._data).append(that._pie);
                     startAngle = endAngle
                 }
                 that._pie.append(root);
-                that._border = renderer.circle(0, 0, r).sharp().attr(that._borderDefault).append(root);
-                $(that._border.element).data(that._ctx.dataKey, that._data)
+                that._border = renderer.circle(0, 0, r).sharp().attr(that._borderDefault).data(that._ctx.dataKey, that._data).append(root)
             },
             _applyDefault: function() {
                 this._pie.attr(this._pieDefault);
@@ -3667,7 +3676,7 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
             type: IMAGE,
             _create: function(style, renderer, root) {
                 var that = this,
-                    size = style.size > 0 ? _Number(style.size) : 0,
+                    size = that._size = style.size > 0 ? _Number(style.size) : 0,
                     hoveredSize = size + (style.hoveredStep > 0 ? _Number(style.hoveredStep) : 0),
                     selectedSize = size + (style.selectedStep > 0 ? _Number(style.selectedStep) : 0);
                 that._default = {
@@ -3692,8 +3701,12 @@ if (!DevExpress.MOD_VIZ_VECTORMAP) {
                     href: that._proxy.url,
                     location: "center"
                 }).append(root);
-                that._tracker = renderer.rect().attr(that._default).attr(TRACKER_SETTINGS).append(root);
-                $(that._tracker.element).data(that._ctx.dataKey, that._data)
+                that._tracker = renderer.rect().attr(that._default).attr({
+                    stroke: "none",
+                    "stroke-width": 0,
+                    fill: "#000000",
+                    opacity: 0.0001
+                }).data(that._ctx.dataKey, that._data).append(root)
             },
             _applyDefault: function() {
                 this._image.attr(this._default);

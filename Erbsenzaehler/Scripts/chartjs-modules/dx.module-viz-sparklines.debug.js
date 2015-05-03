@@ -1,9 +1,9 @@
 /*! 
 * DevExtreme (Sparklines)
-* Version: 14.2.6
-* Build date: Mar 18, 2015
+* Version: 14.2.7
+* Build date: Apr 17, 2015
 *
-* Copyright (c) 2012 - 2015 Developer Express Inc. ALL RIGHTS RESERVED
+* Copyright (c) 2011 - 2014 Developer Express Inc. ALL RIGHTS RESERVED
 * EULA: https://www.devexpress.com/Support/EULAs/DevExtreme.xml
 */
 
@@ -20,10 +20,8 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
             TOUCH_EVENTS_DELAY = 1000,
             _extend = $.extend,
             _abs = Math.abs,
-            _Number = Number,
             _round = Math.round,
-            core = DX.viz.core,
-            CoreFactory = core.CoreFactory;
+            core = DX.viz.core;
         function DEFAULT_CUSTOMIZE_TOOLTIP(customizeObject) {
             return {text: customizeObject.valueText.join('<br/>')}
         }
@@ -167,19 +165,19 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
                 that._disposeCallbacks = function() {
                     that = that._showTooltipCallback = that._hideTooltipCallback = that._disposeCallbacks = null
                 };
-                $(that._tooltipTracker.element).on(mouseEvents, data).on(touchEvents, data);
-                $(that._tooltipTracker.element).on(menuEvents)
+                that._tooltipTracker.on(mouseEvents, data).on(touchEvents, data);
+                that._tooltipTracker.on(menuEvents)
             },
             _disposeTooltipEvents: function() {
                 clearTimeout(this._showTooltipTimeout);
                 clearTimeout(this._hideTooltipTimeout);
                 this._showTooltipTimeout = this._hideTooltipTimeout = null;
-                $(this._tooltipTracker.element).off();
+                this._tooltipTracker.off();
                 this._disposeCallbacks()
             },
             _updateTranslator: function() {
-                this._translatorX = CoreFactory.createTranslator2D(this._ranges.arg, this._canvas, {direction: "horizontal"});
-                this._translatorY = CoreFactory.createTranslator2D(this._ranges.val, this._canvas)
+                this._translatorX = new core.Translator2D(this._ranges.arg, this._canvas, {direction: "horizontal"});
+                this._translatorY = new core.Translator2D(this._ranges.val, this._canvas)
             },
             _prepareTooltipOptions: function() {
                 var that = this,
@@ -387,14 +385,14 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
                     var widget = event.data.widget;
                     widget._x = event.pageX;
                     widget._y = event.pageY;
-                    $(widget._tooltipTracker.element).off(mouseMoveEvents).on(mouseMoveEvents, event.data);
+                    widget._tooltipTracker.off(mouseMoveEvents).on(mouseMoveEvents, event.data);
                     widget._doShowTooltip(DEFAULT_EVENTS_DELAY)
                 },
                 'mouseout.sparkline-tooltip': function(event) {
                     if (isPointerDownCalled)
                         return;
                     var widget = event.data.widget;
-                    $(widget._tooltipTracker.element).off(mouseMoveEvents);
+                    widget._tooltipTracker.off(mouseMoveEvents);
                     widget._doHideTooltip(DEFAULT_EVENTS_DELAY)
                 }
             };
@@ -465,7 +463,6 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
     /*! Module viz-sparklines, file sparkline.js */
     (function($, DX, undefined) {
         var viz = DX.viz,
-            charts = viz.charts,
             core = viz.core,
             MIN_BAR_WIDTH = 1,
             MAX_BAR_WIDTH = 50,
@@ -576,7 +573,7 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
                 this._seriesLabelGroup = this._renderer.g().attr({"class": "dxsl-series-labels"})
             },
             _createSeries: function() {
-                this._series = core.CoreFactory.createSeries({
+                this._series = new core.series.Series({
                     renderer: this._renderer,
                     seriesGroup: this._seriesGroup,
                     labelsGroup: this._seriesLabelGroup
@@ -598,7 +595,7 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
                 that._series.updateOptions(seriesOptions);
                 groupSeries = [[that._series]];
                 groupSeries.argumentOptions = {type: seriesOptions.type === "bar" ? "discrete" : undefined};
-                dataValidator = core.CoreFactory.createDataValidator(that._simpleDataSource, groupSeries, that._incidentOccured, {
+                dataValidator = new core.DataValidator(that._simpleDataSource, groupSeries, that._incidentOccured, {
                     checkTypeForAllData: false,
                     convertToAxisDataType: true,
                     sortingMethod: true
@@ -800,8 +797,9 @@ if (!DevExpress.MOD_VIZ_SPARKLINES) {
                     DEFAULT_VALUE_RANGE_MARGIN = 0.15,
                     DEFAULT_ARGUMENT_RANGE_MARGIN = 0.1,
                     rangeData = series.getRangeData(),
-                    valCoef = (rangeData.val.max - rangeData.val.min) * DEFAULT_VALUE_RANGE_MARGIN,
+                    valCoef,
                     argCoef;
+                valCoef = (rangeData.val.max - rangeData.val.min) * DEFAULT_VALUE_RANGE_MARGIN;
                 if (isBarType || series.type === "area" || series.type === "winloss") {
                     if (rangeData.val.min !== 0)
                         rangeData.val.min = rangeData.val.min - valCoef;

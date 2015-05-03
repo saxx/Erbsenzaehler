@@ -1,9 +1,9 @@
 /*! 
 * DevExtreme (Core Library)
-* Version: 14.2.6
-* Build date: Mar 18, 2015
+* Version: 14.2.7
+* Build date: Apr 17, 2015
 *
-* Copyright (c) 2012 - 2015 Developer Express Inc. ALL RIGHTS RESERVED
+* Copyright (c) 2011 - 2014 Developer Express Inc. ALL RIGHTS RESERVED
 * EULA: https://www.devexpress.com/Support/EULAs/DevExtreme.xml
 */
 
@@ -13,7 +13,7 @@ if (!window.DevExpress) {
     (function($, global, undefined) {
         global.DevExpress = global.DevExpress || {};
         $.extend(global.DevExpress, {
-            VERSION: "14.2.6",
+            VERSION: "14.2.7",
             abstract: function() {
                 throw global.DevExpress.Error("E0001");
             },
@@ -455,6 +455,9 @@ if (!window.DevExpress) {
         var isExponential = function(value) {
                 return isNumber(value) && value.toString().indexOf('e') !== -1
             };
+        var ensureDefined = function(value, defaultValue) {
+                return isDefined(value) ? value : defaultValue
+            };
         var extendFromObject = function(target, source, overrideExistingValues) {
                 target = target || {};
                 for (var prop in source)
@@ -597,6 +600,7 @@ if (!window.DevExpress) {
             isDate: isDate,
             isFunction: isFunction,
             isExponential: isExponential,
+            ensureDefined: ensureDefined,
             extendFromObject: extendFromObject,
             clone: clone,
             executeAsync: executeAsync,
@@ -1166,14 +1170,8 @@ if (!window.DevExpress) {
                     });
                 else
                     $("html").css("-ms-overflow-style", "-ms-autohiding-scrollbar");
-                if (!allowSelection)
-                    $(".dx-viewport").css({
-                        "-moz-user-select": "none",
-                        "-o-user-select": "none",
-                        "-webkit-user-select": "none",
-                        "-ms-user-select": "none",
-                        "user-select": "none"
-                    });
+                if (!allowSelection && DX.support.supportProp("user-select"))
+                    $(".dx-viewport").css(DX.support.styleProp("user-select"), "none");
                 $(metaSelector).attr("content", metaVerbs.join());
                 $("html").css("-ms-touch-action", msTouchVerbs.join(" ") || "none");
                 if (DX.support.touch)
@@ -1194,6 +1192,10 @@ if (!window.DevExpress) {
                             $("body").width(windowWidth)
                         })
                 }
+                if (realDevice.android)
+                    windowResizeCallbacks.add(function() {
+                        document.activeElement.scrollIntoViewIfNeeded()
+                    })
             };
         var triggerVisibilityChangeEvent = function(eventName) {
                 var VISIBILITY_CHANGE_SELECTOR = ".dx-visibility-change-handler";
@@ -2065,15 +2067,19 @@ if (!window.DevExpress) {
                     result.h[h.collision] = decolliders[h.collision](h, bounds.h);
                 if (decolliders[v.collision])
                     result.v[v.collision] = decolliders[v.collision](v, bounds.v);
+                var preciser = function(number) {
+                        return options.precise ? number : Math.round(number)
+                    };
                 $.extend(true, result, {
                     h: {
-                        location: h.myLocation,
-                        oversize: h.oversize
+                        location: preciser(h.myLocation),
+                        oversize: preciser(h.oversize)
                     },
                     v: {
-                        location: v.myLocation,
-                        oversize: v.oversize
-                    }
+                        location: preciser(v.myLocation),
+                        oversize: preciser(v.oversize)
+                    },
+                    precise: options.precise
                 });
                 return result
             };
@@ -2084,9 +2090,12 @@ if (!window.DevExpress) {
                 DX.translator.resetPosition($what);
                 var offset = $what.offset(),
                     targetPosition = options.h && options.v ? options : calculatePosition($what, options);
+                var preciser = function(number) {
+                        return options.precise ? number : Math.round(number)
+                    };
                 DX.translator.move($what, {
-                    left: targetPosition.h.location - offset.left,
-                    top: targetPosition.v.location - offset.top
+                    left: targetPosition.h.location - preciser(offset.left),
+                    top: targetPosition.v.location - preciser(offset.top)
                 });
                 return targetPosition
             };
@@ -4066,8 +4075,8 @@ if (!window.DevExpress) {
             "dxCollectionWidget-noDataText": "No data to display",
             "validation-required": "Required",
             "validation-required-formatted": "{0} is required",
-            "validation-numeric": "Value should be a number",
-            "validation-numeric-formatted": "{0} should be a number",
+            "validation-numeric": "Value must be a number",
+            "validation-numeric-formatted": "{0} must be a number",
             "validation-range": "Value is out of range",
             "validation-range-formatted": "{0} is out of range",
             "validation-stringLength": "The length of the value is not correct",
@@ -4099,18 +4108,17 @@ if (!window.DevExpress) {
             "dxDateBox-simulatedDataPickerTitleTime": "Select time",
             "dxDateBox-simulatedDataPickerTitleDate": "Select date",
             "dxDateBox-simulatedDataPickerTitleDateTime": "Select date and time",
+            "dxDateBox-validation-datetime": "Value must be a date or time",
             "dxFileUploader-selectFile": "Select file",
             "dxFileUploader-dropFile": "or Drop file here",
             "dxFileUploader-bytes": "bytes",
             "dxFileUploader-kb": "kb",
             "dxFileUploader-Mb": "Mb",
-            "dxFileUploader-Gb": "Gb"
-        }});
-    /*! Module core, file widgets-mobile.en.js */
-    Globalize.addCultureInfo("default", {messages: {
+            "dxFileUploader-Gb": "Gb",
             "dxSwitch-onText": "ON",
             "dxSwitch-offText": "OFF"
         }});
+    /*! Module core, file widgets-mobile.en.js */
     /*! Module core, file widgets-web.en.js */
     Globalize.addCultureInfo("default", {messages: {
             "dxDataGrid-columnChooserTitle": "Column Chooser",
@@ -4174,17 +4182,28 @@ if (!window.DevExpress) {
                             value = $.trim(value);
                         return value !== ""
                     },
-                    defaultMessage: Globalize.localize("validation-required"),
-                    defaultFormattedMessage: Globalize.localize("validation-required-formatted")
+                    defaultMessage: function() {
+                        return Globalize.localize("validation-required")
+                    },
+                    defaultFormattedMessage: function() {
+                        return Globalize.localize("validation-required-formatted")
+                    }
                 },
                 numeric: {
                     validate: function(value, rule) {
                         if (!rulesValidators.required.validate(value, {}))
                             return true;
-                        return $.isNumeric(value)
+                        if (rule.useCultureSettings && utils.isString(value))
+                            return !isNaN(Globalize.parseFloat(value));
+                        else
+                            return $.isNumeric(value)
                     },
-                    defaultMessage: Globalize.localize("validation-numeric"),
-                    defaultFormattedMessage: Globalize.localize("validation-numeric-formatted")
+                    defaultMessage: function() {
+                        return Globalize.localize("validation-numeric")
+                    },
+                    defaultFormattedMessage: function() {
+                        return Globalize.localize("validation-numeric-formatted")
+                    }
                 },
                 range: {
                     validate: function(value, rule) {
@@ -4208,8 +4227,12 @@ if (!window.DevExpress) {
                             throw DX.Error("E0101");
                         return false
                     },
-                    defaultMessage: Globalize.localize("validation-range"),
-                    defaultFormattedMessage: Globalize.localize("validation-range-formatted")
+                    defaultMessage: function() {
+                        return Globalize.localize("validation-range")
+                    },
+                    defaultFormattedMessage: function() {
+                        return Globalize.localize("validation-range-formatted")
+                    }
                 },
                 stringLength: {
                     validate: function(value, rule) {
@@ -4218,8 +4241,12 @@ if (!window.DevExpress) {
                             value = $.trim(value);
                         return rulesValidators.range.validate(value.length, $.extend({}, rule))
                     },
-                    defaultMessage: Globalize.localize("validation-stringLength"),
-                    defaultFormattedMessage: Globalize.localize("validation-stringLength-formatted")
+                    defaultMessage: function() {
+                        return Globalize.localize("validation-stringLength")
+                    },
+                    defaultFormattedMessage: function() {
+                        return Globalize.localize("validation-stringLength-formatted")
+                    }
                 },
                 custom: {
                     validate: function(value, rule) {
@@ -4229,8 +4256,12 @@ if (!window.DevExpress) {
                                 rule: rule
                             })
                     },
-                    defaultMessage: Globalize.localize("validation-custom"),
-                    defaultFormattedMessage: Globalize.localize("validation-custom-formatted")
+                    defaultMessage: function() {
+                        return Globalize.localize("validation-custom")
+                    },
+                    defaultFormattedMessage: function() {
+                        return Globalize.localize("validation-custom-formatted")
+                    }
                 },
                 compare: {
                     validate: function(value, rule) {
@@ -4266,8 +4297,12 @@ if (!window.DevExpress) {
                                 break
                         }
                     },
-                    defaultMessage: Globalize.localize("validation-compare"),
-                    defaultFormattedMessage: Globalize.localize("validation-compare-formatted")
+                    defaultMessage: function() {
+                        return Globalize.localize("validation-compare")
+                    },
+                    defaultFormattedMessage: function() {
+                        return Globalize.localize("validation-compare-formatted")
+                    }
                 },
                 pattern: {
                     validate: function(value, rule) {
@@ -4278,8 +4313,12 @@ if (!window.DevExpress) {
                             pattern = new RegExp(pattern);
                         return pattern.test(value)
                     },
-                    defaultMessage: Globalize.localize("validation-pattern"),
-                    defaultFormattedMessage: Globalize.localize("validation-pattern-formatted")
+                    defaultMessage: function() {
+                        return Globalize.localize("validation-pattern")
+                    },
+                    defaultFormattedMessage: function() {
+                        return Globalize.localize("validation-pattern-formatted")
+                    }
                 },
                 email: {
                     validate: function(value, rule) {
@@ -4287,8 +4326,12 @@ if (!window.DevExpress) {
                             return true;
                         return rulesValidators.pattern.validate(value, $.extend({}, rule, {pattern: /^[\d\w\._\-]+@([\d\w\._\-]+\.)+[\w]+$/i}))
                     },
-                    defaultMessage: Globalize.localize("validation-email"),
-                    defaultFormattedMessage: Globalize.localize("validation-email-formatted")
+                    defaultMessage: function() {
+                        return Globalize.localize("validation-email")
+                    },
+                    defaultFormattedMessage: function() {
+                        return Globalize.localize("validation-email-formatted")
+                    }
                 }
             };
         var GroupConfig = DX.Class.inherit({
@@ -4353,9 +4396,9 @@ if (!window.DevExpress) {
             _setDefaultMessage: function(rule, validator, name) {
                 if (!utils.isDefined(rule.message))
                     if (validator.defaultFormattedMessage && utils.isDefined(name))
-                        rule.message = validator.defaultFormattedMessage.replace(/\{0\}/, name);
+                        rule.message = validator.defaultFormattedMessage().replace(/\{0\}/, name);
                     else
-                        rule.message = validator.defaultMessage
+                        rule.message = validator.defaultMessage()
             },
             validate: function validate(value, rules, name) {
                 var result = {
@@ -5473,10 +5516,10 @@ if (!window.DevExpress) {
             var chunks = isoString.replace("Z", "").split("T"),
                 date = /(\d{4})-(\d{2})-(\d{2})/.exec(chunks[0]),
                 time = /(\d{2}):(\d{2}):(\d{2})\.?(\d{0,7})?/.exec(chunks[1]);
-            result.setFullYear(Number(date[1]));
-            result.setMonth(Number(date[2]) - 1);
             result.setDate(Number(date[3]));
-            if (time.length) {
+            result.setMonth(Number(date[2]) - 1);
+            result.setFullYear(Number(date[1]));
+            if ($.isArray(time) && time.length) {
                 result.setHours(Number(time[1]));
                 result.setMinutes(Number(time[2]));
                 result.setSeconds(Number(time[3]));
@@ -7271,7 +7314,8 @@ if (!window.DevExpress) {
                     this.optionChanged.empty();
                     this.disposing.fireWith(this).empty();
                     this._disposingAction();
-                    this._disposeEvents()
+                    this._disposeEvents();
+                    this._disposed = true
                 },
                 instance: function() {
                     return this
@@ -7320,9 +7364,10 @@ if (!window.DevExpress) {
                                     value: value,
                                     previousValue: previousValue
                                 };
-                            that._optionChanged(args);
                             that.optionChanged.fireWith(that, [args.name, value, previousValue]);
-                            that._optionChangedAction($.extend({}, args))
+                            that._optionChangedAction($.extend({}, args));
+                            if (!that._disposed)
+                                that._optionChanged(args)
                         })
                 },
                 initialOption: function(optionName) {
@@ -7697,6 +7742,9 @@ if (!window.DevExpress) {
                             triggerShownEvent(result)
                     }
                     return result
+                },
+                source: function() {
+                    return this._element.clone()
                 },
                 _prepareDataForContainer: function(data) {
                     return data
@@ -8258,12 +8306,21 @@ if (!window.DevExpress) {
             compileGetter = DX.data.utils.compileGetter;
         var CREATED_WITH_NG_DATA_KEY = "dxNgCreation";
         var phoneJsModule = DX.ng.module;
+        var safeApply = function(func, scope) {
+                if (scope.$root.$$phase)
+                    func(scope);
+                else
+                    scope.$apply(function() {
+                        func(scope)
+                    })
+            };
         var ComponentBuilder = DX.Class.inherit({
                 ctor: function(options) {
                     this._$element = options.$element.data(CREATED_WITH_NG_DATA_KEY, true);
                     this._$templates = options.$templates;
                     this._componentClass = options.componentClass;
                     this._scope = options.scope;
+                    this._parse = options.parse;
                     this._compile = options.compile;
                     this._ngOptions = this._normalizeOptions(options.ngOptions);
                     this._componentDisposing = $.Callbacks();
@@ -8462,14 +8519,51 @@ if (!window.DevExpress) {
                     return result
                 }
             });
-        var safeApply = function(func, scope) {
-                if (scope.$root.$$phase)
-                    func(scope);
-                else
-                    scope.$apply(function() {
-                        func(scope)
-                    })
-            };
+        ComponentBuilder = ComponentBuilder.inherit({
+            ctor: function(options) {
+                this.callBase.apply(this, arguments);
+                this._componentName = options.componentName;
+                this._ngModel = options.ngModel;
+                this._ngModelController = options.ngModelController
+            },
+            _isNgModelRequired: function() {
+                return this._componentClass.subclassOf(ui.Editor) && this._ngModel
+            },
+            _initComponentBindings: function() {
+                this.callBase.apply(this, arguments);
+                this._initNgModelBinding()
+            },
+            _initNgModelBinding: function() {
+                if (!this._isNgModelRequired())
+                    return;
+                var that = this;
+                var ngModelWatcher = this._scope.$watch(this._ngModel, function(newValue, oldValue) {
+                        if (newValue === oldValue)
+                            return;
+                        that._component.option(that._ngModelOption(), newValue)
+                    });
+                this._component.on("optionChanged", function(args) {
+                    if (args.name !== that._ngModelOption())
+                        return;
+                    that._ngModelController.$setViewValue(args.value)
+                });
+                this._component.on("disposing", function() {
+                    ngModelWatcher()
+                })
+            },
+            _ngModelOption: function() {
+                if ($.inArray(this._componentName, ["dxFileUploader", "dxTagBox"]) > -1)
+                    return "values";
+                return "value"
+            },
+            _evalOptions: function() {
+                if (!this._isNgModelRequired())
+                    return this.callBase.apply(this, arguments);
+                var result = this.callBase.apply(this, arguments);
+                result[this._ngModelOption()] = this._parse(this._ngModel)(this._scope);
+                return result
+            }
+        });
         var NgComponent = DX.DOMComponent.inherit({
                 _modelByElement: function(element) {
                     if (element.length)
@@ -8505,22 +8599,26 @@ if (!window.DevExpress) {
             };
         var registerComponentDirective = function(componentName) {
                 var priority = componentName !== "dxValidator" ? 1 : 10;
-                phoneJsModule.directive(componentName, ["$compile", function(compile) {
+                phoneJsModule.directive(componentName, ["$compile", "$parse", function($compile, $parse) {
                         return {
                                 restrict: "A",
+                                require: "^?ngModel",
                                 priority: priority,
                                 compile: function($element) {
                                     var componentClass = registeredComponents[componentName],
                                         $content = componentClass.subclassOf(ui.Widget) ? $element.contents().detach() : null;
-                                    return function(scope, $element, attrs) {
+                                    return function(scope, $element, attrs, ngModelController) {
                                             $element.append($content);
                                             var componentBuilder = new ComponentBuilder({
                                                     componentClass: componentClass,
                                                     componentName: componentName,
-                                                    compile: compile,
+                                                    compile: $compile,
+                                                    parse: $parse,
                                                     $element: $element,
                                                     scope: scope,
-                                                    ngOptions: attrs[componentName] ? scope.$eval(attrs[componentName]) : {}
+                                                    ngOptions: attrs[componentName] ? scope.$eval(attrs[componentName]) : {},
+                                                    ngModel: attrs.ngModel,
+                                                    ngModelController: ngModelController
                                                 });
                                             componentBuilder.initComponentWithBindings()
                                         }
@@ -9894,11 +9992,14 @@ if (!window.DevExpress) {
                 return utils.unwrapObservable(value)
             },
             _isValueEquals: function(value1, value2) {
+                var isDefined = utils.isDefined;
+                var ensureDefined = utils.ensureDefined;
+                var unwrapObservable = utils.unwrapObservable;
                 var dataSourceKey = this._dataSource && this._dataSource.key();
                 var result = this._compareValues(value1, value2);
-                if (!result && value1 && value2 && dataSourceKey) {
-                    var valueKey1 = utils.unwrapObservable(value1[dataSourceKey]) || value1;
-                    var valueKey2 = utils.unwrapObservable(value2[dataSourceKey]) || value2;
+                if (!result && isDefined(value1) && isDefined(value2) && dataSourceKey) {
+                    var valueKey1 = ensureDefined(unwrapObservable(value1[dataSourceKey]), value1);
+                    var valueKey2 = ensureDefined(unwrapObservable(value2[dataSourceKey]), value2);
                     result = this._compareValues(valueKey1, valueKey2)
                 }
                 return result
@@ -10637,7 +10738,7 @@ if (!window.DevExpress) {
                         this._cancel(e);
                     else {
                         if (activeEmitter)
-                            activeEmitter._forceInctiveTimer();
+                            activeEmitter._forceInactiveTimer();
                         activeEmitter = this;
                         this._startActiveTimer(e)
                     }
@@ -10654,7 +10755,7 @@ if (!window.DevExpress) {
                         this._forceActiveTimer();
                     this._startInactiveTimer(e);
                     if (skipTimers)
-                        this._forceInctiveTimer()
+                        this._forceInactiveTimer()
                 },
                 dispose: function() {
                     this._stopActiveTimer();
@@ -10679,21 +10780,21 @@ if (!window.DevExpress) {
                 _forceActiveTimer: $.noop,
                 _startInactiveTimer: function(e) {
                     var inactiveTimeout = "inactiveTimeout" in this ? this.inactiveTimeout : INACTIVE_TIMEOUT;
-                    this._forceInctiveTimer = $.proxy(this._fireInctive, this, e);
-                    this._inactiveTimer = window.setTimeout(this._forceInctiveTimer, inactiveTimeout)
+                    this._forceInactiveTimer = $.proxy(this._fireInctive, this, e);
+                    this._inactiveTimer = window.setTimeout(this._forceInactiveTimer, inactiveTimeout)
                 },
                 _fireInctive: function(e) {
                     if (this._inactiveTimer) {
                         this._stopInactiveTimer();
+                        activeEmitter = null;
                         this._fireEvent(INACTIVE_EVENT_NAME, e, {target: this._eventTarget})
                     }
                 },
                 _stopInactiveTimer: function() {
                     clearTimeout(this._inactiveTimer);
-                    delete this._inactiveTimer;
-                    activeEmitter = null
+                    delete this._inactiveTimer
                 },
-                _forceInctiveTimer: $.noop
+                _forceInactiveTimer: $.noop
             });
         events.registerEmitter({
             emitter: FeedbackEmitter,
@@ -10711,6 +10812,7 @@ if (!window.DevExpress) {
         var isInput = function(element) {
                 return $(element).is("input, textarea, select, button ,:focus, :focus *")
             };
+        var misc = {requestAnimationFrame: DX.requestAnimationFrame};
         var ClickEmitter = events.Emitter.inherit({
                 ctor: function(element) {
                     this.callBase(element);
@@ -10733,7 +10835,9 @@ if (!window.DevExpress) {
                     if (!isInput(e.target) && !this._blurPrevented)
                         utils.resetActiveElement();
                     this._accept(e);
-                    this._fireClickEvent(e)
+                    misc.requestAnimationFrame($.proxy(function() {
+                        this._fireClickEvent(e)
+                    }, this))
                 },
                 _eventOutOfElement: function(e, element) {
                     var target = e.target,
@@ -10774,25 +10878,17 @@ if (!window.DevExpress) {
             var fixBuggyInertia = DX.devices.real().ios;
             if (fixBuggyInertia) {
                 var GESTURE_LOCK_KEY = "dxGestureLock";
-                var misc = {requestAnimationFrame: DX.requestAnimationFrame};
                 ClickEmitter = ClickEmitter.inherit({_fireClickEvent: function(e) {
-                        var $element = $(e.target),
-                            callBase = this.callBase,
-                            args = arguments;
-                        misc.requestAnimationFrame($.proxy(function() {
-                            while ($element.length) {
-                                if ($.data($element.get(0), GESTURE_LOCK_KEY))
-                                    return;
-                                $element = $element.parent()
-                            }
-                            callBase.apply(this, args)
-                        }, this))
+                        var $element = $(e.target);
+                        while ($element.length) {
+                            if ($.data($element.get(0), GESTURE_LOCK_KEY))
+                                return;
+                            $element = $element.parent()
+                        }
+                        this.callBase.apply(this, arguments)
                     }})
             }
-            $.extend(events.__internals, {
-                fixBuggyInertia: fixBuggyInertia,
-                misc: misc
-            })
+            $.extend(events.__internals, {fixBuggyInertia: fixBuggyInertia})
         })();
         (function() {
             var desktopDevice = DX.devices.real().generic;
@@ -10819,7 +10915,10 @@ if (!window.DevExpress) {
             bubble: true,
             events: [CLICK_EVENT_NAME]
         });
-        $.extend(events.__internals, {useFastClick: !events.__internals.useNativeClick && !events.__internals.fixBuggyInertia})
+        $.extend(events.__internals, {
+            useFastClick: !events.__internals.useNativeClick && !events.__internals.fixBuggyInertia,
+            misc: misc
+        })
     })(jQuery, DevExpress, window);
     /*! Module core, file ui.events.emitter.hold.js */
     (function($, DX, undefined) {
@@ -10871,6 +10970,7 @@ if (!window.DevExpress) {
             utils = DX.utils,
             events = ui.events,
             devices = DX.devices,
+            support = DX.support,
             abs = Math.abs;
         var SLEEP = 0,
             INITED = 1,
@@ -10879,6 +10979,10 @@ if (!window.DevExpress) {
             IMMEDIATE_TOUCH_BOUNDARY = 0,
             IMMEDIATE_TIMEOUT = 180;
         var GestureEmitter = events.Emitter.inherit({
+                configurate: function(data) {
+                    this.getElement().css("msTouchAction", data.immediate ? "pinch-zoom" : "");
+                    this.callBase(data)
+                },
                 getDirection: function() {
                     return this.direction
                 },
@@ -10957,7 +11061,8 @@ if (!window.DevExpress) {
                         isStarted = this._stage === STARTED;
                     if (isDesktop && isStarted) {
                         $("body").css("pointer-events", toggle ? "" : "none");
-                        $("body").css("user-select", toggle ? "" : "none")
+                        if (support.supportProp("user-select"))
+                            $("body").css(support.styleProp("user-select"), toggle ? "" : "none")
                     }
                 },
                 _clearSelection: function(e) {
@@ -11675,6 +11780,9 @@ if (!window.DevExpress) {
                     return $()
                 }
             });
+        var RendererTemplate = ui.TemplateBase.inherit({_renderCore: function() {
+                    return this._element
+                }});
         ui.Widget = DX.DOMComponent.inherit({
             NAME: "Widget",
             _supportedKeys: function() {
@@ -11776,20 +11884,22 @@ if (!window.DevExpress) {
                     return new DynamicTemplate(function() {
                             var templateSourceResult = templateSource.apply(that, arguments);
                             if (utils.isDefined(templateSourceResult))
-                                return that._acquireTemplate(templateSourceResult, this);
+                                return that._acquireTemplate(templateSourceResult, this, true);
                             else
                                 return new EmptyTemplate
                         }, this)
                 }
                 return this._acquireTemplate(templateSource, this)
             },
-            _acquireTemplate: function(templateSource, owner) {
+            _acquireTemplate: function(templateSource, owner, preferRenderer) {
                 if (templateSource == null)
                     return this._createTemplate(utils.stringToJquery(templateSource), owner);
                 if (templateSource instanceof ui.TemplateBase)
                     return templateSource;
                 if (templateSource.nodeType || templateSource.jquery) {
                     templateSource = $(templateSource);
+                    if (preferRenderer && !templateSource.is("script"))
+                        return new RendererTemplate(templateSource, owner);
                     return this._createTemplate(templateSource, owner)
                 }
                 if (typeof templateSource === "string") {
@@ -12307,7 +12417,7 @@ if (!window.DevExpress) {
                             this._raiseValueChangeAction(args.value, args.previousValue);
                             this._valueChangeEventInstance = undefined
                         }
-                        if (this.validationRequest)
+                        if (args.value != args.previousValue)
                             this.validationRequest.fire({
                                 value: args.value,
                                 editor: this
@@ -12942,34 +13052,33 @@ if (!window.DevExpress) {
                     this._renderSelection(this._selectedItemIndices, [])
                 },
                 _syncSelectionOptions: function(byOption) {
-                    var items = this.option("items") || [],
-                        selectedItems = this.option("selectedItems") || [],
-                        selectedItem = this.option("selectedItem"),
-                        selectedIndex = this.option("selectedIndex");
                     byOption = byOption || this._chooseSelectOption();
                     switch (byOption) {
-                        case"selectedItems":
-                            this._setOptionSilent("selectedItem", selectedItems[0]);
-                            this._setOptionSilent("selectedIndex", $.inArray(selectedItems[0], items));
-                            break;
-                        case"selectedItem":
+                        case"selectedIndex":
+                            var selectedItem = this._editStrategy.getItemDataByIndex(this.option("selectedIndex"));
                             if (utils.isDefined(selectedItem)) {
                                 this._setOptionSilent("selectedItems", [selectedItem]);
-                                this._setOptionSilent("selectedIndex", $.inArray(selectedItem, items))
-                            }
-                            else {
-                                this._setOptionSilent("selectedItems", []);
-                                this._setOptionSilent("selectedIndex", -1)
-                            }
-                            break;
-                        case"selectedIndex":
-                            if (utils.isDefined(items[selectedIndex])) {
-                                this._setOptionSilent("selectedItems", [items[selectedIndex]]);
-                                this._setOptionSilent("selectedItem", items[selectedIndex])
+                                this._setOptionSilent("selectedItem", selectedItem)
                             }
                             else {
                                 this._setOptionSilent("selectedItems", []);
                                 this._setOptionSilent("selectedItem", null)
+                            }
+                            break;
+                        case"selectedItems":
+                            var selectedItems = this.option("selectedItems") || [];
+                            this._setOptionSilent("selectedItem", selectedItems[0]);
+                            this._setOptionSilent("selectedIndex", this._editStrategy.getIndexByItemData(selectedItems[0]));
+                            break;
+                        case"selectedItem":
+                            var selectedItem = this.option("selectedItem");
+                            if (utils.isDefined(selectedItem)) {
+                                this._setOptionSilent("selectedItems", [selectedItem]);
+                                this._setOptionSilent("selectedIndex", this._editStrategy.getIndexByItemData(selectedItem))
+                            }
+                            else {
+                                this._setOptionSilent("selectedItems", []);
+                                this._setOptionSilent("selectedIndex", -1)
                             }
                             break
                     }
@@ -13317,6 +13426,8 @@ if (!window.DevExpress) {
             ctor: function(collectionWidget) {
                 this._collectionWidget = collectionWidget
             },
+            getIndexByItemData: DX.abstract,
+            getItemDataByIndex: DX.abstract,
             getNormalizedIndex: function(value) {
                 if (this._isNormalisedItemIndex(value))
                     return value;
@@ -13364,8 +13475,17 @@ if (!window.DevExpress) {
     (function($, DX, undefined) {
         var ui = DX.ui;
         ui.CollectionWidget.PlainEditStrategy = ui.CollectionWidget.EditStrategy.inherit({
+            _getPlainItems: function() {
+                return this._collectionWidget.option("items") || []
+            },
+            getIndexByItemData: function(itemData) {
+                return $.inArray(itemData, this._getPlainItems())
+            },
+            getItemDataByIndex: function(index) {
+                return this._getPlainItems()[index]
+            },
             deleteItemAtIndex: function(index) {
-                this._collectionWidget.option("items").splice(index, 1)
+                this._getPlainItems().splice(index, 1)
             },
             updateSelectionAfterDelete: function(fromIndex) {
                 var selectedItemIndices = this._collectionWidget._selectedItemIndices;
@@ -13376,7 +13496,7 @@ if (!window.DevExpress) {
             },
             fetchSelectedItems: function(indices) {
                 indices = indices || this._collectionWidget._selectedItemIndices;
-                var items = this._collectionWidget.option("items"),
+                var items = this._getPlainItems(),
                     selectedItems = [];
                 $.each(indices, function(_, index) {
                     selectedItems.push(items[index])
@@ -13385,7 +13505,7 @@ if (!window.DevExpress) {
             },
             selectedItemIndices: function() {
                 var selectedIndices = [],
-                    items = this._collectionWidget.option("items"),
+                    items = this._getPlainItems(),
                     selected = this._collectionWidget.option("selectedItems");
                 $.each(selected, function(_, selectedItem) {
                     var index = $.inArray(selectedItem, items);
@@ -13397,7 +13517,7 @@ if (!window.DevExpress) {
                 return selectedIndices
             },
             moveItemAtIndexToIndex: function(movingIndex, destinationIndex) {
-                var items = this._collectionWidget.option("items"),
+                var items = this._getPlainItems(),
                     movedItemData = items[movingIndex];
                 items.splice(movingIndex, 1);
                 items.splice(destinationIndex, 0, movedItemData)

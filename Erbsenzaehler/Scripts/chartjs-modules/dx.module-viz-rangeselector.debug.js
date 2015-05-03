@@ -1,9 +1,9 @@
 /*! 
 * DevExtreme (Range Selector)
-* Version: 14.2.6
-* Build date: Mar 18, 2015
+* Version: 14.2.7
+* Build date: Apr 17, 2015
 *
-* Copyright (c) 2012 - 2015 Developer Express Inc. ALL RIGHTS RESERVED
+* Copyright (c) 2011 - 2014 Developer Express Inc. ALL RIGHTS RESERVED
 * EULA: https://www.devexpress.com/Support/EULAs/DevExtreme.xml
 */
 
@@ -242,6 +242,12 @@ if (!DevExpress.MOD_VIZ_RANGESELECTOR) {
                 selectedRangeChanged: null
             };
         rangeSelector.consts = {emptySliderMarkerText: '. . .'};
+        function cloneSelectedRange(arg) {
+            return {
+                    startValue: arg.startValue,
+                    endValue: arg.endValue
+                }
+        }
         rangeSelector.formatValue = function(value, formatOptions) {
             var formatObject = {
                     value: value,
@@ -510,10 +516,7 @@ if (!DevExpress.MOD_VIZ_RANGESELECTOR) {
                         return null
                     },
                     deprecatedArgs: function(arg) {
-                        return [{
-                                    startValue: arg.startValue,
-                                    endValue: arg.endValue
-                                }]
+                        return [cloneSelectedRange(arg)]
                     }
                 },
                 selectedRangeChanged: {newName: 'onSelectedRangeChanged'}
@@ -684,7 +687,7 @@ if (!DevExpress.MOD_VIZ_RANGESELECTOR) {
                     selectedRangeChanged: function(selectedRange, blockSelectedRangeChanged) {
                         that.option(SELECTED_RANGE, selectedRange);
                         if (!blockSelectedRangeChanged)
-                            that._eventTrigger('selectedRangeChanged', selectedRange)
+                            that._eventTrigger('selectedRangeChanged', cloneSelectedRange(selectedRange))
                     },
                     setSelectedRange: function(selectedRange) {
                         that.setSelectedRange(selectedRange)
@@ -713,10 +716,7 @@ if (!DevExpress.MOD_VIZ_RANGESELECTOR) {
                         return result
                     };
                 if (!selectedRangeOptions)
-                    return {
-                            startValue: scaleOptions.startValue,
-                            endValue: scaleOptions.endValue
-                        };
+                    return cloneSelectedRange(scaleOptions);
                 else {
                     startValue = parseValue(selectedRangeOptions.startValue, START_VALUE);
                     startValue = rangeSelectorUtils.truncateSelectedRange(startValue, scaleOptions);
@@ -953,12 +953,7 @@ if (!DevExpress.MOD_VIZ_RANGESELECTOR) {
                 return this.element()
             },
             getSelectedRange: function() {
-                var that = this;
-                var selectedRange = that.rangeContainer.slidersContainer.getSelectedRange();
-                return {
-                        startValue: selectedRange.startValue,
-                        endValue: selectedRange.endValue
-                    }
+                return cloneSelectedRange(this.rangeContainer.slidersContainer.getSelectedRange())
             },
             setSelectedRange: function(selectedRange) {
                 var that = this;
@@ -970,12 +965,9 @@ if (!DevExpress.MOD_VIZ_RANGESELECTOR) {
                 that.rangeContainer.slidersContainer.setSelectedRange(selectedRange)
             },
             resetSelectedRange: function(blockSelectedRangeChanged) {
-                var that = this;
-                that.setSelectedRange({
-                    startValue: that._scaleOptions.startValue,
-                    endValue: that._scaleOptions.endValue,
-                    blockSelectedRangeChanged: blockSelectedRangeChanged
-                })
+                var data = cloneSelectedRange(this._scaleOptions);
+                data.blockSelectedRangeChanged = blockSelectedRangeChanged;
+                this.setSelectedRange(data)
             },
             render: function(isResizing) {
                 var that = this;
@@ -1301,7 +1293,7 @@ if (!DevExpress.MOD_VIZ_RANGESELECTOR) {
                         stroke: 'grey',
                         opacity: 0.0001
                     }).append(group);
-                    $(markersTracker.element).on(rangeSelector.events.start, function(e) {
+                    markersTracker.on(rangeSelector.events.start, function(e) {
                         svgOffsetLeft = rangeSelector.utils.getRootOffsetLeft(that._renderer);
                         posX = rangeSelector.utils.getEventPageX(e) - svgOffsetLeft;
                         selectedRange = calculateRangeByMarkerPosition(posX, markerDatePositions, that._options.scale);
@@ -1376,7 +1368,7 @@ if (!DevExpress.MOD_VIZ_RANGESELECTOR) {
             },
             _update: function(group) {
                 if (this._markersTracker)
-                    $(this._markersTracker.element).off(rangeSelector.events.start, '**');
+                    this._markersTracker.off(rangeSelector.events.start, '**');
                 baseVisualElementMethods._update.apply(this, arguments)
             },
             _calculateRangeByMarkerPosition: calculateRangeByMarkerPosition,
@@ -1938,7 +1930,7 @@ if (!DevExpress.MOD_VIZ_RANGESELECTOR) {
                         }
                     },
                     eventsNames = that._eventsNames;
-                $(areaTracker.element).on(eventsNames.start, function(e) {
+                areaTracker.on(eventsNames.start, function(e) {
                     if (!that._enabled || !isLeftButtonPressed(e) || unselectedAreaProcessing)
                         return;
                     unselectedAreaProcessing = true;
@@ -1986,7 +1978,7 @@ if (!DevExpress.MOD_VIZ_RANGESELECTOR) {
                         }
                     },
                     eventsNames = that._eventsNames;
-                $(selectedAreaTracker.element).on(eventsNames.start, function(e) {
+                selectedAreaTracker.on(eventsNames.start, function(e) {
                     if (!that._enabled || !isLeftButtonPressed(e) || selectedAreaMoving)
                         return;
                     selectedAreaMoving = true;
@@ -2516,8 +2508,8 @@ if (!DevExpress.MOD_VIZ_RANGESELECTOR) {
                     marker = that._marker,
                     tracker = marker && marker.getTracker(),
                     sliderTracker = that._sliderTracker;
-                sliderTracker && $(sliderTracker.element).on(event, handler);
-                tracker && $(tracker.element).on(event, handler)
+                sliderTracker && sliderTracker.on(event, handler);
+                tracker && tracker.on(event, handler)
             },
             dispose: function() {
                 var marker = this._marker;

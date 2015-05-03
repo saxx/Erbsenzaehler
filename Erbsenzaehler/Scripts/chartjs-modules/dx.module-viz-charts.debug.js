@@ -1,9 +1,9 @@
 /*! 
 * DevExtreme (Charts)
-* Version: 14.2.6
-* Build date: Mar 18, 2015
+* Version: 14.2.7
+* Build date: Apr 17, 2015
 *
-* Copyright (c) 2012 - 2015 Developer Express Inc. ALL RIGHTS RESERVED
+* Copyright (c) 2011 - 2014 Developer Express Inc. ALL RIGHTS RESERVED
 * EULA: https://www.devexpress.com/Support/EULAs/DevExtreme.xml
 */
 
@@ -136,13 +136,13 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
                 var that = this,
                     margin = $.extend(true, {}, that.margin);
                 if (margin.top + margin.bottom < size.height) {
-                    if (this.innerTitleGroup) {
+                    if (that.innerTitleGroup) {
                         that.options._incidentOccured("W2103");
-                        this.innerTitleGroup.remove();
-                        this.innerTitleGroup = null
+                        that.innerTitleGroup.dispose();
+                        that.innerTitleGroup = null
                     }
                     if (that.clipRect) {
-                        that.clipRect.remove();
+                        that.clipRect.dispose();
                         that.clipRect = null
                     }
                 }
@@ -1104,7 +1104,6 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
             dispose: function() {
                 var that = this;
                 that._axisElementsGroup && that._axisElementsGroup.dispose();
-                that._deleteLabelsData();
                 that._stripLabels = that._strips = null;
                 that._title = null;
                 that._axisStripGroup = that._axisConstantLineGroup = that._axisLabelGroup = null;
@@ -1127,6 +1126,10 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
                 this._options.type = type || this._options.type;
                 this._options[typeSelector] = axisType || this._options[typeSelector]
             },
+            resetTypes: function(typeSelector) {
+                this._options.type = this._initTypes.type;
+                this._options[typeSelector] = this._initTypes[typeSelector]
+            },
             getTranslator: function() {
                 return this._translator
             },
@@ -1135,6 +1138,11 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
                     opt,
                     labelOpt = options.label;
                 that._options = opt = options;
+                that._initTypes = {
+                    type: options.type,
+                    argumentType: options.argumentType,
+                    valueType: options.valueType
+                };
                 _validateAxisOptions(opt);
                 that._setType(options.drawingType);
                 that._setTickOffset();
@@ -1175,12 +1183,12 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
                     direction = options.isHorizontal ? "horizontal" : "vertical";
                 if (options.title.text && that._axisTitleGroup) {
                     options.incidentOccured("W2105", [direction]);
-                    that._axisTitleGroup.remove();
+                    that._axisTitleGroup.dispose();
                     that._axisTitleGroup = null
                 }
                 if (clearAxis && that._axisElementsGroup && options.label.visible && !options.stubData) {
                     options.incidentOccured("W2106", [direction]);
-                    that._axisElementsGroup.remove();
+                    that._axisElementsGroup.dispose();
                     that._axisElementsGroup = null
                 }
                 that._setBoundingRect()
@@ -1215,7 +1223,7 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
                 this._updateTranslatorInterval()
             },
             resetTicks: function() {
-                this._deleteLabelsData();
+                this._deleteLabels();
                 this._majorTicks = this._minorTicks = null
             },
             setRange: function(range) {
@@ -1259,16 +1267,32 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
                     });
                 axis.append(that._axisLineGroup)
             },
+            _correctMinForTicks: function(min, max, screenDelta) {
+                var digitPosition = _getSignificantDigitPosition(_abs(max - min) / screenDelta),
+                    newMin = _roundValue(Number(min), digitPosition),
+                    correctingValue;
+                if (newMin < min) {
+                    correctingValue = _math.pow(10, -digitPosition);
+                    newMin = utils.applyPrecisionByMinDelta(newMin, correctingValue, newMin + correctingValue)
+                }
+                if (newMin > max)
+                    newMin = min;
+                return newMin
+            },
             _getTickManagerData: function() {
                 var that = this,
                     options = that._options,
                     screenDelta = that._getScreenDelta(),
+                    min = options.min,
+                    max = options.max,
                     categories = that._translator.getVisibleCategories() || that._range.categories,
                     customTicks = $.isArray(categories) ? categories : that._majorTicks && convertTicksToValues(that._majorTicks),
                     customMinorTicks = that._minorTicks && convertTicksToValues(that._minorTicks);
+                if (_isNumber(min) && options.type !== LOGARITHMIC)
+                    min = that._correctMinForTicks(min, max, screenDelta);
                 return {
-                        min: options.min,
-                        max: options.max,
+                        min: min,
+                        max: max,
                         customTicks: customTicks,
                         customMinorTicks: customMinorTicks,
                         screenDelta: screenDelta
@@ -1348,10 +1372,8 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
                 this._majorTicks = convertValuesToTicks(ticks.majorTicks);
                 this._minorTicks = convertValuesToTicks(ticks.minorTicks)
             },
-            _deleteLabelsData: function() {
-                _each(this._majorTicks || [], function(_, item) {
-                    item.label && $(item.label.element).removeData()
-                })
+            _deleteLabels: function() {
+                this._axisElementsGroup && this._axisElementsGroup.clear()
             },
             _drawTicks: function(ticks) {
                 var that = this,
@@ -1414,7 +1436,7 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
                                 x: xCoord,
                                 y: yCoord
                             });
-                        $(tick.label.element).data({argument: tick.value})
+                        tick.label.data({argument: tick.value})
                     }
                 })
             },
@@ -2164,8 +2186,7 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
                 this._applyPosition(lx, lx + this._translator.canvasLength / (this._scale * scale))
             },
             dispose: function() {
-                $(this._scroll.element).off();
-                this._scroll.remove();
+                this._scroll.dispose();
                 this._scroll = this._translator = null
             },
             _applyPosition: function(x1, x2) {
@@ -2469,6 +2490,7 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
                 that._canvasClipRect = that._renderer.clipRect();
                 that._createHtmlStructure();
                 that._createLegend();
+                that._createTooltip();
                 that._needHandleRenderComplete = true;
                 that.layoutManager = charts.factory.createChartLayoutManager(that._layoutManagerOptions());
                 that._createScrollBar();
@@ -2541,9 +2563,6 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
                             that[propName] = null
                         }
                     },
-                    detachGroup = function(groupName) {
-                        that[groupName] && that[groupName].remove()
-                    },
                     disposeObjectsInArray = this._disposeObjectsInArray;
                 clearTimeout(that._delayedRedraw);
                 that._renderer.stopAllAnimations();
@@ -2559,15 +2578,6 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
                 that.paneAxis = null;
                 that._userOptions = null;
                 that._canvas = null;
-                detachGroup("_legendGroup");
-                detachGroup("_stripsGroup");
-                detachGroup("_constantLinesGroup");
-                detachGroup("_axesGroup");
-                detachGroup("_gridGroup");
-                detachGroup("_labelAxesGroup");
-                detachGroup("_seriesGroup");
-                detachGroup("_labelsGroup");
-                detachGroup("_crosshairCursorGroup");
                 disposeObject("_canvasClipRect");
                 disposeObject("_panesBackgroundGroup");
                 disposeObject("_titleGroup");
@@ -2624,6 +2634,7 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
                     pointSelectionMode: that.themeManager.getOptions('pointSelectionMode'),
                     seriesGroup: that._seriesGroup,
                     renderer: that._renderer,
+                    tooltip: that.tooltip,
                     eventTrigger: that._eventTrigger
                 }, that.NAME)
             },
@@ -2632,7 +2643,6 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
                 return {
                         series: that.series,
                         legend: that.legend,
-                        tooltip: that.tooltip,
                         legendCallback: $.proxy(that.legend.getActionCallback, that.legend)
                     }
             },
@@ -2692,7 +2702,7 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
                 drawOptions.drawTitle && drawOptions.drawLegend && drawOptions.adjustAxes && that.layoutManager.placeDrawnElements(that._canvas);
                 that._applyClipRects(preparedOptions);
                 that._appendSeriesGroups();
-                that._createTooltip();
+                that._updateTooltip();
                 that._createCrosshairCursor();
                 $.each(layoutTargets, function() {
                     var canvas = this.canvas;
@@ -2855,17 +2865,19 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
                 that.legend.update(legendData, legendOptions)
             },
             _createTooltip: function() {
+                this.tooltip = new DX.viz.core.Tooltip({
+                    renderer: this._renderer,
+                    group: this._tooltipGroup,
+                    eventTrigger: this._eventTrigger
+                })
+            },
+            _updateTooltip: function() {
                 var that = this,
                     tooltipOptions = that.themeManager.getOptions('tooltip');
                 if (!$.isFunction(tooltipOptions.customizeText) && _isDefined(tooltipOptions.customizeText)) {
                     that._incidentOccured("E2103", ['customizeText']);
                     tooltipOptions.customizeText = undefined
                 }
-                that.tooltip = that.tooltip || new DX.viz.core.Tooltip({
-                    renderer: that._renderer,
-                    group: that._tooltipGroup,
-                    eventTrigger: that._eventTrigger
-                });
                 that.tooltip.update(tooltipOptions);
                 that.tooltip.setSize(that._canvas.width, that._canvas.height)
             },
@@ -3817,7 +3829,7 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
                 var that = this,
                     clipArray = that._panesClipRects[clipArrayName];
                 _each(clipArray || [], function(_, clipRect) {
-                    clipRect && clipRect.remove()
+                    clipRect && clipRect.dispose()
                 });
                 that._panesClipRects[clipArrayName] = []
             },
@@ -4636,14 +4648,16 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
             _getSeriesRenderTimeout: _noop,
             _drawSeries: function(drawOptions) {
                 var that = this,
-                    singleSeries = that.getSeries();
+                    singleSeries = that.getSeries(),
+                    legend = that.legend,
+                    getActionCallbackProxy = $.proxy(legend.getActionCallback, legend);
                 if (singleSeries) {
                     that.layoutManager.applyPieChartSeriesLayout(that._canvas, singleSeries, true);
                     singleSeries.canvas = that._canvas;
                     singleSeries.resetLabelSetups();
                     if (singleSeries.drawLabelsWOPoints(that._createTranslator(that.businessRanges[0], that._canvas)))
                         that.layoutManager.applyPieChartSeriesLayout(that._canvas, singleSeries, drawOptions.hideLayoutLabels);
-                    singleSeries.draw(that._createTranslator(that.businessRanges[0], that._canvas), that._getAnimateOption(singleSeries, drawOptions), drawOptions.hideLayoutLabels)
+                    singleSeries.draw(that._createTranslator(that.businessRanges[0], that._canvas), that._getAnimateOption(singleSeries, drawOptions), drawOptions.hideLayoutLabels, getActionCallbackProxy)
                 }
             },
             _adjustSeries: function() {
@@ -5617,7 +5631,8 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
         }
         var baseTrackerPrototype = {
                 ctor: function(options) {
-                    var that = this;
+                    var that = this,
+                        data = {tracker: that};
                     if (processMode(options.pointSelectionMode) === MULTIPLE_MODE) {
                         that._setSelectedPoint = that._selectPointMultipleMode;
                         that._releaseSelectedPoint = that._releaseSelectedPointMultipleMode
@@ -5635,12 +5650,13 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
                         that._setSelectedSeries = that._setSelectedSeriesSingleMode
                     }
                     that._renderer = options.renderer;
+                    that._tooltip = options.tooltip;
                     that._eventTrigger = options.eventTrigger;
-                    $(options.seriesGroup.element).off().on(eventsConsts.selectSeries, {tracker: that}, that._selectSeries).on(eventsConsts.deselectSeries, {tracker: that}, that._deselectSeries).on(eventsConsts.selectPoint, {tracker: that}, that._selectPoint).on(eventsConsts.deselectPoint, {tracker: that}, that._deselectPoint).on(eventsConsts.showPointTooltip, {tracker: that}, that._showPointTooltip).on(eventsConsts.hidePointTooltip, {tracker: that}, that._hidePointTooltip)
+                    options.seriesGroup.off().on(eventsConsts.selectSeries, data, that._selectSeries).on(eventsConsts.deselectSeries, data, that._deselectSeries).on(eventsConsts.selectPoint, data, that._selectPoint).on(eventsConsts.deselectPoint, data, that._deselectPoint).on(eventsConsts.showPointTooltip, data, that._showPointTooltip).on(eventsConsts.hidePointTooltip, data, that._hidePointTooltip);
+                    that._renderer.root.off(POINTER_ACTION).off("dxclick dxhold").on(POINTER_ACTION, data, that._pointerHandler).on("dxclick", data, that._clickHandler).on("dxhold", {timeout: 300}, $.noop)
                 },
                 update: function(options) {
-                    var that = this,
-                        tooltip = options.tooltip;
+                    var that = this;
                     if (that._storedSeries !== options.series) {
                         that._storedSeries = options.series || [];
                         that._clean()
@@ -5650,8 +5666,7 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
                         that._clearHover();
                         that.clearSelection()
                     }
-                    that._tooltip = tooltip;
-                    that._tooltipEnabled = tooltip.enabled();
+                    that._tooltipEnabled = that._tooltip.enabled();
                     that._legend = options.legend;
                     that.legendCallback = options.legendCallback;
                     that._prepare(that._renderer.root)
@@ -5663,11 +5678,7 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
                 repairTooltip: function() {
                     this._showTooltip(this.pointAtShownTooltip)
                 },
-                _prepare: function(root) {
-                    var that = this,
-                        data = {tracker: that};
-                    $(root.element).off().on(POINTER_ACTION, data, that._pointerHandler).on("dxclick", data, that._clickHandler).on("dxhold", {timeout: 300}, $.noop)
-                },
+                _prepare: $.noop,
                 _selectPointMultipleMode: function(point) {
                     var that = this;
                     that._selectedPoint = that._selectedPoint || [];
@@ -5927,7 +5938,9 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
         };
         $.extend(charts.ChartTracker.prototype, baseTrackerPrototype, {
             ctor: function(options) {
-                baseTrackerPrototype.ctor.call(this, options)
+                var that = this;
+                baseTrackerPrototype.ctor.call(that, options);
+                that._tooltip.off(POINTER_ACTION).on(POINTER_ACTION, {tracker: that}, that._tooltipPointerHandler)
             },
             _pointClick: function(point, event) {
                 var that = this,
@@ -6011,13 +6024,14 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
                     },
                     wheelzoomingEnabled = that._zoomingMode === "all" || that._zoomingMode === "mouse";
                 baseTrackerPrototype._prepare.call(that, root);
+                root.off("dxmousewheel dxc-scroll-start dxc-scroll-move");
                 if (!that._gestureEndHandler) {
                     that._gestureEndHandler = function() {
                         that._gestureEnd()
                     };
                     $(document).on("dxpointerup", that._gestureEndHandler)
                 }
-                wheelzoomingEnabled && $(root.element).on("dxmousewheel", function(e) {
+                wheelzoomingEnabled && root.on("dxmousewheel", function(e) {
                     var rootOffset = utils.getRootOffset(that._renderer),
                         x = that._rotated ? e.pageY - rootOffset.top : e.pageX - rootOffset.left,
                         scale = that._argumentAxis.getTranslator().getMinScale(e.delta > 0),
@@ -6027,7 +6041,7 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
                     that._chart.zoomArgument(zoom.min, zoom.max, true);
                     e.preventDefault()
                 });
-                $(root.element).on("dxc-scroll-start", function(e) {
+                root.on("dxc-scroll-start", function(e) {
                     that._gestureStart(that._getGestureParams(e, {
                         left: 0,
                         top: 0
@@ -6038,7 +6052,6 @@ if (!DevExpress.MOD_VIZ_CHARTS) {
                         top: 0
                     })) && e.preventDefault()
                 });
-                that._tooltip.off().on(POINTER_ACTION, {tracker: that}, that._tooltipPointerHandler);
                 root.css(rootStyles)
             },
             _getGestureParams: function(e, offset) {

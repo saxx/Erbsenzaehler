@@ -1,9 +1,9 @@
 /*! 
 * DevExtreme (Gauges)
-* Version: 14.2.6
-* Build date: Mar 18, 2015
+* Version: 14.2.7
+* Build date: Apr 17, 2015
 *
-* Copyright (c) 2012 - 2015 Developer Express Inc. ALL RIGHTS RESERVED
+* Copyright (c) 2011 - 2014 Developer Express Inc. ALL RIGHTS RESERVED
 * EULA: https://www.devexpress.com/Support/EULAs/DevExtreme.xml
 */
 
@@ -3849,7 +3849,7 @@ if (!DevExpress.MOD_VIZ_GAUGES) {
                             that._bars.push(new BarWrapper(i, that._context));
                     if (that._bars.length > 0) {
                         if (that._dummyBackground) {
-                            that._dummyBackground.remove();
+                            that._dummyBackground.dispose();
                             that._dummyBackground = null
                         }
                     }
@@ -3972,11 +3972,11 @@ if (!DevExpress.MOD_VIZ_GAUGES) {
         _extend(BarWrapper.prototype, {
             dispose: function() {
                 var that = this;
-                that._background.remove();
-                that._bar.remove();
+                that._background.dispose();
+                that._bar.dispose();
                 if (that._context.textEnabled) {
-                    that._line.remove();
-                    that._text.remove()
+                    that._line.dispose();
+                    that._text.dispose()
                 }
                 that._context.tracker.detach(that._tracker);
                 that._context = that._settings = that._background = that._bar = that._line = that._text = that._tracker = null;
@@ -4159,7 +4159,7 @@ if (!DevExpress.MOD_VIZ_GAUGES) {
                 var that = this;
                 that._dispose();
                 that.deactivate();
-                $(that._element.element).off();
+                that._element.remove();
                 that._container = that._element = that._context = that._callbacks = null;
                 return that
             },
@@ -4168,30 +4168,27 @@ if (!DevExpress.MOD_VIZ_GAUGES) {
                 return this
             },
             deactivate: function() {
-                this._element.remove();
-                this._element.clear();
+                this._element.remove().clear();
                 return this
             },
             attach: function(element, target, info) {
-                $(element.element).data({
+                element.data({
                     target: target,
                     info: info
-                });
-                element.append(this._element);
+                }).append(this._element);
                 return this
             },
             detach: function(element) {
                 element.remove();
-                $(element.element).removeData();
                 return this
             },
             setTooltipState: function(state) {
                 var that = this,
                     data;
-                $(that._element.element).off(tooltipMouseEvents).off(tooltipTouchEvents);
+                that._element.off(tooltipMouseEvents).off(tooltipTouchEvents);
                 if (state) {
                     data = {tracker: that};
-                    $(that._element.element).on(tooltipMouseEvents, data).on(tooltipTouchEvents, data)
+                    that._element.on(tooltipMouseEvents, data).on(tooltipTouchEvents, data)
                 }
                 return that
             },
@@ -4232,7 +4229,7 @@ if (!DevExpress.MOD_VIZ_GAUGES) {
             var tracker = event.data.tracker;
             tracker._x = event.pageX;
             tracker._y = event.pageY;
-            $(tracker._element.element).off(tooltipMouseMoveEvents).on(tooltipMouseMoveEvents, event.data);
+            tracker._element.off(tooltipMouseMoveEvents).on(tooltipMouseMoveEvents, event.data);
             tracker._showTooltip(event, TOOLTIP_SHOW_DELAY)
         }
         function handleTooltipMouseMove(event) {
@@ -4245,7 +4242,7 @@ if (!DevExpress.MOD_VIZ_GAUGES) {
         }
         function handleTooltipMouseOut(event) {
             var tracker = event.data.tracker;
-            $(tracker._element.element).off(tooltipMouseMoveEvents);
+            tracker._element.off(tooltipMouseMoveEvents);
             tracker._hideTooltip(TOOLTIP_HIDE_DELAY)
         }
         var active_touch_tooltip_tracker = null;
