@@ -27,7 +27,7 @@ namespace Erbsenzaehler.SummaryMails.WebJob
 
             var credentials = new NetworkCredential(Config.SendGridUserName, Config.SendGridPassword);
             var transportWeb = new Web(credentials);
-            transportWeb.Deliver(message);
+            transportWeb.DeliverAsync(message).Wait();
         }
     }
 }
