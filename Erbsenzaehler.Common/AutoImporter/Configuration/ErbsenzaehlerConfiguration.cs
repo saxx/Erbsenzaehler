@@ -4,7 +4,7 @@
     {
         public ErbsenzaehlerConfiguration()
         {
-            Url = "http://erbsenzaehler.azurewebsites.net";
+            Url = "http://erbsenzaehler.sachsenhofer.com";
             Importer = "Easybank";
         }
 
