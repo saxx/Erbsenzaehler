@@ -14,7 +14,8 @@
         <th>Datum</th>
         <th>Typ</th>
         <th>Konto</th>
-        <th>Buchungszeilen (insgesamt &rArr; <span class="label label-success">importiert</span>)</th>
+        <th>Buchungszeilen insgesamt</th>
+        <th>Buchungszeilen importiert</th>
         <th>Dauer</th>
         <th>Zusätzliche Information</th>
     </tr>
@@ -32,7 +33,13 @@
                 <span class="label label-info">@log.Account</span>
             </td>
             <td>
-                @log.TotalLines &rArr; <span class="label label-success">@log.ImportedLines</span> 
+                @log.TotalLines
+            </td>
+            <td>
+                @if (log.ImportedLines > 0)
+                {
+                    <span class="label label-success">@log.ImportedLines</span>
+                }
             </td>
             <td>
                 @((log.DurationInMilliseconds / 1000d).ToString("N1")) s

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Erbsenzaehler.Importer;
+using Erbsenzaehler.Models;
 using Erbsenzaehler.Rules;
 using Erbsenzaehler.ViewModels.Api;
 using Microsoft.AspNet.Identity.Owin;
@@ -18,6 +20,9 @@ namespace Erbsenzaehler.Controllers
         [HttpPost]
         public async Task<ActionResult> Import(ImportViewModel model)
         {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            
             try
             {
                 if (string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password))
@@ -36,7 +41,8 @@ namespace Erbsenzaehler.Controllers
                         return new HttpStatusCodeResult(HttpStatusCode.Unauthorized, "Username or password invalid.");
                 }
 
-                var currentClient = (await Db.Users.FirstAsync(x => x.UserName == model.Username)).Client;
+                var currentUser = await Db.Users.FirstAsync(x => x.UserName == model.Username);
+                var currentClient = currentUser.Client;
                 var account = await Db.Accounts.FirstOrDefaultAsync(x => x.ClientId == currentClient.Id && x.Name == model.Account);
                 if (account == null)
                 {
@@ -55,6 +61,13 @@ namespace Erbsenzaehler.Controllers
                 }
 
                 var result = new ImportResultViewModel();
+                var importLog = new ImportLog
+                {
+                    AccountId = account.Id,
+                    UserId = currentUser.Id,
+                    Date = DateTime.UtcNow,
+                    Type = ImportLogType.AutomaticOnClient
+                };
                 try
                 {
                     using (var stream = new MemoryStream(model.File))
@@ -66,12 +79,25 @@ namespace Erbsenzaehler.Controllers
 
                             result.IgnoredCount = importResult.DuplicateLinesCount;
                             result.ImportedCount = importResult.NewLinesCount;
+
+                            importLog.LinesDuplicatesCount = importResult.DuplicateLinesCount;
+                            importLog.LinesFoundCount = importResult.DuplicateLinesCount + importResult.NewLinesCount;
+                            importLog.LinesImportedCount = importResult.NewLinesCount;
                         }
                     }
                 }
                 catch (Exception ex)
                 {
+                    importLog.Log = ex.Message;
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Import failed: " + ex.Message);
+                }
+                finally
+                {
+                    // save to import log
+                    stopwatch.Stop();
+                    importLog.Milliseconds = (int)stopwatch.ElapsedMilliseconds;
+                    Db.ImportLog.Add(importLog);
+                    await Db.SaveChangesAsync();
                 }
 
                 return Json(result);
