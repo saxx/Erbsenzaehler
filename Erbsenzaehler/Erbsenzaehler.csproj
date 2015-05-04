@@ -202,6 +202,7 @@
     <Compile Include="ViewModels\Api\ImportResultViewModel.cs" />
     <Compile Include="ViewModels\Api\ImportViewModel.cs" />
     <Compile Include="ViewModels\Import\AutoImporterSettingsViewModel.cs" />
+    <Compile Include="ViewModels\Import\ImportLogsViewModel.cs" />
     <Compile Include="ViewModels\ManageBudgets\IndexViewModel.cs" />
     <Compile Include="ViewModels\ManageUsers\CreateViewModel.cs" />
     <Compile Include="ViewModels\ManageUsers\DeleteViewModel.cs" />
@@ -724,6 +725,7 @@
     <Content Include="Views\Shared\_NoBudgetsWarning.cshtml" />
     <Content Include="Views\Import\Index.cshtml" />
     <Content Include="Views\Import\AutoImporterSettings.cshtml" />
+    <Content Include="Views\Import\ImportLogs.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

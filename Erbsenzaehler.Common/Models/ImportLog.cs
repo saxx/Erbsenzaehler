@@ -5,7 +5,7 @@ namespace Erbsenzaehler.Models
 {
     public static class ImportLogExtensions
     {
-        public static IQueryable<ImportLog> ByAccount(this IQueryable<ImportLog> query, Client client)
+        public static IQueryable<ImportLog> ByClient(this IQueryable<ImportLog> query, Client client)
         {
             return query.Where(x => x.Account.ClientId == client.Id);
         }

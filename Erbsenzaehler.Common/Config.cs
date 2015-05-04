@@ -10,6 +10,20 @@ namespace Erbsenzaehler
         public static string DatabaseConnectionString => Setting("DatabaseConnectionString", null) ?? ConfigurationManager.ConnectionStrings["Db"].ConnectionString;
 
 
+        public static int Setting(string key, int defaultValue)
+        {
+            var setting = Setting(key, "");
+
+            int settingAsInt;
+            if (string.IsNullOrEmpty(setting) || !int.TryParse(setting, out settingAsInt))
+            {
+                return defaultValue;
+            }
+
+            return settingAsInt;
+        }
+
+
         public static string Setting(string key, string defaultValue)
         {
             var value = Environment.GetEnvironmentVariable(SettingPrefix + "." + key);

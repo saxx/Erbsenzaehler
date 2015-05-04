@@ -1,0 +1,50 @@
+﻿@model Erbsenzaehler.ViewModels.Import.ImportLogsViewModel
+
+
+<h2>Letzte Imports</h2>
+
+<div class="alert alert-info">
+    Hier sehen Sie die Resultate der letzten 30 Imports, die Sie manuell oder der Erbsenzähler automatisch durchgeführt hat.
+</div>
+
+<hr />
+
+<table class="table">
+    <tr>
+        <th>Datum</th>
+        <th>Typ</th>
+        <th>Konto</th>
+        <th>Buchungszeilen (insgesamt &rArr; <span class="label label-success">importiert</span>)</th>
+        <th>Dauer</th>
+        <th>Zusätzliche Information</th>
+    </tr>
+
+    @foreach (var log in Model.ImportLogs)
+    {
+        <tr>
+            <td>
+                @log.Date.ToLocalTime()
+            </td>
+            <td>
+                @log.Type
+            </td>
+            <td>
+                <span class="label label-info">@log.Account</span>
+            </td>
+            <td>
+                @log.TotalLines &rArr; <span class="label label-success">@log.ImportedLines</span> 
+            </td>
+            <td>
+                @((log.DurationInMilliseconds / 1000d).ToString("N1")) s
+            </td>
+            <td>
+                @if (!string.IsNullOrEmpty(log.ErrorMessage))
+                {
+                    <code>@log.ErrorMessage</code>
+                }
+            </td>
+        </tr>
+
+    }
+
+</table>

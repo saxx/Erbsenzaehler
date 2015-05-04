@@ -19,9 +19,6 @@ namespace Erbsenzaehler.AutoImporter.WebJob
 {
     public class Program
     {
-        public const int IntervalInMinutes = 60*12;
-
-
         public static void Main()
         {
             var logger = new Logger();
@@ -76,7 +73,7 @@ namespace Erbsenzaehler.AutoImporter.WebJob
                                     throw new Exception("There is no account '" + config.Erbsenzaehler.Account + "'.");
                                 }
 
-                                if (account.LastImport <= DateTime.UtcNow.AddMinutes(-IntervalInMinutes))
+                                if (account.LastImport <= DateTime.UtcNow.AddMinutes(-Config.ImportIntervalInMinutes))
                                 {
                                     RunImport(db, config, client.ClientId, account.AccountId, logger).Wait();
                                 }
