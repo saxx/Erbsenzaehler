@@ -38,8 +38,8 @@ namespace Erbsenzaehler.SummaryMail
                 .ByNotIgnored();
 
             var latestLinesQuery = linesQuery
-                .Where(x => (x.Date ?? x.OriginalDate) >= lastSummaryMailDate)
-                .OrderByDescending(x => x.Date ?? x.OriginalDate);
+                .Where(x => x.DateOfCreationUtc >= lastSummaryMailDate)
+                .OrderByDescending(x => x.DateOfCreationUtc);
             Lines = (await latestLinesQuery.ToListAsync()).Select(x => new Line(x));
 
             var currentMonth = new Month();

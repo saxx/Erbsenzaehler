@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace Erbsenzaehler.Models
@@ -97,6 +98,9 @@ namespace Erbsenzaehler.Models
     {
         public int Id { get; set; }
         public int AccountId { get; set; }
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public DateTime DateOfCreationUtc { get; set; }
 
         public decimal OriginalAmount { get; set; }
         public DateTime OriginalDate { get; set; }

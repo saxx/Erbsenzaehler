@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CsvHelper;
@@ -34,6 +35,7 @@ namespace Erbsenzaehler.Importer
 
                     await rulesApplier.Apply(db, clientId, line);
 
+                    line.DateOfCreationUtc = DateTime.UtcNow;
                     db.Lines.Add(line);
                     result.NewLinesCount++;
                     anyChangesToDatabase = true;

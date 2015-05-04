@@ -115,6 +115,10 @@
     <Compile Include="Migrations\201504141850205_ImportLogs.Designer.cs">
       <DependentUpon>201504141850205_ImportLogs.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201505041831444_LinesDateOfCreation.cs" />
+    <Compile Include="Migrations\201505041831444_LinesDateOfCreation.Designer.cs">
+      <DependentUpon>201505041831444_LinesDateOfCreation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Budget.cs" />
@@ -146,9 +150,6 @@
     <Compile Include="Templates\RazorTemplateResolver.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -177,6 +178,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504141850205_ImportLogs.resx">
       <DependentUpon>201504141850205_ImportLogs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505041831444_LinesDateOfCreation.resx">
+      <DependentUpon>201505041831444_LinesDateOfCreation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
