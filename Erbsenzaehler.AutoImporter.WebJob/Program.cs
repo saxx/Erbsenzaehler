@@ -25,7 +25,7 @@ namespace Erbsenzaehler.AutoImporter.WebJob
 
             try
             {
-                logger.Info("Erbsenzaehler.AutoImporter.WebJob v" + typeof (Program).Assembly.GetName().Version + " starting up ...");
+                logger.Info("Erbsenzaehler.AutoImporter.WebJob v" + typeof(Program).Assembly.GetName().Version + " starting up ...");
 
                 // hard-code german culture here, we want our e-mails formatted for german
                 var germanCulture = new CultureInfo("de-DE");
@@ -112,55 +112,85 @@ namespace Erbsenzaehler.AutoImporter.WebJob
             var watch = new Stopwatch();
             watch.Start();
 
+            var importLog = new ImportLog
+            {
+                Date = DateTime.UtcNow,
+                AccountId = accountId,
+                Type = ImportLogType.AutomaticOnServer,
+                Milliseconds = (int)watch.ElapsedMilliseconds
+            };
+
+            try
+            {
+                var tempFilePath = RunRecipe(config, logger);
+
+                if (File.Exists(tempFilePath) && new FileInfo(tempFilePath).Length > 0)
+                {
+                    var importResult = await ParseAndSaveToDatabase(db, clientId, accountId, tempFilePath, config, logger);
+                    importLog.LinesDuplicatesCount = importResult.DuplicateLinesCount;
+                    importLog.LinesFoundCount = importResult.NewLinesCount + importResult.DuplicateLinesCount;
+                    importLog.LinesImportedCount = importResult.NewLinesCount;
+                }
+                else
+                {
+                    throw new Exception("File (to import from) does not exist or is empty.");
+                }
+
+                if (File.Exists(tempFilePath))
+                {
+                    logger?.Trace("Deleting temporary file {0} ...", tempFilePath);
+                    File.Delete(tempFilePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                importLog.Log = ex.Message;
+                logger?.Error(ex.ToString());
+                LogException(ex);
+            }
+            finally
+            {
+                logger?.Trace("Saving to import log ...");
+
+                watch.Stop();
+                importLog.Milliseconds = (int)watch.ElapsedMilliseconds;
+
+                db.ImportLog.Add(importLog);
+                db.SaveChanges();
+            }
+        }
+
+
+        private static string RunRecipe(ConfigurationContainer config, ILogger logger)
+        {
             var tempFilePath = Path.GetTempFileName();
             logger?.Trace("Temporary file path is {0} ...", tempFilePath);
 
             var recipe = RecipeFactory.GetRecipe(config);
             recipe.DownloadFile(tempFilePath, logger);
 
-            if (File.Exists(tempFilePath) && new FileInfo(tempFilePath).Length > 0)
-            {
-                logger?.Trace("Parsing file and saving to database ...");
-                logger?.Trace("File size: " + new FileInfo(tempFilePath).Length + " bytes.");
-
-                var importerType = (ImporterType) Enum.Parse(typeof (ImporterType), config.Erbsenzaehler.Importer);
-                using (var reader = new StreamReader(tempFilePath, Encoding.UTF8))
-                {
-                    var concreteImporter = new ImporterFactory().GetImporter(reader, importerType);
-                    var importResult = await concreteImporter.LoadFileAndImport(db, clientId, accountId, new RulesApplier());
-
-                    logger?.Info(importResult.NewLinesCount + " line(s) created, " + importResult.DuplicateLinesCount + " duplicate line(s).");
-
-                    watch.Stop();
-                    SaveLog(db, accountId, importResult, watch, logger);
-                }
-            }
-
-            if (File.Exists(tempFilePath))
-            {
-                logger?.Trace("Deleting temporary file {0} ...", tempFilePath);
-                File.Delete(tempFilePath);
-            }
+            return tempFilePath;
         }
 
 
-        private static void SaveLog(Db db, int accountId, ImporterBase.ImportResult importResult, Stopwatch watch, ILogger logger)
+        private static async Task<ImporterBase.ImportResult> ParseAndSaveToDatabase(Db db, int clientId, int accountId, string tempFilePath, ConfigurationContainer config, ILogger logger)
         {
-            logger?.Trace("Saving to import log ...");
-            db.ImportLog.Add(new ImportLog
-            {
-                Date = DateTime.UtcNow,
-                AccountId = accountId,
-                Type = ImportLogType.AutomaticOnServer,
-                LinesDuplicatesCount = importResult.DuplicateLinesCount,
-                LinesFoundCount = importResult.NewLinesCount + importResult.DuplicateLinesCount,
-                LinesImportedCount = importResult.NewLinesCount,
-                Log = null,
-                Milliseconds = (int) watch.ElapsedMilliseconds
-            });
-            db.SaveChanges();
-        }
+            logger?.Trace("Parsing file and saving to database ...");
+            logger?.Trace("File size: " + new FileInfo(tempFilePath).Length + " bytes.");
 
+            ImporterBase.ImportResult importResult;
+
+            var importerType = (ImporterType)Enum.Parse(typeof(ImporterType), config.Erbsenzaehler.Importer);
+            using (var reader = new StreamReader(tempFilePath, Encoding.UTF8))
+            {
+                var concreteImporter = new ImporterFactory().GetImporter(reader, importerType);
+                importResult = await concreteImporter.LoadFileAndImport(db, clientId, accountId, new RulesApplier());
+
+                logger?.Info(importResult.NewLinesCount + " line(s) created, " + importResult.DuplicateLinesCount + " duplicate line(s).");
+            }
+
+            return importResult;
+        }
 
         private static void LogException(Exception ex)
         {
