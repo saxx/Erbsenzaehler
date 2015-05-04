@@ -20,7 +20,7 @@ namespace Erbsenzaehler
                 "~/Scripts/app/LinesEditor/*.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/chartjs").Include(
-                "~/Scripts/jquery.globalize/globalize.js",
+                "~/Scripts/globalize/globalize.js",
                 "~/Scripts/dx.chartjs.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
