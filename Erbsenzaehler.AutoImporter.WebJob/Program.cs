@@ -19,13 +19,15 @@ namespace Erbsenzaehler.AutoImporter.WebJob
 {
     public class Program
     {
-        public static void Main()
+        public static void Main(string[] args)
         {
             var logger = new Logger();
 
             try
             {
                 logger.Info("Erbsenzaehler.AutoImporter.WebJob v" + typeof(Program).Assembly.GetName().Version + " starting up ...");
+
+                var ignoreInterval = args.Any(x => x.Equals("--ignoreInterval", StringComparison.InvariantCultureIgnoreCase));
 
                 // hard-code german culture here, we want our e-mails formatted for german
                 var germanCulture = new CultureInfo("de-DE");
@@ -73,8 +75,12 @@ namespace Erbsenzaehler.AutoImporter.WebJob
                                     throw new Exception("There is no account '" + config.Erbsenzaehler.Account + "'.");
                                 }
 
-                                if (account.LastImport <= DateTime.UtcNow.AddMinutes(-Config.ImportIntervalInMinutes))
+                                if (ignoreInterval || account.LastImport <= DateTime.UtcNow.AddMinutes(-Config.ImportIntervalInMinutes))
                                 {
+                                    if (ignoreInterval)
+                                    {
+                                        logger.Trace("Completely ignoring interval because of command-line argument.");
+                                    }
                                     RunImport(db, config, client.ClientId, account.AccountId, logger).Wait();
                                 }
                                 else
