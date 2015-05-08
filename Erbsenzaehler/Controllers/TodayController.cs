@@ -24,13 +24,13 @@ namespace Erbsenzaehler.Controllers
             var calculator = new SumCalculator(Db, await GetCurrentClient());
 
             var result = from x in await calculator.CalculateForMonth(new Month(month))
-                where x.Key != Constants.IncomeCategory
-                orderby x.Value
-                select new
-                {
-                    amount = -x.Value,
-                    category = x.Key
-                };
+                         where x.Key != Constants.IncomeCategory
+                         orderby x.Value
+                         select new
+                         {
+                             amount = -x.Value,
+                             category = x.Key
+                         };
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -61,13 +61,13 @@ namespace Erbsenzaehler.Controllers
             }
 
             var result = from x in months
-                orderby x.Date
-                select new
-                {
-                    month = x.Date.ToString("MMM yyyy"),
-                    income = incomes[x],
-                    spendings = -spendings[x]
-                };
+                         orderby x.Date
+                         select new
+                         {
+                             month = x.Date.ToString("MMM yyyy"),
+                             income = incomes[x],
+                             spendings = -spendings[x]
+                         };
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -77,13 +77,24 @@ namespace Erbsenzaehler.Controllers
         {
             var calculator = new BudgetCalculator(Db, await GetCurrentClient());
 
-            var result = from x in await calculator.CalculateForMonth(new Month(month))
-                orderby x.Category
-                select new
-                {
-                    percentage = x.Percentage,
-                    category = x.Category
-                };
+            var selectedMonth = new Month(month);
+            var budgets = await calculator.CalculateForMonth(selectedMonth);
+
+            IEnumerable<BudgetCalculator.BudgetResult> relativeBudgets = null;
+            if (selectedMonth.IsCurrentMonth)
+            {
+                relativeBudgets = await calculator.CalculateRelativeToCurrentMonth();
+            }
+
+
+            var result = from x in budgets
+                         orderby x.Category
+                         select new
+                         {
+                             percentage = x.Percentage,
+                             relativePercentage = relativeBudgets == null ? null : new int?(relativeBudgets.First(y => y.Category == x.Category).Percentage),
+                             category = x.Category
+                         };
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

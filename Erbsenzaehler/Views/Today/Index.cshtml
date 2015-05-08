@@ -1,7 +1,7 @@
 ﻿@model Erbsenzaehler.ViewModels.Today.IndexViewModel
 
 @{
-    var currentMonth = Model.CurrentDate;
+    var currentMonth = Model.SelectedDate;
 
     var previousMonth = currentMonth.Date.AddMonths(-1);
     var nextMonth = currentMonth.Date.AddMonths(1);
@@ -17,10 +17,11 @@
             <nav>
                 <ul class="pager">
                     @if (Model.MinDate < previousMonth && Model.MinDate > DateTime.MinValue)
-                    {
+                {
                         <li>
                             <a href="@Url.Action("Index")?month=@previousMonth.ToString("yyyy-MM")">
-                                <span aria-hidden="true">&larr;</span> @previousMonth.ToString("MMMM yyyy")</a>
+                                <span aria-hidden="true">&larr;</span> @previousMonth.ToString("MMMM yyyy")
+                            </a>
                         </li>
                     }
                 </ul>
@@ -34,10 +35,11 @@
             <nav>
                 <ul class="pager">
                     @if (Model.MaxDate >= nextMonth)
-                    {
+                {
                         <li>
                             <a href="@Url.Action("Index")?month=@nextMonth.ToString("yyyy-MM")">
-                                @nextMonth.ToString("MMMM yyyy") <span aria-hidden="true">&rarr;</span></a>
+                                @nextMonth.ToString("MMMM yyyy") <span aria-hidden="true">&rarr;</span>
+                            </a>
                         </li>
                     }
                 </ul>
@@ -45,7 +47,7 @@
         </div>
     </div>
 
-    <hr/>
+    <hr />
 }
 
 @if (Model.HasLines)
@@ -69,7 +71,7 @@
         </div>
     </div>
 
-    <hr/>
+    <hr />
 
     <div class="row">
         <div class="col-sm-12">
@@ -77,181 +79,210 @@
         </div>
     </div>
 
-@section scripts
-{
-    <script>
-        $(document).ready(function() {
-            function loadSpendingsChart() {
-                $.getJSON('@Url.Action("SpendingsChart")?month=@currentMonth.ToString("yyyy-MM")', function(data) {
-                    $('#spendingsChart').dxPieChart({
-                        title: {
-                            text: 'Ausgaben',
-                            font: {
-                                size: '1.25em'
-                            }
-                        },
-                        dataSource: data,
-                        palette: 'Soft Pastel',
-                        legend: {
-                            visible: true
-                        },
-                        tooltip: {
-                            enabled: true,
-                            argumentFormat: 'currency',
-                            customizeText: function() {
-                                return this.argumentText + ": " + this.valueText + " €";
-                            }
-                        },
-                        series: {
-                            valueField: 'amount',
-                            argumentField: 'category'
-                        }
-                    });
-                });
-            }
-
-            function loadBalanceChart() {
-                $.getJSON('@Url.Action("BalanceChart")?month=@currentMonth.ToString("yyyy-MM")', function(data) {
-                    $('#balanceChart').dxChart({
-                        title: {
-                            text: 'Einkommen vs. Ausgaben',
-                            font: {
-                                size: '1.25em'
-                            }
-                        },
-                        dataSource: data,
-                        legend: {
-                            visible: false
-                        },
-                        valueAxis: {
-                            visible: false,
-                            grid: {
-                                visible: false
+    @section scripts
+    {
+        <script>
+            $(document).ready(function () {
+                function loadSpendingsChart() {
+                    $.getJSON('@Url.Action("SpendingsChart")?month=@currentMonth.ToString("yyyy-MM")', function (data) {
+                        $('#spendingsChart').dxPieChart({
+                            title: {
+                                text: 'Ausgaben',
+                                font: {
+                                    size: '1.25em'
+                                }
                             },
-                            label: {
-                                visible: false
-                            }
-                        },
-                        argumentAxis: {
-                            visible: false,
-                            grid: {
-                                visible: false
-                            },
-                            label: {
+                            dataSource: data,
+                            palette: 'Soft Pastel',
+                            legend: {
                                 visible: true
-                            }
-                        },
-                        tooltip: {
-                            enabled: true,
-                            argumentFormat: 'currency',
-                            customizeText: function() {
-                                return this.argumentText + ": " + this.valueText + " €";
-                            }
-                        },
-                        series: [
-                            {
-                                name: 'Income',
-                                type: 'spline',
-                                valueField: 'income',
-                                argumentField: 'month',
-                                color: '#78b6d9',
-                                point: {
-                                    visible: false
-                                }
-                            }, {
-                                name: 'Spendings',
-                                type: 'spline',
-                                valueField: 'spendings',
-                                argumentField: 'month',
-                                color: '#a37182',
-                                point: {
-                                    visible: false
-                                }
-                            }
-                        ]
-                    });
-                });
-            }
-
-            function loadBudgetChart() {
-                $.getJSON('@Url.Action("BudgetChart")?month=@currentMonth.ToString("yyyy-MM")', function(data) {
-                    var max = 100;
-                    $.each(data, function(i, val) {
-                        if (val.percentage >= 100) {
-                            max = null;
-                            return;
-                        }
-                    });
-
-
-                    $('#budgetChart').dxChart({
-                        title: {
-                            text: 'Budgets',
-                            font: {
-                                size: '1.25em'
-                            }
-                        },
-                        dataSource: data,
-                        legend: {
-                            visible: false
-                        },
-                        customizePoint: function() {
-                            if (this.value > 100) {
-                                return {
-                                    color: '#a37182'
-                                };
-                            }
-                            return {
-                                color: '#90ba58'
-                            };
-                        },
-                        tooltip: {
-                            enabled: true,
-                            argumentFormat: 'currency',
-                            customizeText: function() {
-                                return this.argumentText + ": " + this.valueText + " %";
-                            }
-                        },
-                        valueAxis: {
-                            visible: false,
-                            grid: {
-                                visible: false
                             },
-                            max: max,
-                            label: {
-                                visible: false
-                            },
-                            constantLines: [
-                                {
-                                    label: {
-                                        text: 'Limit'
-                                    },
-                                    width: 2,
-                                    value: 100,
-                                    color: '#000000',
-                                    dashStyle: 'dash'
+                            tooltip: {
+                                enabled: true,
+                                argumentFormat: 'currency',
+                                customizeText: function () {
+                                    return this.argumentText + ": " + this.valueText + " €";
                                 }
-                            ]
-                        },
-                        series: [
-                            {
-                                type: 'bar',
-                                valueField: 'percentage',
+                            },
+                            series: {
+                                valueField: 'amount',
                                 argumentField: 'category'
                             }
-                        ]
+                        });
                     });
-                });
-            }
+                }
 
-            window.reloadCallback = function() {
-                loadBudgetChart();
-                loadBalanceChart();
-                loadSpendingsChart();
-            };
-        });
-    </script>
-}}
+                function loadBalanceChart() {
+                    $.getJSON('@Url.Action("BalanceChart")?month=@currentMonth.ToString("yyyy-MM")', function (data) {
+                        $('#balanceChart').dxChart({
+                            title: {
+                                text: 'Einkommen vs. Ausgaben',
+                                font: {
+                                    size: '1.25em'
+                                }
+                            },
+                            dataSource: data,
+                            legend: {
+                                visible: false
+                            },
+                            valueAxis: {
+                                visible: false,
+                                grid: {
+                                    visible: false
+                                },
+                                label: {
+                                    visible: false
+                                }
+                            },
+                            argumentAxis: {
+                                visible: false,
+                                grid: {
+                                    visible: false
+                                },
+                                label: {
+                                    visible: true
+                                }
+                            },
+                            tooltip: {
+                                enabled: true,
+                                argumentFormat: 'currency',
+                                customizeText: function () {
+                                    return this.argumentText + ": " + this.valueText + " €";
+                                }
+                            },
+                            series: [
+                                {
+                                    name: 'Income',
+                                    type: 'spline',
+                                    valueField: 'income',
+                                    argumentField: 'month',
+                                    color: '#78b6d9',
+                                    point: {
+                                        visible: false
+                                    }
+                                }, {
+                                    name: 'Spendings',
+                                    type: 'spline',
+                                    valueField: 'spendings',
+                                    argumentField: 'month',
+                                    color: '#a37182',
+                                    point: {
+                                        visible: false
+                                    }
+                                }
+                            ]
+                        });
+                    });
+                }
+
+                function loadBudgetChart() {
+                    $.getJSON('@Url.Action("BudgetChart")?month=@currentMonth.ToString("yyyy-MM")', function (data) {
+                        var max = 100;
+                        $.each(data, function (i, val) {
+                            if (val.percentage || val.relativePercentage >= 100) {
+                                max = null;
+                                return;
+                            }
+                        });
+
+
+                        $('#budgetChart').dxChart({
+                            title: {
+                                text: 'Budgets',
+                                font: {
+                                    size: '1.25em'
+                                }
+                            },
+                            dataSource: data,
+                            legend: {
+                                visible: false
+                            },
+                            customizePoint: function () {
+                                if (this.value > 100) {
+                                    return {
+                                        color: '#a37182'
+                                    };
+                                }
+                                return {
+                                    color: '#90ba58'
+                                };
+                            },
+                            tooltip: {
+                                enabled: true,
+                                argumentFormat: 'currency',
+                                customizeText: function () {
+                                    return this.argumentText + ": " + this.valueText + " %";
+                                }
+                            },
+                            valueAxis: {
+                                visible: false,
+                                grid: {
+                                    visible: false
+                                },
+                                max: max,
+                                label: {
+                                    visible: false
+                                },
+                                constantLines: [
+                                    {
+                                        label: {
+                                            text: 'Limit'
+                                        },
+                                        width: 2,
+                                        value: 100,
+                                        color: '#000000',
+                                        dashStyle: 'dash'
+                                    }
+                                ]
+                            },
+                            series: [
+                                {
+                                    type: 'bar',
+                                    valueField: 'percentage',
+                                    argumentField: 'category'
+                                }
+                                @if (Model.IsCurrentMonth)
+                                {
+                                    <text>
+                                    ,
+                                    {
+                                        type: 'bar',
+                                        valueField: 'relativePercentage',
+                                        argumentField: 'category'
+                                    }
+                                    </text>
+                                }
+                            ]
+                        });
+                    });
+                }
+
+                window.reloadCallback = function () {
+                    loadBudgetChart();
+                    loadBalanceChart();
+                    loadSpendingsChart();
+                };
+            });
+
+            @if (Model.IsCurrentMonth)
+            {
+                <text>
+            $('#budgetChart').parent().append(
+                '<div class="alert alert-info fade in">' +
+                '<p>Für das aktuelle Monat wird neben dem absoluten Budget auch stets das relative angezeigt.So wird berücksichtigt, wie viel Zeit des aktuellen Monats bereits vergangen ist.</p>' +
+                '<p class="text-right"><a href="#" data-dismiss="alert" class="btn btn-info btn-sm">OK, alles klar</a></p>' +
+                '</div>');
+
+            $('#budgetChart p').alert();
+
+            // TODO save/load in cookie
+            $('#budgetChart .btn').click(function () {
+                    alert('asdf');
+                });
+            </text>
+            }
+        </script>
+    }}
 else
 {
     @Html.Partial("_NoLinesWarning")

@@ -10,7 +10,8 @@ namespace Erbsenzaehler.ViewModels.Today
     {
         public async Task<IndexViewModel> Fill(Db db, Client currentClient, Month month)
         {
-            CurrentDate = month.Date;
+            SelectedDate = month.Date;
+            IsCurrentMonth = month.IsCurrentMonth;
 
             var linesQuery = db.Lines.ByClient(currentClient);
             var linesQueryForMonth = linesQuery.ByMonth(month);
@@ -27,10 +28,10 @@ namespace Erbsenzaehler.ViewModels.Today
             return this;
         }
 
-
+        public bool IsCurrentMonth { get; set; }
         public bool HasLines { get; set; }
         public bool HasBudgets { get; set; }
-        public DateTime CurrentDate { get; set; }
+        public DateTime SelectedDate { get; set; }
         public DateTime MinDate { get; set; }
         public DateTime MaxDate { get; set; }
         public decimal Balance { get; set; }
