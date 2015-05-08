@@ -27,24 +27,11 @@ namespace Erbsenzaehler.Reporting
                 .OrderBy(x => x.Category)
                 .ToListAsync();
 
-
             var allLines = await _db.Lines.ByClient(_currentClient).ByMonth(month).ByNotIgnored().ByCategoryNotEmpty().Select(x => new
             {
                 Amount = x.Amount ?? x.OriginalAmount,
                 x.Category
             }).ToListAsync();
-
-            // correction factor if we're calculating the current month
-            double factor = 1;
-            if (month.NumberOfDays == month.NumberOfDaysLeft)
-            {
-                factor = 0;
-            }
-            else if (month.NumberOfDaysLeft > 0)
-            {
-                factor = 1.0/month.NumberOfDays*month.NumberOfDaysLeft;
-            }
-
 
             var result = new List<BudgetResult>();
             foreach (var budget in allBudgets)
@@ -52,13 +39,29 @@ namespace Erbsenzaehler.Reporting
                 var budgetResult = new BudgetResult(budget.Category);
                 var budgetCategory = budget.Category.ToLower();
 
-                budgetResult.Amount = allLines.Where(x => x.Category.ToLower() == budgetCategory).Select(x => x.Amount).Sum()*(decimal) factor;
-                budgetResult.Limit = budget.NormalizeLimit(month)*(decimal) factor;
+                budgetResult.Amount = allLines.Where(x => x.Category.ToLower() == budgetCategory).Select(x => x.Amount).Sum();
+                budgetResult.Limit = budget.NormalizeLimit(month);
 
                 result.Add(budgetResult);
             }
 
             return result;
+        }
+
+
+        public async Task<IEnumerable<BudgetResult>> CalculateRelativeToCurrentMonth()
+        {
+            var currentMonth = new Month();
+            var budgets = await CalculateForMonth(currentMonth);
+
+            var daysHappened = currentMonth.NumberOfDays - currentMonth.NumberOfDaysLeft;
+            var factor = 1.0d / daysHappened * currentMonth.NumberOfDays;
+            foreach (var budget in budgets)
+            {
+                budget.Amount = budget.Amount * (decimal)factor;
+            }
+
+            return budgets;
         }
 
 
@@ -85,7 +88,7 @@ namespace Erbsenzaehler.Reporting
                         return 0;
                     }
 
-                    var i = (int) Math.Round(100/Limit*(Limit + Amount));
+                    var i = (int)Math.Round(100 / Limit * (Limit + Amount));
 
                     if (i < 100)
                     {

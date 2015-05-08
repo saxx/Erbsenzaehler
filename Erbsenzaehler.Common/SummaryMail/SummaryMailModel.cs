@@ -17,8 +17,8 @@ namespace Erbsenzaehler.SummaryMail
             BudgetCalculator budgetCalculator,
             SumCalculator sumCalculator)
         {
-            CurrentMonth = DateTime.UtcNow.ToString("MMMM yyyy");
-            LastMonth = DateTime.UtcNow.AddMonths(-1).ToString("MMMM yyyy");
+            const int numberOfMonths = 3;
+
             CurrentDate = DateTime.UtcNow.ToShortDateString();
             ErbsenzaehlerUrl = erbsenzaehlerUri;
 
@@ -42,21 +42,24 @@ namespace Erbsenzaehler.SummaryMail
                 .OrderByDescending(x => x.DateOfCreationUtc);
             Lines = (await latestLinesQuery.ToListAsync()).Select(x => new Line(x));
 
-            var currentMonth = new Month();
-            CurrentMonthBudget = await budgetCalculator.CalculateForMonth(currentMonth);
-            LastMonthBudget = await budgetCalculator.CalculateForMonth(currentMonth.PreviousMonth);
+            Months = new List<string>();
+            Budgets = new List<IEnumerable<BudgetCalculator.BudgetResult>>();
+            Spendings = new List<IDictionary<string, decimal>>();
+            Balances = new List<decimal>();
 
-            CurrentMonthSpendings = await sumCalculator.CalculateForMonth(currentMonth);
-            LastMonthSpendings = await sumCalculator.CalculateForMonth(currentMonth.PreviousMonth);
+            var month = new Month();
+            for (var i = 1; i <= numberOfMonths; i++)
+            {
+                Months.Insert(0, DateTime.UtcNow.AddMonths(-i - 1).ToString("MMMM yyyy"));
+                Budgets.Insert(0, await budgetCalculator.CalculateForMonth(month));
+                Spendings.Insert(0, await sumCalculator.CalculateForMonth(month));
+                Balances.Insert(0, await linesQuery.ByMonth(month).Select(x => x.Amount ?? x.OriginalAmount).DefaultIfEmpty().SumAsync());
 
-            var categories = CurrentMonthSpendings.Select(x => x.Key).ToList();
-            categories.AddRange(LastMonthSpendings.Keys);
-            SpendingCategories = categories.Distinct().OrderBy(x => x).ToList();
+                month = month.PreviousMonth;
+            }
 
-            var currentMonthLinesQuery = linesQuery.ByMonth(currentMonth);
-            var lastMonthLinesQuery = linesQuery.ByMonth(currentMonth.PreviousMonth);
-            CurrentMonthBalance = await currentMonthLinesQuery.Select(x => x.Amount ?? x.OriginalAmount).DefaultIfEmpty().SumAsync();
-            LastMonthBalance = await lastMonthLinesQuery.Select(x => x.Amount ?? x.OriginalAmount).DefaultIfEmpty().SumAsync();
+            CurrentMonthRelativeBudget = await budgetCalculator.CalculateRelativeToCurrentMonth();
+            SpendingCategories = Spendings.SelectMany(x=>x.Keys).ToList().Distinct().OrderBy(x => x).ToList();
 
             return this;
         }
@@ -65,19 +68,17 @@ namespace Erbsenzaehler.SummaryMail
         public IEnumerable<Line> Lines { get; set; }
         public Uri ErbsenzaehlerUrl { get; set; }
         public string CurrentDate { get; set; }
-        public string CurrentMonth { get; set; }
-        public string LastMonth { get; set; }
         public string ClientName { get; set; }
 
-        public IEnumerable<BudgetCalculator.BudgetResult> CurrentMonthBudget { get; set; }
-        public IEnumerable<BudgetCalculator.BudgetResult> LastMonthBudget { get; set; }
+        public IList<string> Months { get; set; }
+
+        public IList<IEnumerable<BudgetCalculator.BudgetResult>> Budgets { get; set; }
+        public IEnumerable<BudgetCalculator.BudgetResult> CurrentMonthRelativeBudget { get; set; }
 
         public IEnumerable<string> SpendingCategories { get; set; }
-        public IDictionary<string, decimal> CurrentMonthSpendings { get; set; }
-        public IDictionary<string, decimal> LastMonthSpendings { get; set; }
+        public IList<IDictionary<string, decimal>> Spendings { get; set; }
 
-        public decimal CurrentMonthBalance { get; set; }
-        public decimal LastMonthBalance { get; set; }
+        public IList<decimal> Balances { get; set; }
 
         public class Line
         {
