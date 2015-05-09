@@ -1,0 +1,22 @@
+﻿@model Erbsenzaehler.ViewModels.Today.IndexViewModel
+
+@if (Model.HasBudgets)
+            {
+    <text>
+        @if (Model.IsCurrentMonth)
+        {
+            <div class="alert alert-info fade in hidden" data-tipp="today_budgetchart">
+                <p>Für das aktuelle Monat wird neben dem absoluten Budget auch stets das relative angezeigt.So wird berücksichtigt, wie viel Zeit des aktuellen Monats bereits vergangen ist.</p>
+                <p class="text-right">
+                    <a href="#" data-dismiss="alert" class="btn btn-info btn-sm">OK, alles klar</a>
+                </p>
+            </div>
+        }
+
+        <div id="budgetChart" style="width: 100%; height: 250px;"></div>
+    </text>
+}
+else
+{
+    @Html.Partial("_NoBudgetsWarning")
+}

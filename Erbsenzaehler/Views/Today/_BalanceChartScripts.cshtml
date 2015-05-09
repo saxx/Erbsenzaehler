@@ -1,0 +1,71 @@
+﻿@model Erbsenzaehler.ViewModels.Today.IndexViewModel
+
+@{
+    var currentMonth = Model.SelectedDate;
+}
+
+<script>
+    function loadBalanceChart() {
+        $.getJSON('@Url.Action("BalanceChart")?month=@currentMonth.ToString("yyyy-MM")', function (data) {
+            $('#balanceChart').dxChart({
+                title: {
+                    text: 'Einkommen vs. Ausgaben',
+                    font: {
+                        size: '1.25em'
+                    }
+                },
+                dataSource: data,
+                legend: {
+                    visible: false
+                },
+                valueAxis: {
+                    visible: false,
+                    grid: {
+                        visible: false
+                    },
+                    label: {
+                        visible: false
+                    }
+                },
+                argumentAxis: {
+                    visible: false,
+                    grid: {
+                        visible: false
+                    },
+                    label: {
+                        visible: true
+                    }
+                },
+                tooltip: {
+                    enabled: true,
+                    argumentFormat: 'currency',
+                    customizeText: function () {
+                        return this.argumentText + ": " + this.valueText + " €";
+                    }
+                },
+                series: [
+                    {
+                        name: 'Income',
+                        type: 'spline',
+                        valueField: 'income',
+                        argumentField: 'month',
+                        color: '#78b6d9',
+                        point: {
+                            visible: false
+                        }
+                    }, {
+                        name: 'Spendings',
+                        type: 'spline',
+                        valueField: 'spendings',
+                        argumentField: 'month',
+                        color: '#a37182',
+                        point: {
+                            visible: false
+                        }
+                    }
+                ]
+            });
+        });
+    }
+</script>
+

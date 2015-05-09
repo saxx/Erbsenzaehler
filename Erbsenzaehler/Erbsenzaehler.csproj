@@ -727,6 +727,12 @@
     <Content Include="Views\Import\Index.cshtml" />
     <Content Include="Views\Import\AutoImporterSettings.cshtml" />
     <Content Include="Views\Import\ImportLogs.cshtml" />
+    <Content Include="Views\Today\_BudgetChart.cshtml" />
+    <Content Include="Views\Today\_BudgetChartScripts.cshtml" />
+    <Content Include="Views\Today\_BalanceChart.cshtml" />
+    <Content Include="Views\Today\_BalanceChartScripts.cshtml" />
+    <Content Include="Views\Today\_SpendingsChartScripts.cshtml" />
+    <Content Include="Views\Today\_SpendingsChart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

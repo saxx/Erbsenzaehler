@@ -1,0 +1,36 @@
+﻿@model Erbsenzaehler.ViewModels.Today.IndexViewModel
+
+@{
+    var currentMonth = Model.SelectedDate;
+}
+
+<script>
+    function loadSpendingsChart() {
+        $.getJSON('@Url.Action("SpendingsChart")?month=@currentMonth.ToString("yyyy-MM")', function (data) {
+            $('#spendingsChart').dxPieChart({
+                title: {
+                    text: 'Ausgaben',
+                    font: {
+                        size: '1.25em'
+                    }
+                },
+                dataSource: data,
+                palette: 'Soft Pastel',
+                legend: {
+                    visible: true
+                },
+                tooltip: {
+                    enabled: true,
+                    argumentFormat: 'currency',
+                    customizeText: function () {
+                        return this.argumentText + ": " + this.valueText + " €";
+                    }
+                },
+                series: {
+                    valueField: 'amount',
+                    argumentField: 'category'
+                }
+            });
+        });
+    }
+</script>
