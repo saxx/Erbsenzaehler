@@ -50,7 +50,7 @@ namespace Erbsenzaehler.SummaryMail
             var month = new Month();
             for (var i = 1; i <= numberOfMonths; i++)
             {
-                Months.Insert(0, DateTime.UtcNow.AddMonths(-i - 1).ToString("MMMM yyyy"));
+                Months.Insert(0, DateTime.UtcNow.AddMonths(-i + 1).ToString("MMMM yyyy"));
                 Budgets.Insert(0, await budgetCalculator.CalculateForMonth(month));
                 Spendings.Insert(0, await sumCalculator.CalculateForMonth(month));
                 Balances.Insert(0, await linesQuery.ByMonth(month).Select(x => x.Amount ?? x.OriginalAmount).DefaultIfEmpty().SumAsync());
