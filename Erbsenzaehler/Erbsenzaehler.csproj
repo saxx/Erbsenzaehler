@@ -229,11 +229,6 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\Carousel\carousel0.png" />
-    <Content Include="Content\Carousel\carousel1.png" />
-    <Content Include="Content\Carousel\carousel2.png" />
-    <Content Include="Content\Carousel\carousel3.png" />
-    <Content Include="Content\Carousel\carousel4.png" />
     <Content Include="Content\Icons\android-chrome-192x192.png" />
     <Content Include="Content\Icons\apple-touch-icon-114x114.png" />
     <Content Include="Content\Icons\apple-touch-icon-120x120.png" />
@@ -247,6 +242,12 @@
     <Content Include="Content\Icons\favicon-16x16.png" />
     <Content Include="Content\Icons\favicon-32x32.png" />
     <Content Include="Content\Icons\favicon-96x96.png" />
+    <Content Include="Content\Screenshots\Budgets.png" />
+    <Content Include="Content\Screenshots\Charts.png" />
+    <Content Include="Content\Screenshots\HistoricalReports.png" />
+    <Content Include="Content\Screenshots\Import.png" />
+    <Content Include="Content\Screenshots\Lines.png" />
+    <Content Include="Content\Screenshots\Rules.png" />
     <Content Include="favicon.ico" />
     <Content Include="Content\Icons\largetile.png" />
     <Content Include="Content\Icons\logo-original.png" />

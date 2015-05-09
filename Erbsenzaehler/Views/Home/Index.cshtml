@@ -1,43 +1,92 @@
-﻿<div id="carousel" class="carousel slide" data-ride="carousel">
-    <div class="carousel-inner" role="listbox">
-        <div class="item active">
-            <img src="@Url.Content("~/Content/Carousel/carousel0.png")" alt="">
-            <div class="carousel-caption">
-                <h1>Erbsenzähler: Behalten Sie den Überblick über Ihre Ausgaben.</h1>
-            </div>
-        </div>
-        <div class="item">
-            <img src="@Url.Content("~/Content/Carousel/carousel1.png")" alt="...">
-            <div class="carousel-caption">
-                <h1>Auf einen Blick haben Sie Übersicht über Ihre Ausgaben.</h1>
-            </div>
-        </div>
-        <div class="item">
-            <img src="@Url.Content("~/Content/Carousel/carousel2.png")" alt="...">
-            <div class="carousel-caption">
-                <h1>Importieren Sie einfach Kontoauszüge aus Ihrem E-Banking.</h1>
-            </div>
-        </div>
-        <div class="item">
-            <img src="@Url.Content("~/Content/Carousel/carousel3.png")" alt="...">
-            <div class="carousel-caption">
-                <h1>Ausgefeilte Regeln helfen Ihnen, Ihre Ausgaben zu kategorisieren.</h1>
-            </div>
-        </div>
-        <div class="item">
-            <img src="@Url.Content("~/Content/Carousel/carousel4.png")" alt="...">
-            <div class="carousel-caption">
-                <h1>Wunderschöne Charts und Reports machen Ihr Haushaltsbuch zum Kinderspiel.</h1>
-            </div>
-        </div>
-    </div>
+﻿<div class="jumbotron text-center">
+    <h1>
+        Erbsenzähler
+    </h1>
+    <p class="lead">
+        Der Erbsenzähler ist das Haushaltsbuch, das Ihnen keine zusätzliche Arbeit macht.
+    </p>
+    <p class="lead">
+        Sie behalten automatisch den Überblick über Ihre monatlichen Ausgaben und Ihr Einkommen,
+        weil der Erbsenzähler alle nötigen Informationen direkt aus Ihren Kontoauszügen bezieht.
+    </p>
+    <p>
+        <a class="btn btn-lg btn-success" href="@Url.Action("Register", "User")">
+            Kostenlos registrieren
+        </a>
+    </p>
+</div>
 
-    <a class="left carousel-control" href="#carousel" role="button" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-        <span class="sr-only">Vorheriges</span>
-    </a>
-    <a class="right carousel-control" href="#carousel" role="button" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-        <span class="sr-only">Nächstes</span>
-    </a>
+<div class="row">
+    <div class="col-md-6">
+        <a class="feature-image" href="~/Content/Screenshots/Charts.png">
+            <img src="~/Content/Screenshots/Charts.png" alt="Wunderschöne Grafiken">
+        </a>
+        <h3>
+            Wunderschöne Charts
+        </h3>
+        <p>
+            Übersichtliche und vor allem sinnvolle Charts helfen Ihnen, schon auf einen Blick Ihre monatlichen Ausgaben oder Saldos zu erkennen.
+        </p>
+    </div>
+    <div class="col-md-6">
+        <a class="feature-image" href="~/Content/Screenshots/Budgets.png">
+            <img src="~/Content/Screenshots/Budgets.png" alt="Budgets zur Ausgabenkontrolle">
+        </a>
+        <h3>
+            Budgets zur Ausgabenkontrolle
+        </h3>
+        <p>
+            Sie können beliebige Budgets festlegen, so dass der Erbsenzähler Sie rechtzeitig warnen kann, wenn Ihre Ausgaben einmal unerwartet etwas höher ausfallen sollten.
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <a class="feature-image" href="~/Content/Screenshots/HistoricalReports.png">
+            <img src="~/Content/Screenshots/HistoricalReports.png" alt="Historische Reports">
+        </a>
+        <h3>
+            Historische Reports
+        </h3>
+        <p>
+            Der Erbsenzähler bereitet Ihre Daten auch so auf, dass Sie direkt vergleichen können, wie sich Ihre Einnahmen und Ausgaben über die Monate und Jahre verändert haben.
+        </p>
+    </div>
+    <div class="col-md-6">
+        <a class="feature-image" href="~/Content/Screenshots/Rules.png">
+            <img src="~/Content/Screenshots/Rules.png" alt="Ausgefeilte Regeln">
+        </a>
+        <h3>
+            Ausgefeilte Regeln
+        </h3>
+        <p>
+            Mithilfe detaillierter Regeln können Sie Ihre Buchungszeilen vollautomatisch gewissen Kategorien und Budgets zuordnen.
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <a class="feature-image" href="~/Content/Screenshots/Lines.png">
+            <img src="~/Content/Screenshots/Lines.png" alt="Bis ins letzte Detail">
+        </a>
+        <h3>
+            Bis ins letzte Detail
+        </h3>
+        <p>
+            Manchmal ist es nötig, Ausgaben bis ins letzte Detail nachzuverfolgen. Der Erbsenzähler ermöglicht zusätzlich zu seinen übersichtlichen Reports und Grafiken auch genau das.
+        </p>
+    </div>
+    <div class="col-md-6">
+        <a class="feature-image" href="~/Content/Screenshots/Import.png">
+            <img src="~/Content/Screenshots/Import.png" alt="Sie entscheiden, woher Ihre Daten kommen">
+        </a>
+        <h3>
+            Datenfreiheit
+        </h3>
+        <p>
+            Der Erbsenzähler kann vollautomatisch Ihre Kontoauszüge abrufen und aufbereiten. Auf Wunsch können Sie Ihre Buchungen aber auch manuell importieren, oder sogar selbst einzeln eintragen.
+        </p>
+    </div>
 </div>
