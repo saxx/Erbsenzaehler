@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using Erbsenzaehler.ExtensionMethods;
 using Erbsenzaehler.Models;
 using Erbsenzaehler.Reporting;
 
@@ -10,30 +11,46 @@ namespace Erbsenzaehler.SummaryMail
 {
     public class SummaryMailModel
     {
-        public async Task<SummaryMailModel> Fill(
+        #region Constructor
+        private readonly Db _db;
+        private readonly BudgetCalculator _budgetCalculator;
+        private readonly SumCalculator _sumCalculator;
+
+        public SummaryMailModel(
             Db db,
-            User currentUser,
-            Uri erbsenzaehlerUri,
             BudgetCalculator budgetCalculator,
             SumCalculator sumCalculator)
+        {
+            _sumCalculator = sumCalculator;
+            _budgetCalculator = budgetCalculator;
+            _db = db;
+        }
+        #endregion
+
+
+        public async Task<SummaryMailModel> Fill(
+            User currentUser)
         {
             const int numberOfMonths = 3;
 
             CurrentDate = DateTime.UtcNow.ToShortDateString();
-            ErbsenzaehlerUrl = erbsenzaehlerUri;
+            ErbsenzaehlerUrl = new Uri(Config.ErbsenzaehlerUrl);
 
             // date and time of last summary mail sent to the user
-            var lastSummaryMailDate = db.SummaryMailLogs.ByUser(currentUser).Select(x => x.Date).DefaultIfEmpty().Max().Date;
+            var lastSummaryMailDate = _db.SummaryMailLogs.ByUser(currentUser).Select(x => x.Date).DefaultIfEmpty().Max().Date;
             // if the last summary mail was long ago, just assume it was last month
             if (lastSummaryMailDate < DateTime.UtcNow.Date.AddMonths(-1))
             {
                 lastSummaryMailDate = DateTime.UtcNow.Date.AddMonths(-1);
             }
+            // add the lines of the last previous days, too. 
+            // This could mean that some lines are multiple times in the e-mail, but that's okay.
+            lastSummaryMailDate = lastSummaryMailDate.AddDays(-2);
 
             var client = currentUser.Client;
             ClientName = client.Name;
 
-            var linesQuery = db.Lines
+            var linesQuery = _db.Lines
                 .ByClient(client)
                 .ByNotIgnored();
 
@@ -51,15 +68,25 @@ namespace Erbsenzaehler.SummaryMail
             for (var i = 1; i <= numberOfMonths; i++)
             {
                 Months.Insert(0, DateTime.UtcNow.AddMonths(-i + 1).ToString("MMMM yyyy"));
-                Budgets.Insert(0, await budgetCalculator.CalculateForMonth(month));
-                Spendings.Insert(0, await sumCalculator.CalculateForMonth(month));
+                Budgets.Insert(0, await _budgetCalculator.CalculateForMonth(month));
+                Spendings.Insert(0, await _sumCalculator.CalculateForMonth(month));
                 Balances.Insert(0, await linesQuery.ByMonth(month).Select(x => x.Amount ?? x.OriginalAmount).DefaultIfEmpty().SumAsync());
 
                 month = month.PreviousMonth;
             }
 
-            CurrentMonthRelativeBudget = await budgetCalculator.CalculateRelativeToCurrentMonth();
-            SpendingCategories = Spendings.SelectMany(x=>x.Keys).ToList().Distinct().OrderBy(x => x).ToList();
+            CurrentMonthRelativeBudget = await _budgetCalculator.CalculateRelativeToCurrentMonth();
+            SpendingCategories = Spendings.SelectMany(x => x.Keys).ToList().Distinct().OrderBy(x => x).ToList();
+
+            var importsQuery = from x in _db.ImportLog.ByClient(client).ByNoError()
+                               group x by x.Account
+                               into g
+                               select new
+                               {
+                                   Account = g.Key.Name,
+                                   LastImportDate = g.Select(y => y.Date).DefaultIfEmpty().Max()
+                               };
+            LastImports = importsQuery.ToDictionary(x => x.Account, x => x.LastImportDate.ToRelativeDate());
 
             return this;
         }
@@ -79,6 +106,8 @@ namespace Erbsenzaehler.SummaryMail
         public IList<IDictionary<string, decimal>> Spendings { get; set; }
 
         public IList<decimal> Balances { get; set; }
+
+        public IDictionary<string, string> LastImports { get; set; }
 
         public class Line
         {

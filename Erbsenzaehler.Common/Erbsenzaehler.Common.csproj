@@ -77,6 +77,7 @@
     <Compile Include="AutoImporter\Configuration\EasybankConfiguration.cs" />
     <Compile Include="AutoImporter\Configuration\ErbsenzaehlerConfiguration.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="ExtensionMethods\DateTimeExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\StringExtensionMethods.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="Importer\Converters\GermanAmountConverter.cs" />

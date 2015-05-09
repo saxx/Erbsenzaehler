@@ -84,15 +84,10 @@ namespace Erbsenzaehler.Controllers
                 throw new Exception("Request.Url is null. This should not be possible at this point.");
             }
 
-            var currentUrl = new Uri(
-                requestUrl.Scheme + "://" +
-                requestUrl.Host +
-                (requestUrl.IsDefaultPort ? "" : ":" + requestUrl.Port));
-
             var budgetCalculator = new BudgetCalculator(Db, await GetCurrentClient());
             var sumCalculator = new SumCalculator(Db, await GetCurrentClient());
 
-            var summaryMailRenderer = new SummaryMailRenderer(Db, currentUrl, budgetCalculator, sumCalculator);
+            var summaryMailRenderer = new SummaryMailRenderer(Db, budgetCalculator, sumCalculator);
             var summaryMail = await summaryMailRenderer.Render(currentUser);
             return View(new SummaryMailPreviewViewModel
             {

@@ -80,7 +80,7 @@ namespace Erbsenzaehler.SummaryMails.WebJob
 
             var budgetCalculator = new BudgetCalculator(db, client);
             var sumCalculator = new SumCalculator(db, client);
-            var renderer = new SummaryMailRenderer(db, new Uri(Config.ErbsenzaehlerUrl), budgetCalculator, sumCalculator);
+            var renderer = new SummaryMailRenderer(db, budgetCalculator, sumCalculator);
             var mailer = new SendGridMailer();
             var sender = new SummaryMailSender(renderer, mailer);
 
