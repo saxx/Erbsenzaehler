@@ -6,7 +6,7 @@
 
 <script>
     function loadSpendingsChart() {
-        $.getJSON('@Url.Action("SpendingsChart")?month=@currentMonth.ToString("yyyy-MM")', function (data) {
+        $.getJSON('@Url.Action("SpendingsChart")?month=@currentMonth.ToString("yyyy-MM")', function(data) {
             $('#spendingsChart').dxPieChart({
                 title: {
                     text: 'Ausgaben',
@@ -22,7 +22,7 @@
                 tooltip: {
                     enabled: true,
                     argumentFormat: 'currency',
-                    customizeText: function () {
+                    customizeText: function() {
                         return this.argumentText + ": " + this.valueText + " €";
                     }
                 },

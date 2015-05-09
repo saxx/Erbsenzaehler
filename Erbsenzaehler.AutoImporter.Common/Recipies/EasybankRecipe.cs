@@ -55,12 +55,12 @@ namespace Erbsenzaehler.AutoImporter.Recipies
                                               "type: 'post'," +
                                               "data: $(form).serialize()," +
                                               "error: function(xhr, status, error) {" +
-                                                  "$('body').html('').append(resultField);" +
-                                                  "resultField.html('AJAX request failed: ' + status + ' / ' + error);" +
+                                              "$('body').html('').append(resultField);" +
+                                              "resultField.html('AJAX request failed: ' + status + ' / ' + error);" +
                                               "}," +
                                               "success: function(response) {" +
-                                                  "$('body').html('').append(resultField);" +
-                                                  "resultField.html(response);" +
+                                              "$('body').html('').append(resultField);" +
+                                              "resultField.html(response);" +
                                               "}});";
                         driver.ExecuteScript(script);
 

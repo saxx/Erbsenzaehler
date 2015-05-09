@@ -12,9 +12,11 @@ namespace Erbsenzaehler.SummaryMail
     public class SummaryMailModel
     {
         #region Constructor
+
         private readonly Db _db;
         private readonly BudgetCalculator _budgetCalculator;
         private readonly SumCalculator _sumCalculator;
+
 
         public SummaryMailModel(
             Db db,
@@ -25,8 +27,8 @@ namespace Erbsenzaehler.SummaryMail
             _budgetCalculator = budgetCalculator;
             _db = db;
         }
-        #endregion
 
+        #endregion
 
         public async Task<SummaryMailModel> Fill(
             User currentUser)
@@ -79,13 +81,13 @@ namespace Erbsenzaehler.SummaryMail
             SpendingCategories = Spendings.SelectMany(x => x.Keys).ToList().Distinct().OrderBy(x => x).ToList();
 
             var importsQuery = from x in _db.ImportLog.ByClient(client).ByNoError()
-                               group x by x.Account
-                               into g
-                               select new
-                               {
-                                   Account = g.Key.Name,
-                                   LastImportDate = g.Select(y => y.Date).DefaultIfEmpty().Max()
-                               };
+                group x by x.Account
+                into g
+                select new
+                {
+                    Account = g.Key.Name,
+                    LastImportDate = g.Select(y => y.Date).DefaultIfEmpty().Max()
+                };
             LastImports = importsQuery.ToDictionary(x => x.Account, x => x.LastImportDate.ToRelativeDate());
 
             return this;

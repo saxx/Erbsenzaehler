@@ -21,6 +21,7 @@ namespace Erbsenzaehler.Controllers
             return View();
         }
 
+
         public async Task<ActionResult> ImportLogs()
         {
             return View(await new ImportLogsViewModel(Db).Fill(await GetCurrentClient()));

@@ -10,6 +10,7 @@ namespace Erbsenzaehler
         public static string DatabaseConnectionString => Setting("DatabaseConnectionString", null) ?? ConfigurationManager.ConnectionStrings["Db"].ConnectionString;
         public static string ErbsenzaehlerUrl => Setting("Url", "http://erbsenzaehler.sachsenhofer.com");
 
+
         public static int Setting(string key, int defaultValue)
         {
             var setting = Setting(key, "");

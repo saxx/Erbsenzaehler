@@ -28,6 +28,7 @@ namespace Erbsenzaehler.ViewModels.Today
             return this;
         }
 
+
         public bool IsCurrentMonth { get; set; }
         public bool HasLines { get; set; }
         public bool HasBudgets { get; set; }

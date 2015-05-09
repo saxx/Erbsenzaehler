@@ -10,14 +10,16 @@ namespace Erbsenzaehler.ViewModels.Import
     public class ImportLogsViewModel
     {
         #region Constructor
+
         private readonly Db _db;
+
 
         public ImportLogsViewModel(Db db)
         {
             _db = db;
         }
-        #endregion
 
+        #endregion
 
         public async Task<ImportLogsViewModel> Fill(Client client)
         {

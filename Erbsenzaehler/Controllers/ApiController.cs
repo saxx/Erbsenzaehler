@@ -22,7 +22,7 @@ namespace Erbsenzaehler.Controllers
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            
+
             try
             {
                 if (string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password))
@@ -95,7 +95,7 @@ namespace Erbsenzaehler.Controllers
                 {
                     // save to import log
                     stopwatch.Stop();
-                    importLog.Milliseconds = (int)stopwatch.ElapsedMilliseconds;
+                    importLog.Milliseconds = (int) stopwatch.ElapsedMilliseconds;
                     Db.ImportLog.Add(importLog);
                     await Db.SaveChangesAsync();
                 }

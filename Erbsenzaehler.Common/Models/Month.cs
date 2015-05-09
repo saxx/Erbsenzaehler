@@ -70,13 +70,13 @@ namespace Erbsenzaehler.Models
         public Month NextMonth => new Month(Date.AddMonths(1).ToString("yyyy-MM"), false);
 
         /// <summary>
-        /// Returns the total number of days in this month.
+        ///     Returns the total number of days in this month.
         /// </summary>
         public int NumberOfDays => DateTime.DaysInMonth(Date.Year, Date.Month);
 
         /// <summary>
-        /// Returns the number of days left in this month, relative to the current date.
-        /// Returns 0 when this month is in the past, or the total number of days when this month is in the future.
+        ///     Returns the number of days left in this month, relative to the current date.
+        ///     Returns 0 when this month is in the past, or the total number of days when this month is in the future.
         /// </summary>
         public int NumberOfDaysLeft
         {

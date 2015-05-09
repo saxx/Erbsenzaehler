@@ -55,10 +55,10 @@ namespace Erbsenzaehler.Reporting
             var budgets = await CalculateForMonth(currentMonth);
 
             var daysHappened = currentMonth.NumberOfDays - currentMonth.NumberOfDaysLeft;
-            var factor = 1.0d / daysHappened * currentMonth.NumberOfDays;
+            var factor = 1.0d/daysHappened*currentMonth.NumberOfDays;
             foreach (var budget in budgets)
             {
-                budget.Amount = budget.Amount * (decimal)factor;
+                budget.Amount = budget.Amount*(decimal) factor;
             }
 
             return budgets;
@@ -88,7 +88,7 @@ namespace Erbsenzaehler.Reporting
                         return 0;
                     }
 
-                    var i = (int)Math.Round(100 / Limit * (Limit + Amount));
+                    var i = (int) Math.Round(100/Limit*(Limit + Amount));
 
                     if (i < 100)
                     {

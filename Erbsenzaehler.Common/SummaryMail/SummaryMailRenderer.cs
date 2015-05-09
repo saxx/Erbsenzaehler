@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Erbsenzaehler.Models;
 using Erbsenzaehler.Reporting;
 using Erbsenzaehler.Templates;
@@ -9,6 +8,7 @@ namespace Erbsenzaehler.SummaryMail
     public class SummaryMailRenderer
     {
         #region Constructor
+
         private readonly Db _db;
         private readonly BudgetCalculator _budgetCalculator;
         private readonly SumCalculator _sumCalculator;

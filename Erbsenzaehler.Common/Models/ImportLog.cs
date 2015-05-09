@@ -22,6 +22,7 @@ namespace Erbsenzaehler.Models
             return query.Where(x => x.UserId == user.Id);
         }
 
+
         public static IQueryable<ImportLog> ByNoError(this IQueryable<ImportLog> query)
         {
             return query.Where(x => x.LinesFoundCount > 0);

@@ -6,9 +6,9 @@
 
 <script>
     function loadBudgetChart() {
-        $.getJSON('@Url.Action("BudgetChart")?month=@currentMonth.ToString("yyyy-MM")', function (data) {
+        $.getJSON('@Url.Action("BudgetChart")?month=@currentMonth.ToString("yyyy-MM")', function(data) {
             var max = 100;
-            $.each(data, function (i, val) {
+            $.each(data, function(i, val) {
                 if (val.percentage || val.relativePercentage >= 100) {
                     max = null;
                     return;
@@ -27,7 +27,7 @@
                 legend: {
                     visible: false
                 },
-                customizePoint: function () {
+                customizePoint: function() {
                     if (this.value > 100) {
                         return {
                             color: '#a37182'
@@ -40,7 +40,7 @@
                 tooltip: {
                     enabled: true,
                     argumentFormat: 'currency',
-                    customizeText: function () {
+                    customizeText: function() {
                         return this.argumentText + ": " + this.valueText + " %";
                     }
                 },
@@ -54,26 +54,26 @@
                         visible: false
                     },
                     constantLines: [
-                    {
-                        label: {
-                            text: 'Limit'
-                        },
-                        width: 2,
-                        value: 100,
-                        color: '#000000',
-                        dashStyle: 'dash'
-                    }
+                        {
+                            label: {
+                                text: 'Limit'
+                            },
+                            width: 2,
+                            value: 100,
+                            color: '#000000',
+                            dashStyle: 'dash'
+                        }
                     ]
                 },
                 series: [
-                {
-                    type: 'bar',
-                    valueField: 'percentage',
-                    argumentField: 'category'
-                }
-                @if (Model.IsCurrentMonth)
-                        {
-                            <text>
+                    {
+                        type: 'bar',
+                        valueField: 'percentage',
+                        argumentField: 'category'
+                    }
+                    @if (Model.IsCurrentMonth)
+                    {
+                        <text>
                         ,
                         {
                             type: 'bar',
@@ -81,7 +81,7 @@
                             argumentField: 'category'
                         }
                     </text>
-                        }
+                    }
                 ]
             });
         });

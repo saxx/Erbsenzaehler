@@ -7,7 +7,7 @@
     Hier sehen Sie die Resultate der letzten 30 Imports, die Sie manuell oder der Erbsenzähler automatisch durchgeführt hat.
 </div>
 
-<hr />
+<hr/>
 
 <table class="table">
     <tr>
@@ -42,7 +42,7 @@
                 }
             </td>
             <td>
-                @((log.DurationInMilliseconds / 1000d).ToString("N1")) s
+                @((log.DurationInMilliseconds/1000d).ToString("N1")) s
             </td>
             <td>
                 @if (!string.IsNullOrEmpty(log.ErrorMessage))
@@ -51,7 +51,6 @@
                 }
             </td>
         </tr>
-
     }
 
 </table>

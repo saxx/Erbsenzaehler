@@ -25,7 +25,7 @@ namespace Erbsenzaehler.AutoImporter.WebJob
 
             try
             {
-                logger.Info("Erbsenzaehler.AutoImporter.WebJob v" + typeof(Program).Assembly.GetName().Version + " starting up ...");
+                logger.Info("Erbsenzaehler.AutoImporter.WebJob v" + typeof (Program).Assembly.GetName().Version + " starting up ...");
 
                 var ignoreInterval = args.Any(x => x.Equals("--ignoreInterval", StringComparison.InvariantCultureIgnoreCase));
 
@@ -123,7 +123,7 @@ namespace Erbsenzaehler.AutoImporter.WebJob
                 Date = DateTime.UtcNow,
                 AccountId = accountId,
                 Type = ImportLogType.AutomaticOnServer,
-                Milliseconds = (int)watch.ElapsedMilliseconds
+                Milliseconds = (int) watch.ElapsedMilliseconds
             };
 
             try
@@ -159,7 +159,7 @@ namespace Erbsenzaehler.AutoImporter.WebJob
                 logger?.Trace("Saving to import log ...");
 
                 watch.Stop();
-                importLog.Milliseconds = (int)watch.ElapsedMilliseconds;
+                importLog.Milliseconds = (int) watch.ElapsedMilliseconds;
 
                 db.ImportLog.Add(importLog);
                 db.SaveChanges();
@@ -186,7 +186,7 @@ namespace Erbsenzaehler.AutoImporter.WebJob
 
             ImporterBase.ImportResult importResult;
 
-            var importerType = (ImporterType)Enum.Parse(typeof(ImporterType), config.Erbsenzaehler.Importer);
+            var importerType = (ImporterType) Enum.Parse(typeof (ImporterType), config.Erbsenzaehler.Importer);
             using (var reader = new StreamReader(tempFilePath, Encoding.UTF8))
             {
                 var concreteImporter = new ImporterFactory().GetImporter(reader, importerType);
@@ -197,6 +197,7 @@ namespace Erbsenzaehler.AutoImporter.WebJob
 
             return importResult;
         }
+
 
         private static void LogException(Exception ex)
         {

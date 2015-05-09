@@ -16,7 +16,7 @@
             <nav>
                 <ul class="pager">
                     @if (Model.MinDate < previousMonth && Model.MinDate > DateTime.MinValue)
-                {
+                    {
                         <li>
                             <a href="@Url.Action("Index")?month=@previousMonth.ToString("yyyy-MM")">
                                 <span aria-hidden="true">&larr;</span> @previousMonth.ToString("MMMM yyyy")
@@ -34,7 +34,7 @@
             <nav>
                 <ul class="pager">
                     @if (Model.MaxDate >= nextMonth)
-                {
+                    {
                         <li>
                             <a href="@Url.Action("Index")?month=@nextMonth.ToString("yyyy-MM")">
                                 @nextMonth.ToString("MMMM yyyy") <span aria-hidden="true">&rarr;</span>
@@ -46,7 +46,7 @@
         </div>
     </div>
 
-    <hr />
+    <hr/>
 }
 
 @if (Model.HasLines)
@@ -63,7 +63,7 @@
         </div>
     </div>
 
-    <hr />
+    <hr/>
 
     <div class="row">
         <div class="col-sm-12">
@@ -71,23 +71,23 @@
         </div>
     </div>
 
-    @section scripts
-    {
+@section scripts
+{
 
-        <script>
-            @* ReSharper disable UseOfImplicitGlobalInFunctionScope *@
-            window.reloadCallback = function () {
-                loadBudgetChart();
-                loadBalanceChart();
-                loadSpendingsChart();
-            };
-            @* ReSharper restore UseOfImplicitGlobalInFunctionScope *@
-        </script>
+    <script>
+        @* ReSharper disable UseOfImplicitGlobalInFunctionScope *@
+        window.reloadCallback = function() {
+            loadBudgetChart();
+            loadBalanceChart();
+            loadSpendingsChart();
+        };
+        @* ReSharper restore UseOfImplicitGlobalInFunctionScope *@
+    </script>
 
-        @Html.Partial("_BudgetChartScripts")
-        @Html.Partial("_BalanceChartScripts")
-        @Html.Partial("_SpendingsChartScripts")
-    }}
+    @Html.Partial("_BudgetChartScripts")
+    @Html.Partial("_BalanceChartScripts")
+    @Html.Partial("_SpendingsChartScripts")
+}}
 else
 {
     @Html.Partial("_NoLinesWarning")
