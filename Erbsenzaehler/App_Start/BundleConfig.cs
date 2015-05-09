@@ -12,8 +12,7 @@ namespace Erbsenzaehler
 
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
                 "~/Scripts/angular.js",
-                "~/Scripts/angular-*",
-                "~/Scripts/moment.js"));
+                "~/Scripts/angular-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/app").Include(
                 "~/Scripts/app/*.js",

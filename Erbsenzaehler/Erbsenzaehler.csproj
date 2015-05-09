@@ -279,6 +279,7 @@
     <Content Include="Scripts\App\app.js" />
     <Content Include="Scripts\App\LinesEditor\linesEditorController.js" />
     <Content Include="Scripts\App\LinesEditor\linesEditorResource.js" />
+    <Content Include="Scripts\App\tipps.js" />
     <Content Include="Scripts\App\utilities.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
