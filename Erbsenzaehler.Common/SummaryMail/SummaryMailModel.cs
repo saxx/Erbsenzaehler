@@ -58,7 +58,7 @@ namespace Erbsenzaehler.SummaryMail
 
             var latestLinesQuery = linesQuery
                 .Where(x => x.DateOfCreationUtc >= lastSummaryMailDate)
-                .OrderByDescending(x => x.DateOfCreationUtc);
+                .OrderByDescending(x => x.Date ?? x.OriginalDate);
             Lines = (await latestLinesQuery.ToListAsync()).Select(x => new Line(x));
 
             Months = new List<string>();
