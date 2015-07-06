@@ -203,6 +203,9 @@
     <Compile Include="ViewModels\Api\ImportViewModel.cs" />
     <Compile Include="ViewModels\Import\AutoImporterSettingsViewModel.cs" />
     <Compile Include="ViewModels\Import\ImportLogsViewModel.cs" />
+    <Compile Include="ViewModels\ManageAccounts\DeleteLineViewModel.cs" />
+    <Compile Include="ViewModels\ManageAccounts\DeleteDuplicatesViewModel.cs" />
+    <Compile Include="ViewModels\ManageAccounts\DuplicatesViewModel.cs" />
     <Compile Include="ViewModels\ManageBudgets\IndexViewModel.cs" />
     <Compile Include="ViewModels\ManageUsers\CreateViewModel.cs" />
     <Compile Include="ViewModels\ManageUsers\DeleteViewModel.cs" />
@@ -734,6 +737,9 @@
     <Content Include="Views\Today\_BalanceChartScripts.cshtml" />
     <Content Include="Views\Today\_SpendingsChartScripts.cshtml" />
     <Content Include="Views\Today\_SpendingsChart.cshtml" />
+    <Content Include="Views\ManageAccounts\Duplicates.cshtml" />
+    <Content Include="Views\ManageAccounts\DeleteLine.cshtml" />
+    <Content Include="Views\ManageAccounts\DeleteDuplicates.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

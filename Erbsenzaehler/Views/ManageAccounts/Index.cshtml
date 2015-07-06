@@ -16,6 +16,7 @@
                 @item.LinesCount.ToString("N0") @(item.LinesCount == 1 ? "Buchungszeile" : "Buchungszeilen")
             </td>
             <td>
+                @Html.ActionLink("Buchungszeilen-Duplikate finden", "Duplicates", new { id = item.Id }, new { @class = "btn btn-default" })
                 @Html.ActionLink("Bearbeiten", "Edit", new { id = item.Id }, new { @class = "btn btn-default" })
                 @Html.ActionLink("Löschen", "Delete", new { id = item.Id }, new { @class = "btn btn-danger" })
             </td>

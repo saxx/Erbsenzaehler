@@ -1,0 +1,19 @@
+﻿@model Erbsenzaehler.ViewModels.ManageAccounts.DeleteLineViewModel
+
+<h2>Buchungszeile löschen</h2>
+
+<p>
+    Sind Sie sicher, dass Sie die Buchungszeile <i>@Model.Text</i> vom <i>@Model.Date</i> über <i>@Model.Amount</i> löschen möchten?
+    Eine Löschung kann nicht rückgängig gemacht werden.
+</p>
+
+<div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-actions no-color">
+            <input type="submit" value="Löschen" class="btn btn-danger" />
+            @Html.ActionLink("Zurück", "Duplicates", null, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>

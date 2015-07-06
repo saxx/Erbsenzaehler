@@ -1,0 +1,18 @@
+﻿@model Erbsenzaehler.ViewModels.ManageAccounts.DeleteDuplicatesViewModel
+
+<h2>Alle @(Model.UsedFuzzyMatching ? "möglichen" : "exakten") Duplikate in Konto '@Model.Account.Name' löschen</h2>
+
+<p>
+    Sind Sie sicher, dass Sie alle @(Model.UsedFuzzyMatching ? "möglichen" : "exakten") Buchungszeilen-Duplikate dieses Kontos löschen möchten? Dies ist nicht mehr rückgängig zu machen!
+</p>
+
+<div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-actions no-color">
+            <input type="submit" value="Löschen" class="btn btn-danger" />
+            @Html.ActionLink("Zurück", "Duplicates", new { id = Model.Account.Id, fuzzyMatching = Model.UsedFuzzyMatching }, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>

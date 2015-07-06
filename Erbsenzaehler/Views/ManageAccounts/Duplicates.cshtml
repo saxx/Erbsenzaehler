@@ -1,0 +1,62 @@
+﻿@model Erbsenzaehler.ViewModels.ManageAccounts.DuplicatesViewModel
+
+<h2>Duplikate in Konto @Model.AccountName</h2>
+
+<div class="pull-right">
+    @using (Html.BeginForm())
+    {
+        <a href="@Url.Action("DeleteDuplicates", new { id = Model.AccountId, fuzzyMatch = Model.UseFuzzyMatching })" class="btn btn-danger">Alle angezeigten Duplikate löschen</a>
+    }
+</div>
+
+<p class="btn-group">
+    <a href="@Url.Action("Duplicates", new { fuzzyMatch = false })" class="btn btn-default@(Model.UseFuzzyMatching ? "" : " active")">Nur exakte Duplikate anzeigen</a>
+    <a href="@Url.Action("Duplicates", new { fuzzyMatch = true })" class="btn btn-default@(Model.UseFuzzyMatching ? " active" : "")">Auch mögliche Duplikate anzeigen</a>
+</p>
+
+<table class="table">
+    @foreach (var duplicate in Model.Duplicates)
+    {
+        <text>
+            <tr>
+                <th>
+                    <code>@duplicate.Original.DateOfCreationUtc.ToShortDateString()</code>
+                </th>
+                <td>
+                    @duplicate.Original.OriginalDate.ToShortDateString()
+                </td>
+                <td>
+                    @duplicate.Original.OriginalText
+                </td>
+                <td class="text-right">
+                    @duplicate.Original.OriginalAmount.ToString("N2")
+                </td>
+                <td></td>
+            </tr>
+            @foreach (var duplicateLine in duplicate.Duplicates)
+                {
+                <tr>
+                    <td>
+                        <code>@duplicateLine.DateOfCreationUtc.ToShortDateString()</code>
+                    </td>
+                    <td>
+                        @duplicateLine.OriginalDate.ToShortDateString()
+                    </td>
+                    <td>
+                        @duplicateLine.OriginalText
+                    </td>
+                    <td class="text-right">
+                        @duplicateLine.OriginalAmount.ToString("N2")
+                    </td>
+                    <td>
+                        <a href="@Url.Action("DeleteLine", new { id = duplicateLine.Id })" class="btn btn-xs btn-danger glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="left" title="Diese Buchungszeile löschen"></a>
+                    </td>
+                </tr>
+            }
+            <tr class="separator">
+                <td colspan="4"></td>
+            </tr>
+        </text>
+    }
+
+</table>

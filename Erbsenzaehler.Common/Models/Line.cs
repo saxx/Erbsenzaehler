@@ -92,6 +92,11 @@ namespace Erbsenzaehler.Models
         {
             return q.Where(x => x.Account.ClientId == client.Id);
         }
+
+        public static IQueryable<Line> ByAccount(this IQueryable<Line> q, int accountId)
+        {
+            return q.Where(x => x.AccountId == accountId);
+        }
     }
 
     public class Line
