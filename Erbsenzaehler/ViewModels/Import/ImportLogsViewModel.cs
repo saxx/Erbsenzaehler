@@ -26,7 +26,7 @@ namespace Erbsenzaehler.ViewModels.Import
             var lastImports = await _db.ImportLog
                 .ByClient(client)
                 .OrderByDescending(x => x.Date)
-                .Take(30)
+                .Take(100)
                 .Select(x => new
                 {
                     AccountName = x.Account.Name,
