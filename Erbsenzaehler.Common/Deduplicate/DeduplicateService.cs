@@ -44,9 +44,12 @@ namespace Erbsenzaehler.Deduplicate
                     continue;
                 }
 
-                var possibleDuplicates =
-                    await _db.Lines.Where(x => x.AccountId == accountId && x.OriginalAmount == line.OriginalAmount && x.OriginalDate == line.OriginalDate && x.Id != line.Id).ToListAsync();
-                possibleDuplicates = possibleDuplicates.Where(x => textCompareFunction.Invoke(line.OriginalText, x.OriginalText)).ToList();
+                var possibleDuplicatesQuery = _db.Lines.Where(x => x.AccountId == accountId && x.Id != line.Id);
+                possibleDuplicatesQuery = possibleDuplicatesQuery.Where(x => (x.Amount ?? x.OriginalAmount) == (line.Amount ?? line.OriginalAmount));
+                possibleDuplicatesQuery = possibleDuplicatesQuery.Where(x => (x.Date ?? x.OriginalDate) == (line.Date ?? line.OriginalDate));
+
+                var possibleDuplicates = await possibleDuplicatesQuery.ToListAsync();
+                possibleDuplicates = possibleDuplicates.Where(x => textCompareFunction.Invoke(line.Text ?? line.OriginalText, x.Text ?? x.OriginalText)).ToList();
                 if (possibleDuplicates.Any())
                 {
                     result.Add(new Duplicate
