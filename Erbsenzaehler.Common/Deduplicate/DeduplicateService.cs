@@ -20,9 +20,9 @@ namespace Erbsenzaehler.Deduplicate
         }
 
 
-        public async Task<IEnumerable<Duplicate>> FindPossibleDuplicates(int accountId, int maxDistance)
+        public async Task<IEnumerable<Duplicate>> FindPossibleDuplicates(int accountId)
         {
-            return await FindDuplicates(accountId, (s, t) => TextIsSimilar(s, t, maxDistance));
+            return await FindDuplicates(accountId, TextIsSimilar);
         }
 
 
@@ -118,9 +118,9 @@ namespace Erbsenzaehler.Deduplicate
         }
 
 
-        private bool TextIsSimilar(string s, string t, int maxDistance)
+        private bool TextIsSimilar(string s, string t)
         {
-            return s.DamerauLevenshteinDistanceTo(t) <= maxDistance;
+            return s.DamerauLevenshteinDistanceTo(t) <= 40;
         }
     }
 }

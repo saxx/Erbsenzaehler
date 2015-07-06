@@ -129,11 +129,11 @@ namespace Erbsenzaehler.Controllers
                 var viewModel = new DuplicatesViewModel();
                 if (!fuzzyMatch)
                 {
-                    viewModel.Fill(account, await dedupService.FindExactDuplicates(account.Id, true), false);
+                    viewModel.Fill(account, await dedupService.FindExactDuplicates(account.Id), false);
                 }
                 else
                 {
-                    viewModel.Fill(account, await dedupService.FindPossibleDuplicates(account.Id, 50), true);
+                    viewModel.Fill(account, await dedupService.FindPossibleDuplicates(account.Id), true);
                 }
                 return View(viewModel);
             }
@@ -166,11 +166,11 @@ namespace Erbsenzaehler.Controllers
             IEnumerable<Duplicate> duplicates;
             if (!fuzzyMatch)
             {
-                duplicates = await dedupService.FindExactDuplicates(account.Id, true);
+                duplicates = await dedupService.FindExactDuplicates(account.Id);
             }
             else
             {
-                duplicates = await dedupService.FindPossibleDuplicates(account.Id, 20);
+                duplicates = await dedupService.FindPossibleDuplicates(account.Id);
             }
 
             foreach (var line in duplicates.SelectMany(x => x.Duplicates))
