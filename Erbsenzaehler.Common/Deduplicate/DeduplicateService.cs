@@ -26,7 +26,7 @@ namespace Erbsenzaehler.Deduplicate
         }
 
 
-        public async Task<IEnumerable<Duplicate>> FindExactDuplicates(int accountId, bool treatSpaceAsPipe)
+        public async Task<IEnumerable<Duplicate>> FindExactDuplicates(int accountId)
         {
             return await FindDuplicates(accountId, TextIsIdentical);
         }

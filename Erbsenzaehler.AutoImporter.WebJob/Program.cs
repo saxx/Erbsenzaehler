@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Erbsenzaehler.AutoImporter.Configuration;
 using Erbsenzaehler.AutoImporter.Recipies;
+using Erbsenzaehler.Deduplicate;
 using Erbsenzaehler.Importer;
 using Erbsenzaehler.Models;
 using Erbsenzaehler.Rules;
@@ -25,7 +26,7 @@ namespace Erbsenzaehler.AutoImporter.WebJob
 
             try
             {
-                logger.Info("Erbsenzaehler.AutoImporter.WebJob v" + typeof (Program).Assembly.GetName().Version + " starting up ...");
+                logger.Info("Erbsenzaehler.AutoImporter.WebJob v" + typeof(Program).Assembly.GetName().Version + " starting up ...");
 
                 var ignoreInterval = args.Any(x => x.Equals("--ignoreInterval", StringComparison.InvariantCultureIgnoreCase));
 
@@ -123,7 +124,7 @@ namespace Erbsenzaehler.AutoImporter.WebJob
                 Date = DateTime.UtcNow,
                 AccountId = accountId,
                 Type = ImportLogType.AutomaticOnServer,
-                Milliseconds = (int) watch.ElapsedMilliseconds
+                Milliseconds = (int)watch.ElapsedMilliseconds
             };
 
             try
@@ -136,6 +137,20 @@ namespace Erbsenzaehler.AutoImporter.WebJob
                     importLog.LinesDuplicatesCount = importResult.DuplicateLinesCount;
                     importLog.LinesFoundCount = importResult.NewLinesCount + importResult.DuplicateLinesCount;
                     importLog.LinesImportedCount = importResult.NewLinesCount;
+
+                    // now, look for duplicates and delete the exact duplicates
+                    var dupService = new DeduplicateService(db);
+                    var duplicates = (await dupService.FindExactDuplicates(accountId)).SelectMany(x => x.Duplicates).ToList();
+                    foreach (var duplicate in duplicates)
+                    {
+                        db.Lines.Remove(duplicate);
+                        importLog.LinesDuplicatesCount++;
+                    }
+                    if (duplicates.Any())
+                    {
+                        logger?.Info("{0} exact duplicates deleted.", duplicates.Count);
+                        await db.SaveChangesAsync();
+                    }
                 }
                 else
                 {
@@ -159,7 +174,7 @@ namespace Erbsenzaehler.AutoImporter.WebJob
                 logger?.Trace("Saving to import log ...");
 
                 watch.Stop();
-                importLog.Milliseconds = (int) watch.ElapsedMilliseconds;
+                importLog.Milliseconds = (int)watch.ElapsedMilliseconds;
 
                 db.ImportLog.Add(importLog);
                 db.SaveChanges();
@@ -186,7 +201,7 @@ namespace Erbsenzaehler.AutoImporter.WebJob
 
             ImporterBase.ImportResult importResult;
 
-            var importerType = (ImporterType) Enum.Parse(typeof (ImporterType), config.Erbsenzaehler.Importer);
+            var importerType = (ImporterType)Enum.Parse(typeof(ImporterType), config.Erbsenzaehler.Importer);
             using (var reader = new StreamReader(tempFilePath, Encoding.UTF8))
             {
                 var concreteImporter = new ImporterFactory().GetImporter(reader, importerType);
