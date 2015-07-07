@@ -137,22 +137,6 @@ namespace Erbsenzaehler.AutoImporter.WebJob
                     importLog.LinesDuplicatesCount = importResult.DuplicateLinesCount;
                     importLog.LinesFoundCount = importResult.NewLinesCount + importResult.DuplicateLinesCount;
                     importLog.LinesImportedCount = importResult.NewLinesCount;
-
-                    /*
-                    // now, look for duplicates and delete the exact duplicates
-                    var dupService = new DeduplicateService(db);
-                    var duplicates = (await dupService.FindExactDuplicates(accountId)).SelectMany(x => x.Duplicates).ToList();
-                    foreach (var duplicate in duplicates)
-                    {
-                        db.Lines.Remove(duplicate);
-                        importLog.LinesDuplicatesCount++;
-                    }
-                    if (duplicates.Any())
-                    {
-                        logger?.Info("{0} exact duplicates deleted.", duplicates.Count);
-                        await db.SaveChangesAsync();
-                    }
-                    */
                 }
                 else
                 {

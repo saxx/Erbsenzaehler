@@ -45,9 +45,6 @@ namespace Erbsenzaehler.SummaryMail
             {
                 lastSummaryMailDate = DateTime.UtcNow.Date.AddMonths(-1);
             }
-            // add the lines of the last previous days, too. 
-            // This could mean that some lines are multiple times in the e-mail, but that's okay.
-            lastSummaryMailDate = lastSummaryMailDate.AddDays(-2);
 
             var client = currentUser.Client;
             ClientName = client.Name;
