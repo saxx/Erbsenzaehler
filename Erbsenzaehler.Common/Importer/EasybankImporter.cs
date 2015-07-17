@@ -22,7 +22,7 @@ namespace Erbsenzaehler.Importer
             public LineMap()
             {
                 Map(x => x.OriginalText).Index(1).TypeConverter<TextConverter>();
-                Map(x => x.OriginalDate).Index(2).TypeConverter<GermanDateConverter>();
+                Map(x => x.OriginalDate).Index(3).TypeConverter<GermanDateConverter>();
                 Map(x => x.OriginalAmount).Index(4).TypeConverter<GermanAmountConverter>();
             }
         }
