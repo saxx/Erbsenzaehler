@@ -36,7 +36,11 @@ namespace Erbsenzaehler.Deduplicate
         {
             var result = new List<Duplicate>();
 
-            foreach (var line in _db.Lines.ByAccount(accountId).OrderByDescending(x => x.Id))
+            foreach (var line in _db.Lines
+                .ByAccount(accountId)
+                // manually changed lines first, so that won't be deleted
+                .OrderByDescending(x => x.AmountUpdatedManually || x.CategoryUpdatedManually || x.DateUpdatedManually || x.LineAddedManually || x.TextUpdatedManually || x.IgnoreUpdatedManually)
+                .ThenByDescending(x => x.Id))
             {
                 // the line was already identified as a duplicate, s lets ignore it
                 if (result.Any(x => x.Duplicates.Any(y => y.Id == line.Id)))

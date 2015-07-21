@@ -105,7 +105,7 @@ namespace Erbsenzaehler.Controllers
             }
 
             var newDate = DateTime.Parse(line.Date);
-            if (lineInDatebase.Date != newDate)
+            if ((lineInDatebase.Date ?? lineInDatebase.OriginalDate) != newDate)
             {
                 lineInDatebase.Date = newDate;
                 lineInDatebase.DateUpdatedManually = true;
@@ -122,7 +122,7 @@ namespace Erbsenzaehler.Controllers
             decimal amountAsDecimal;
             if (decimal.TryParse(line.Amount, out amountAsDecimal))
             {
-                if (lineInDatebase.Amount != amountAsDecimal)
+                if ((lineInDatebase.Amount ?? lineInDatebase.OriginalAmount) != amountAsDecimal)
                 {
                     lineInDatebase.Amount = amountAsDecimal;
                     lineInDatebase.AmountUpdatedManually = true;
@@ -131,7 +131,7 @@ namespace Erbsenzaehler.Controllers
             }
 
             var newText = (line.Text ?? "").Replace("\n", "").Replace("\r", "").Trim();
-            if (!string.IsNullOrWhiteSpace(newText) && lineInDatebase.Text != newText)
+            if (!string.IsNullOrWhiteSpace(newText) && (lineInDatebase.Text ?? lineInDatebase.OriginalText) != newText)
             {
                 lineInDatebase.Text = newText;
                 lineInDatebase.TextUpdatedManually = true;
