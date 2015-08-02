@@ -35,7 +35,7 @@ deploy:
   website: Erbsenzaehler
   username: Administrator
   password:
-    secure: f2cUOZ5bKYlzZvH2xXJqHg==
+    secure: 0VezCAl9nnPtt2Kdqabh3Q==
   ntlm: true
   remove_files: true
   app_offline: false
