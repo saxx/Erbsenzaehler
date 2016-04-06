@@ -31,11 +31,11 @@ artifacts:
 
 deploy:
 - provider: WebDeploy
-  server: http://85.93.17.211/MSDEPLOYAGENTSERVICE
-  website: Erbsenzaehler
-  username: Administrator
+  server: http://40.117.44.116/MSDEPLOYAGENTSERVICE
+  website: erbsenzaehler
+  username: saxx
   password:
-    secure: MoW0xgokacm0ynXqPSoGI9VoHcjdDZ/Y+cU2rl/O5mQ=
+    secure: RHmwJ0TuDaknqQdBiIUtYiO6NSmxqEbXDACMtJG16W4=
   ntlm: true
   remove_files: true
   app_offline: false
